@@ -13,12 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx;
 
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.Map;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CyclicBarrier;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -29,35 +33,39 @@ import netscape.javascript.JSObject;
 
 /**
  *
-* @author Rob Terpilowski
+ * @author Rob Terpilowski
  */
 public class GoogleMapComponent extends AnchorPane {
 
     protected WebView webview;
     protected WebEngine webengine;
-    protected JSObject map;
     protected boolean loaded = false;
-    
+    protected final CyclicBarrier barrier = new CyclicBarrier(2);
+    protected final List<MapInitializedListener> mapInitializedListeners = new ArrayList<>();
+    protected Map map;
     
     public GoogleMapComponent() {
         webview = new WebView();
         webengine = webview.getEngine();
         JavascriptRuntime.engine = webengine;
         getChildren().add(webview);
-        webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
 
         webengine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                        System.out.println("new state: " + newState);
+                        System.out.println("new state: " + newState );
                         if (newState == Worker.State.SUCCEEDED) {
-                           // webengine.executeScript("initialize()");
-                            Map map = new Map();
-                            map.setCenter( new LatLong(10, 150));
+                            // webengine.executeScript("initialize()");
+                            map = new Map();
+                            map.setCenter(new LatLong(10, 150));
                             map.setZoom(4);
                             setLoaded(true);
+                            MarkerOptions options = new MarkerOptions();
+                            options.setTitle("My Title" );
+                            Marker marker = new Marker(options);
+                            fireMapInitializedListeners();
                             try {
-                                //barrier.await(10,TimeUnit.SECONDS);
+                          //      barrier.await(10, TimeUnit.SECONDS);
 //                                setCenter(50, 50);
 //                                setZoom(10);
                             } catch (Exception ex) {
@@ -66,49 +74,72 @@ public class GoogleMapComponent extends AnchorPane {
                         }
                     }
                 });
+        
+        System.out.println("Start loading");
+        webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
+
+        System.out.println("done loading");
+        
+//        while (! loaded ) {
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException ex) {
+//                ex.printStackTrace();
+//            }
+//        }
+
+    }
+
+    public void setZoom(int zoom) {
+        map.setZoom(zoom);
+    }
+
+    public void setCenter(double latitude, double longitude) {
+        LatLong latLong = new LatLong(latitude, longitude);
+        map.setCenter(latLong);
+    }
+
+    
+    public void addMapInializedListener( MapInitializedListener listener ) {
+        synchronized(mapInitializedListeners) {
+            mapInitializedListeners.add(listener);
+        }
     }
     
-    
-    
-    public void setZoom( int zoom ) {
-        getMap().call("setZoom", zoom);
+    public void removeMapInitializedListener( MapInitializedListener listener ) {
+        synchronized(mapInitializedListeners) {
+            mapInitializedListeners.remove(listener);
+        }
     }
     
-    
-//    public void setCenter( double latitude, double longitude ) {
-//        LatLong latLong = new LatLong(latitude, longitude);
-//        JSObject latLongJS = executeJavascript( latLong.getJavascriptConstructor() );
-//        getMap().call("setCenter", latLongJS );
-//    }
-    
-    
-    protected void setLoaded( boolean loaded ) {
+    protected void setLoaded(boolean loaded) {
         this.loaded = loaded;
     }
     
-    protected JSObject getMap() {
-        if( map == null ) {
-             map = executeJavascript("map");
+    protected void fireMapInitializedListeners() {
+        synchronized(mapInitializedListeners){
+            for( MapInitializedListener listener : mapInitializedListeners ) {
+                listener.mapInitialized();
+            }
         }
-        return map;
     }
     
-    protected JSObject executeJavascript( String function ) {
-        return (JSObject) webengine.executeScript( function );
+
+    protected JSObject executeJavascript(String function) {
+        Object returnObject = webengine.executeScript(function);
+        System.out.println("Return object: " + returnObject );
+        return (JSObject) returnObject;
     }
-    
-    protected String getJavascriptMethod( String methodName, Object... args ) {
+
+    protected String getJavascriptMethod(String methodName, Object... args) {
         StringBuilder sb = new StringBuilder();
-        sb.append( methodName ).append("(" );
-        for( Object arg : args ) {
+        sb.append(methodName).append("(");
+        for (Object arg : args) {
             sb.append(arg).append(",");
         }
-        sb.replace(sb.length()-1, sb.length(), ")");
-        
+        sb.replace(sb.length() - 1, sb.length(), ")");
+
         return sb.toString();
     }
-    
-    
-    
 
 }

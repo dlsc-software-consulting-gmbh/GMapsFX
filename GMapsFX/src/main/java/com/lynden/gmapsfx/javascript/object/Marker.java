@@ -17,6 +17,7 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptType;
+import com.lynden.gmapsfx.javascript.Type;
 
 /**
  *
@@ -24,12 +25,11 @@ import com.lynden.gmapsfx.javascript.JavascriptType;
  */
 public class Marker extends JavascriptType {
 
-    public static final String TYPE = "google.maps.Marker";
 
     protected String title;
     
-    public Marker(String type) {
-        super(type, (Object[]) null);
+    public Marker(MarkerOptions markerOptions) {
+        super(Type.MARKER, markerOptions);
     }
     
     public void setTitle( String title ) {

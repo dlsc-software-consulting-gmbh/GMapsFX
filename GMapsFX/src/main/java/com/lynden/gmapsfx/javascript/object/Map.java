@@ -17,6 +17,7 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptType;
+import com.lynden.gmapsfx.javascript.Type;
 
 /**
  *
@@ -24,12 +25,11 @@ import com.lynden.gmapsfx.javascript.JavascriptType;
  */
 public class Map extends JavascriptType {
 
-    public static final String TYPE = "google.maps.Map";
     protected LatLong latLong;
     protected int zoom;
     
     public Map() {
-        super(TYPE, "document.getElementById('map-canvas')");
+        super(Type.MAP, "document.getElementById('map-canvas')");
     }
     
     

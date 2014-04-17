@@ -45,7 +45,7 @@ public class JavascriptRuntime {
     }
 
     
-    public String getConstructor( String type, Object... args ) {
+    public String getConstructor( Type type, Object... args ) {
         return getFunction( "new " + type, args );
     }
     
@@ -54,9 +54,13 @@ public class JavascriptRuntime {
     }
     
     public String getFunction(String function, Object... args) {
+        if( args == null ) {
+            return function + "();";
+        }
         StringBuilder sb = new StringBuilder();
         sb.append(function).append("(");
         for (Object arg : args) {
+            
             sb.append(arg).append(",");
         }
         sb.replace(sb.length() - 1, sb.length(), ")");

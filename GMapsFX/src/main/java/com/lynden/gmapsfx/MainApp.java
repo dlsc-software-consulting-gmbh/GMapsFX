@@ -1,45 +1,63 @@
 package com.lynden.gmapsfx;
 
-import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CyclicBarrier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.application.Platform;
 import javafx.scene.Scene;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-public class MainApp extends Application {
+public class MainApp extends Application implements MapInitializedListener {
+
+    GoogleMapComponent map;
 
     @Override
     public void start(final Stage stage) throws Exception {
-        Scene scene = new Scene(new GoogleMapComponent());
-        
+        System.out.println("Creating map");
+        map = new GoogleMapComponent();
+        map.addMapInializedListener(this);
+        System.out.println("Map created");
+        Scene scene = new Scene(map);
 
+        System.out.println("center set");
 
         //webView.getEngine().executeScript("Alert(\"Hello!\")");
-        System.out.println("Starting load");
+//        System.out.println("Starting load");
         //webView.getEngine().load(getClass().getResource("/html/maps.html").toExternalForm());
-        System.out.println("Loaded hit");
-  //      
-       // 
+//        System.out.println("Loaded hit");
+        //      
+        // 
         //window.setMember("app", this);
         //JSObject jsobj = (JSObject) webView.getEngine().executeScript("hello()");
         //jsobj.call("alert", "Hello");
-
         stage.setScene(scene);
         stage.show();
         //barrier.await(10, TimeUnit.SECONDS);
-        
 
         System.out.println("Got here");
+    }
+
+    @Override
+    public void mapInitialized() {
+        Thread thread = new Thread(new Runnable() {
+
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        System.out.println("Moving to new location");
+                        map.setCenter(80, 150);
+                    }
+                });
+            }
+        });
+        thread.start();
+
     }
 
     /**

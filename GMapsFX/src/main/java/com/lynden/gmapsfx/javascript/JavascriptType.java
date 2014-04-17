@@ -29,7 +29,12 @@ public class JavascriptType {
     protected static int objectCounter = 0;
     protected String variableName;
     
-    public JavascriptType(String type, Object... args ) {
+    
+    public JavascriptType(Type type ) {
+        this(type, (Object[]) null);
+    }
+    
+    public JavascriptType(Type type, Object... args ) {
         runtime = JavascriptRuntime.getInstance();
         variableName = getNextVariableName();
         runtime.execute( "var " + variableName + " = " + runtime.getConstructor(type, args) );
@@ -47,6 +52,10 @@ public class JavascriptType {
     
     public String getVariableName() {
         return variableName;
+    }
+    
+    public void setProperty( String propertyName, Object propertyValue ) {
+        javascriptObject.setMember(propertyName, propertyValue);
     }
     
     public void invokeJavascript( String method, Object... args ) {
