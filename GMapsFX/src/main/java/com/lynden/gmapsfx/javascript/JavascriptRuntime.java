@@ -48,7 +48,7 @@ public class JavascriptRuntime implements IJavascriptRuntime {
 
     
     @Override
-    public String getConstructor( Type type, Object... args ) {
+    public String getConstructor( ObjectType type, Object... args ) {
         return getFunction( "new " + type, args );
     }
     

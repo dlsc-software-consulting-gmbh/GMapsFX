@@ -26,7 +26,7 @@ public interface IJavascriptRuntime {
 
     JSObject execute(String command);
 
-    String getConstructor(Type type, Object... args);
+    String getConstructor(ObjectType type, Object... args);
 
     String getFunction(String variable, String function, Object... args);
 

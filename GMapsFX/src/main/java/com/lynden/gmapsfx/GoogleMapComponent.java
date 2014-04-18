@@ -46,11 +46,8 @@ public class GoogleMapComponent extends BorderPane {
     protected final List<MapComponentInitializedListener> mapInitializedListeners = new ArrayList<>();
     protected GoogleMap map;
 
-    public GoogleMapComponent() {
-        this(null);
-    }
 
-    public GoogleMapComponent(final MapOptions mapOptions) {
+    public GoogleMapComponent() {
         webview = new WebView();
         webengine = webview.getEngine();
         JavascriptRuntime.engine = webengine;
@@ -61,11 +58,6 @@ public class GoogleMapComponent extends BorderPane {
                 new ChangeListener<Worker.State>() {
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                         if (newState == Worker.State.SUCCEEDED) {
-                            if (mapOptions != null) {
-                                map = new GoogleMap(mapOptions);
-                            } else {
-                                map = new GoogleMap();
-                            }
                             setInitialized(true);
                             fireMapInitializedListeners();
                         }
@@ -92,6 +84,7 @@ public class GoogleMapComponent extends BorderPane {
     }
     
     public GoogleMap createMap( MapOptions mapOptions ) {
+        checkInitialized();
         map = new GoogleMap(mapOptions);
         return map;
     }

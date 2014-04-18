@@ -17,7 +17,7 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.Type;
+import com.lynden.gmapsfx.javascript.ObjectType;
 
 /**
  *
@@ -29,7 +29,7 @@ public class LatLong extends JavascriptType {
     protected double longitude;
 
     public LatLong(double latitude, double longitude) {
-        super(Type.LAT_LNG, latitude, longitude);
+        super(ObjectType.LAT_LNG, latitude, longitude);
         this.latitude = latitude;
         this.longitude = longitude;
     }

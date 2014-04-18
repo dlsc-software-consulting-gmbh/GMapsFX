@@ -31,11 +31,11 @@ public class JavascriptType {
     protected String variableName;
     protected Map<String, Object> properties = new LinkedHashMap<>();
 
-    protected JavascriptType(Type type) {
+    protected JavascriptType(ObjectType type) {
         this(type, (Object[]) null);
     }
 
-    protected JavascriptType(Type type, Object... args) {
+    protected JavascriptType(ObjectType type, Object... args) {
         runtime = JavascriptRuntime.getInstance();
         variableName = getNextVariableName();
         runtime.execute("var " + variableName + " = " + runtime.getConstructor(type, args));

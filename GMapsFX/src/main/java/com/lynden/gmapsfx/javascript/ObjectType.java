@@ -20,7 +20,7 @@ package com.lynden.gmapsfx.javascript;
  *
  * @author Rob Terpilowski
  */
-public enum Type {
+public enum ObjectType {
     
    OBJECT("Object"),
    MAP("google.maps.Map"),
@@ -29,7 +29,7 @@ public enum Type {
    
    protected String typeString;
    
-   Type( String typeString ) {
+   ObjectType( String typeString ) {
        this.typeString = typeString;
    }
 

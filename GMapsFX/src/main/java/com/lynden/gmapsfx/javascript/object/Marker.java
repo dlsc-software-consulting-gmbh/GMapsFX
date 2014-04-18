@@ -17,13 +17,12 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.Type;
+import com.lynden.gmapsfx.javascript.ObjectType;
 
 /**
  * Marker which can be placed on a GoogleMap.
  * 
  * @author Rob Terpilowski
- * @version $Revision$
  */
 public class Marker extends JavascriptType {
 
@@ -36,7 +35,7 @@ public class Marker extends JavascriptType {
      * @param markerOptions The options to use when constructing this marker.
      */
     public Marker(MarkerOptions markerOptions) {
-        super(Type.MARKER, markerOptions);
+        super(ObjectType.MARKER, markerOptions);
     }
     
     

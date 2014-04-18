@@ -19,7 +19,7 @@ package com.lynden.gmapsfx.javascript.object;
 /**
  * Various types of maps that are available.
  * 
- * @author robt
+ * @author Rob Terpilowski
  */
 public enum MapType {
     

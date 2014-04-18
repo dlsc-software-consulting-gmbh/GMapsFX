@@ -17,7 +17,7 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.Type;
+import com.lynden.gmapsfx.javascript.ObjectType;
 
 /**
  *
@@ -38,7 +38,7 @@ public class MapOptions extends JavascriptType {
     
 
     public MapOptions() {
-        super(Type.OBJECT);
+        super(ObjectType.OBJECT);
     }
     
     

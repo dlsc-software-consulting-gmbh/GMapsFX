@@ -54,7 +54,7 @@ public class JavascriptTypeTest {
         mockJsObject = Mockito.mock(JSObject.class);
         JavascriptRuntime.runtime = mockJSRuntime;
         when(mockJSRuntime.execute(any(String.class))).thenReturn(mockJsObject);
-        testJavascriptType = new JavascriptType(Type.OBJECT);
+        testJavascriptType = new JavascriptType(ObjectType.OBJECT);
     }
 
     @After
@@ -80,7 +80,7 @@ public class JavascriptTypeTest {
     
     @Test
     public void testGetProperty_JavascriptType() {
-        JavascriptType myJSType = new JavascriptType(Type.OBJECT);
+        JavascriptType myJSType = new JavascriptType(ObjectType.OBJECT);
         myJSType.variableName = "MyJSType1";
         testJavascriptType.properties.put("MyJSType",myJSType);
         assertEquals("MyJSType1", testJavascriptType.getProperty("MyJSType"));
