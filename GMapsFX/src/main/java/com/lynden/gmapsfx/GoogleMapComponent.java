@@ -17,7 +17,8 @@ package com.lynden.gmapsfx;
 
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.object.LatLong;
-import com.lynden.gmapsfx.javascript.object.Map;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import java.util.ArrayList;
@@ -39,10 +40,10 @@ public class GoogleMapComponent extends AnchorPane {
 
     protected WebView webview;
     protected WebEngine webengine;
-    protected boolean loaded = false;
+    protected boolean initialized = false;
     protected final CyclicBarrier barrier = new CyclicBarrier(2);
     protected final List<MapInitializedListener> mapInitializedListeners = new ArrayList<>();
-    protected Map map;
+    protected GoogleMap map;
     
     public GoogleMapComponent() {
         webview = new WebView();
@@ -56,13 +57,30 @@ public class GoogleMapComponent extends AnchorPane {
                         System.out.println("new state: " + newState );
                         if (newState == Worker.State.SUCCEEDED) {
                             // webengine.executeScript("initialize()");
-                            map = new Map();
-                            map.setCenter(new LatLong(10, 150));
+                            LatLong center = new LatLong(10, 150);
+                            MapOptions options = new MapOptions();
+                            options.center(center)
+                                    .mapMarker(true)
+                                    .zoom(6)
+                                    .overviewMapControl(false)
+                                    .panControl(false)
+                                    .rotateControl(false)
+                                    .scaleControl(false)
+                                    .streetViewControl(false)
+                                    .zoomControl(initialized);
+                            
+                            
+                            map = new GoogleMap(options);
                             map.setZoom(4);
-                            setLoaded(true);
-                            MarkerOptions options = new MarkerOptions();
-                            options.setTitle("My Title" );
-                            Marker marker = new Marker(options);
+                            setInitialized(true);
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            markerOptions.position(new LatLong(30,150))
+                                    .title("My new Marker")
+                                    .map(map)
+                                    .visible(true);
+                            
+                            
+                            Marker marker = new Marker(markerOptions);
                             fireMapInitializedListeners();
                             try {
                           //      barrier.await(10, TimeUnit.SECONDS);
@@ -91,13 +109,17 @@ public class GoogleMapComponent extends AnchorPane {
     }
 
     public void setZoom(int zoom) {
+        checkInitialized();
         map.setZoom(zoom);
     }
 
     public void setCenter(double latitude, double longitude) {
+        checkInitialized();
         LatLong latLong = new LatLong(latitude, longitude);
         map.setCenter(latLong);
     }
+    
+    
 
     
     public void addMapInializedListener( MapInitializedListener listener ) {
@@ -112,8 +134,8 @@ public class GoogleMapComponent extends AnchorPane {
         }
     }
     
-    protected void setLoaded(boolean loaded) {
-        this.loaded = loaded;
+    protected void setInitialized(boolean initialized) {
+        this.initialized = initialized;
     }
     
     protected void fireMapInitializedListeners() {
@@ -140,6 +162,13 @@ public class GoogleMapComponent extends AnchorPane {
         sb.replace(sb.length() - 1, sb.length(), ")");
 
         return sb.toString();
+    }
+    
+    
+    protected void checkInitialized() {
+        if( !initialized ) {
+            throw new MapNotInitializedException();
+        }
     }
 
 }

@@ -16,29 +16,20 @@
 
 package com.lynden.gmapsfx.javascript;
 
+import netscape.javascript.JSObject;
+
 /**
  *
  * @author Rob Terpilowski
  */
-public enum Type {
+public interface IJavascriptRuntime {
+
+    JSObject execute(String command);
+
+    String getConstructor(Type type, Object... args);
+
+    String getFunction(String variable, String function, Object... args);
+
+    String getFunction(String function, Object... args);
     
-   OBJECT("Object"),
-   MAP("google.maps.Map"),
-   LAT_LNG("google.maps.LatLng"),
-   MARKER("google.maps.Marker");
-   
-   protected String typeString;
-   
-   Type( String typeString ) {
-       this.typeString = typeString;
-   }
-
-    @Override
-    public String toString() {
-        return typeString;
-    }
-   
-   
-
-   
 }

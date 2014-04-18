@@ -18,6 +18,8 @@ package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptType;
 import com.lynden.gmapsfx.javascript.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -25,14 +27,40 @@ import com.lynden.gmapsfx.javascript.Type;
  */
 public class MarkerOptions extends JavascriptType {
     
-
+    protected LatLong position;
+    protected String title;
+    protected boolean visible = true;
+    
+    
     public MarkerOptions() {
         super(Type.OBJECT);
     }
     
-    public void setTitle( String title ) {
+    public MarkerOptions title( String title ) {
         setProperty("title", title);
+        this.title = title;
+        return this;
     }
+    
+    public MarkerOptions visible( Boolean visible ) {
+        setProperty( "visible", visible );
+        this.visible = visible;
+        return this;
+    }
+    
+    
+    public MarkerOptions position( LatLong latLong ) {
+        setProperty("position", latLong);
+        position = latLong;
+        return this;
+    }
+    
+    
+    public MarkerOptions map( GoogleMap map ) {
+        setProperty("map", map);
+        return this;
+    }
+    
     
     
 }

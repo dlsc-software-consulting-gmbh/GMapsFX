@@ -51,7 +51,7 @@ public class MainApp extends Application implements MapInitializedListener {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Moving to new location");
-                        map.setCenter(80, 150);
+                        //map.setCenter(80, 150);
                     }
                 });
             }

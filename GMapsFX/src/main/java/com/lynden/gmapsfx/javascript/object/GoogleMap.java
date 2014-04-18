@@ -23,13 +23,18 @@ import com.lynden.gmapsfx.javascript.Type;
  *
  * @author Rob Terpilowski
  */
-public class Map extends JavascriptType {
+public class GoogleMap extends JavascriptType {
 
     protected LatLong latLong;
     protected int zoom;
+    protected static String divArg = "document.getElementById('map-canvas')";
     
-    public Map() {
-        super(Type.MAP, "document.getElementById('map-canvas')");
+    public GoogleMap() {
+        super(Type.MAP, divArg );
+    }
+    
+    public GoogleMap( MapOptions mapOptions ) {
+        super(Type.MAP, new Object[]{ divArg, mapOptions} );
     }
     
     

@@ -14,31 +14,16 @@
  * limitations under the License.
  */
 
-package com.lynden.gmapsfx.javascript;
+package com.lynden.gmapsfx;
 
 /**
  *
  * @author Rob Terpilowski
  */
-public enum Type {
-    
-   OBJECT("Object"),
-   MAP("google.maps.Map"),
-   LAT_LNG("google.maps.LatLng"),
-   MARKER("google.maps.Marker");
-   
-   protected String typeString;
-   
-   Type( String typeString ) {
-       this.typeString = typeString;
-   }
+public class MapNotInitializedException extends RuntimeException {
 
-    @Override
-    public String toString() {
-        return typeString;
+    public MapNotInitializedException() {
+        super( "Map has not yet been initialized");
     }
-   
-   
-
-   
+    
 }

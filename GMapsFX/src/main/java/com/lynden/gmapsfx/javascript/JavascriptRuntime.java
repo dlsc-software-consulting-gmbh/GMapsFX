@@ -22,19 +22,21 @@ import netscape.javascript.JSObject;
  *
  * @author Rob Terpilowski
  */
-public class JavascriptRuntime {
+public class JavascriptRuntime implements IJavascriptRuntime {
     
-    protected static JavascriptRuntime runtime = null;
+    protected static IJavascriptRuntime runtime = null;
+    
        
     public static WebEngine engine;
     
-    public static JavascriptRuntime getInstance() {
+    public static IJavascriptRuntime getInstance() {
         if( runtime == null ) {
             runtime = new JavascriptRuntime();
         }
         return runtime;
     }
     
+    @Override
     public JSObject execute(String command) {
         Object returnValue = engine.executeScript(command);
         if( returnValue instanceof JSObject ) {
@@ -45,14 +47,17 @@ public class JavascriptRuntime {
     }
 
     
+    @Override
     public String getConstructor( Type type, Object... args ) {
         return getFunction( "new " + type, args );
     }
     
+    @Override
     public String getFunction(String variable, String function, Object... args) {
         return getFunction( variable + "." + function, args );
     }
     
+    @Override
     public String getFunction(String function, Object... args) {
         if( args == null ) {
             return function + "();";
@@ -60,11 +65,19 @@ public class JavascriptRuntime {
         StringBuilder sb = new StringBuilder();
         sb.append(function).append("(");
         for (Object arg : args) {
-            
-            sb.append(arg).append(",");
+            sb.append(getArgString(arg)).append(",");
         }
         sb.replace(sb.length() - 1, sb.length(), ")");
 
         return sb.toString();
+    }
+    
+    
+    protected String getArgString( Object arg ) {
+        if( arg instanceof JavascriptType ) {
+            return ((JavascriptType) arg).getProperties();
+        } else {
+            return arg.toString();
+        }
     }
 }

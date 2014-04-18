@@ -18,7 +18,7 @@ package com.lynden.gmapsfx;
 
 /**
  *
- * @author robt
+ * @author Rob Terpilowski
  */
 public interface MapInitializedListener {
     

@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx.javascript;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import netscape.javascript.JSObject;
 
 /**
@@ -23,45 +24,88 @@ import netscape.javascript.JSObject;
  * @author Rob Terpilowski
  */
 public class JavascriptType {
-    
-    protected JavascriptRuntime runtime;
+
+    protected IJavascriptRuntime runtime;
     protected JSObject javascriptObject;
     protected static int objectCounter = 0;
     protected String variableName;
-    
-    
-    public JavascriptType(Type type ) {
+    protected Map<String, Object> properties = new LinkedHashMap<>();
+
+    protected JavascriptType(Type type) {
         this(type, (Object[]) null);
     }
-    
-    public JavascriptType(Type type, Object... args ) {
+
+    protected JavascriptType(Type type, Object... args) {
         runtime = JavascriptRuntime.getInstance();
         variableName = getNextVariableName();
-        runtime.execute( "var " + variableName + " = " + runtime.getConstructor(type, args) );
-        javascriptObject = runtime.execute( variableName );
+        runtime.execute("var " + variableName + " = " + runtime.getConstructor(type, args));
+        javascriptObject = runtime.execute(variableName);
+        System.out.println("JS Object: " + javascriptObject.toString());
     }
-    
-    
+
     public JSObject getJSObject() {
         return javascriptObject;
     }
-    
+
     protected final String getNextVariableName() {
         return getClass().getSimpleName() + (objectCounter++);
     }
-    
+
     public String getVariableName() {
         return variableName;
     }
-    
-    public void setProperty( String propertyName, Object propertyValue ) {
+
+    protected void setProperty(String propertyName, Object propertyValue) {
         javascriptObject.setMember(propertyName, propertyValue);
+        properties.put(propertyName, propertyValue);
     }
-    
-    public void invokeJavascript( String method, Object... args ) {
+
+//    protected void setProperty(String propertyName, String propertyValue) {
+//        javascriptObject.setMember(propertyName, propertyValue);
+//        properties.put(propertyName, propertyValue);
+//    }
+//
+//    protected void setProperty(String propertyName, Boolean propertyValue) {
+//        javascriptObject.setMember(propertyName, propertyValue);
+//        properties.put(propertyName, propertyValue);
+//    }
+
+    protected void setProperty(String propertyName, JavascriptType propertyValue) {
+        javascriptObject.setMember(propertyName, propertyValue.getVariableName());
+        properties.put(propertyName, propertyValue);
+    }
+
+    protected String getProperties() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\n");
+        for (String key : properties.keySet()) {
+            sb.append(key).append(": ").append(getProperty(key)).append(",\n");
+        }
+        sb.replace(sb.length() - 2, sb.length(), "\n}");
+
+        return sb.toString();
+
+    }
+
+    protected Object getProperty(String key) {
+        Object returnValue = null;
+        Object value = properties.get(key);
+        if (value != null) {
+            if (value instanceof String) {
+                returnValue = "\"" + value + "\"";
+            } else if (value instanceof JavascriptType) {
+                returnValue = ((JavascriptType) value).getVariableName();
+            } else {
+                returnValue = value.toString();
+            }
+        }
+        return returnValue;
+    }
+
+    protected void invokeJavascript(String method, Object... args) {
         Object[] jsArgs = new Object[args.length];
-        for( int i = 0; i < jsArgs.length; i++ ) {
-            if( args[i] instanceof JavascriptType ) {
+        for (int i = 0; i < jsArgs.length; i++) {
+            if (args[i] instanceof JavascriptType) {
                 jsArgs[i] = ((JavascriptType) args[i]).getJSObject();
             } else {
                 jsArgs[i] = args[i];
@@ -70,4 +114,3 @@ public class JavascriptType {
         javascriptObject.call(method, (Object[]) jsArgs);
     }
 }
-    
