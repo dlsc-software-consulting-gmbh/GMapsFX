@@ -20,7 +20,7 @@ package com.lynden.gmapsfx;
  *
  * @author Rob Terpilowski
  */
-public interface MapInitializedListener {
+public interface MapComponentInitializedListener {
     
     
     public void mapInitialized();

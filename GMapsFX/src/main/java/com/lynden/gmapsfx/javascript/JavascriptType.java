@@ -75,7 +75,7 @@ public class JavascriptType {
         properties.put(propertyName, propertyValue);
     }
 
-    protected String getProperties() {
+    public String getProperties() {
         StringBuilder sb = new StringBuilder();
         sb.append("{\n");
         for (String key : properties.keySet()) {

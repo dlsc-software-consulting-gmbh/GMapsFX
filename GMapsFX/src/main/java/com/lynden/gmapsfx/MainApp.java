@@ -1,62 +1,68 @@
 package com.lynden.gmapsfx;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapType;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class MainApp extends Application implements MapInitializedListener {
+public class MainApp extends Application implements MapComponentInitializedListener {
 
-    GoogleMapComponent map;
+    GoogleMapComponent mapComponent;
+    GoogleMap map;
 
     @Override
     public void start(final Stage stage) throws Exception {
-        System.out.println("Creating map");
-        map = new GoogleMapComponent();
-        map.addMapInializedListener(this);
-        System.out.println("Map created");
-        Scene scene = new Scene(map);
+        mapComponent = new GoogleMapComponent();
+        mapComponent.addMapInializedListener(this);
 
-        System.out.println("center set");
-
-        //webView.getEngine().executeScript("Alert(\"Hello!\")");
-//        System.out.println("Starting load");
-        //webView.getEngine().load(getClass().getResource("/html/maps.html").toExternalForm());
-//        System.out.println("Loaded hit");
-        //      
-        // 
-        //window.setMember("app", this);
-        //JSObject jsobj = (JSObject) webView.getEngine().executeScript("hello()");
-        //jsobj.call("alert", "Hello");
+        Scene scene = new Scene(mapComponent);
         stage.setScene(scene);
         stage.show();
-        //barrier.await(10, TimeUnit.SECONDS);
-
-        System.out.println("Got here");
     }
 
+    
     @Override
     public void mapInitialized() {
-        Thread thread = new Thread(new Runnable() {
+        LatLong center = new LatLong(47.606189, -122.335842);
+        MapOptions options = new MapOptions();
+        options.center(center)
+                .mapMarker(true)
+                .zoom(11)
+                .overviewMapControl(false)
+                .panControl(false)
+                .rotateControl(false)
+                .scaleControl(false)
+                .streetViewControl(false)
+                .zoomControl(false)
+                .mapType(MapType.ROADMAP);
 
-            public void run() {
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException ex) {
-                    ex.printStackTrace();
-                }
-                Platform.runLater(new Runnable() {
-                    public void run() {
-                        System.out.println("Moving to new location");
-                        //map.setCenter(80, 150);
-                    }
-                });
-            }
-        });
-        thread.start();
+        map = mapComponent.createMap(options);
+
+        
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(new LatLong(47.606189, -122.335842))
+                    .title("My new Marker")
+                    .visible(true)
+                    .icon("container.jpg");
+
+        Marker containerMarker = new Marker(markerOptions);
+        map.addMarker(containerMarker);
+        
+        
+        MarkerOptions markerOptions2 = new MarkerOptions();
+        markerOptions2.position(new LatLong(47.906189, -122.335842))
+                        .title("My other Marker")
+                    .visible(true);
+        Marker otherMarker = new Marker(markerOptions2);
+        
+        
+        map.addMarker(otherMarker);
 
     }
 

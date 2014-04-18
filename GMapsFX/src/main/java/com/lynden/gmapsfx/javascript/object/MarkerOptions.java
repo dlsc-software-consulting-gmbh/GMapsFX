@@ -30,6 +30,7 @@ public class MarkerOptions extends JavascriptType {
     protected LatLong position;
     protected String title;
     protected boolean visible = true;
+    protected String icon;
     
     
     public MarkerOptions() {
@@ -56,8 +57,8 @@ public class MarkerOptions extends JavascriptType {
     }
     
     
-    public MarkerOptions map( GoogleMap map ) {
-        setProperty("map", map);
+    public MarkerOptions icon( String iconPath ) {
+        setProperty("icon", iconPath);
         return this;
     }
     

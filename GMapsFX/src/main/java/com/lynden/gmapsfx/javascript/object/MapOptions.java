@@ -26,6 +26,7 @@ import com.lynden.gmapsfx.javascript.Type;
 public class MapOptions extends JavascriptType {
     
     protected LatLong center;
+    protected MapType mapType;
     protected boolean mapMarker;
     protected boolean overviewMapControl;
     protected boolean panControl;
@@ -50,6 +51,12 @@ public class MapOptions extends JavascriptType {
     public MapOptions mapMarker( boolean mapMarker ) {
         setProperty("mapMarker", mapMarker );
         this.mapMarker = mapMarker;
+        return this;
+    }
+    
+    public MapOptions mapType( MapType mapType ) {
+        setProperty( "mapTypeId", mapType );
+        this.mapType = mapType;
         return this;
     }
     

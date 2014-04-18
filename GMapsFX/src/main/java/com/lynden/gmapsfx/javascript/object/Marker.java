@@ -20,20 +20,43 @@ import com.lynden.gmapsfx.javascript.JavascriptType;
 import com.lynden.gmapsfx.javascript.Type;
 
 /**
- *
+ * Marker which can be placed on a GoogleMap.
+ * 
  * @author Rob Terpilowski
+ * @version $Revision$
  */
 public class Marker extends JavascriptType {
 
 
     protected String title;
     
+    
+    /**
+     * Contructs a new map Marker with the specified options
+     * @param markerOptions The options to use when constructing this marker.
+     */
     public Marker(MarkerOptions markerOptions) {
         super(Type.MARKER, markerOptions);
     }
     
+    
+    /**
+     * Sets the title of this Marker
+     * @param title The Marker's new title
+     */
     public void setTitle( String title ) {
+        invokeJavascript("setTitle", title);
         this.title = title;
+    }
+    
+    
+    /**
+     * This method is called from the GoogleMap.addMarker() method, it should not be invoked directory.
+     *
+     * @param map The map to add this Marker to.
+     */
+    protected void setMap( GoogleMap map ) {
+        invokeJavascript("setMap", map);
     }
     
     

@@ -27,6 +27,7 @@ public class GoogleMap extends JavascriptType {
 
     protected LatLong latLong;
     protected int zoom;
+    protected MapOptions options;
     protected static String divArg = "document.getElementById('map-canvas')";
     
     public GoogleMap() {
@@ -47,7 +48,7 @@ public class GoogleMap extends JavascriptType {
         invokeJavascript("setCenter", latLong);
         this.latLong = latLong;
     }
-
+    
     public LatLong getLatLong() {
         return latLong;
     }
@@ -56,6 +57,18 @@ public class GoogleMap extends JavascriptType {
         return zoom;
     }
     
+    
+    public void addMarker( Marker marker ) {
+        marker.setMap(this);
+    }
+    
+    public void removeMarker( Marker marker ) {
+        marker.setMap(null);
+    }
+    
+    public void setMapType( MapType type ) {
+        invokeJavascript("setMapTypeId", type.toString() );
+    }
     
     
 }
