@@ -13,12 +13,12 @@ import javafx.stage.Stage;
 
 public class MainApp extends Application implements MapComponentInitializedListener {
 
-    GoogleMapComponent mapComponent;
-    GoogleMap map;
+    protected GoogleMapView mapComponent;
+    protected GoogleMap map;
 
     @Override
     public void start(final Stage stage) throws Exception {
-        mapComponent = new GoogleMapComponent();
+        mapComponent = new GoogleMapView();
         mapComponent.addMapInializedListener(this);
 
         Scene scene = new Scene(mapComponent);
@@ -29,6 +29,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
     
     @Override
     public void mapInitialized() {
+        //Once the map has been loaded by the Webview, initialize the map details.
         LatLong center = new LatLong(47.606189, -122.335842);
         MapOptions options = new MapOptions();
         options.center(center)
@@ -46,24 +47,14 @@ public class MainApp extends Application implements MapComponentInitializedListe
 
         
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(new LatLong(47.606189, -122.335842))
+        LatLong markerLatLong = new LatLong(47.606189, -122.335842);
+        markerOptions.position( markerLatLong )
                     .title("My new Marker")
-                    .visible(true)
-                    .icon("container.jpg");
-
-        Marker containerMarker = new Marker(markerOptions);
-        map.addMarker(containerMarker);
-        
-        
-        MarkerOptions markerOptions2 = new MarkerOptions();
-        markerOptions2.position(new LatLong(47.906189, -122.335842))
-                        .title("My other Marker")
                     .visible(true);
-        Marker otherMarker = new Marker(markerOptions2);
-        
-        
-        map.addMarker(otherMarker);
 
+        Marker myMarker = new Marker(markerOptions);
+        map.addMarker(myMarker);
+        
     }
 
     /**

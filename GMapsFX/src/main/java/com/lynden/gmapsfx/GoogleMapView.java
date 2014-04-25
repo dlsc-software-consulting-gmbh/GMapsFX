@@ -37,7 +37,7 @@ import netscape.javascript.JSObject;
  *
  * @author Rob Terpilowski
  */
-public class GoogleMapComponent extends BorderPane {
+public class GoogleMapView extends BorderPane {
 
     protected WebView webview;
     protected WebEngine webengine;
@@ -47,7 +47,7 @@ public class GoogleMapComponent extends BorderPane {
     protected GoogleMap map;
 
 
-    public GoogleMapComponent() {
+    public GoogleMapView() {
         webview = new WebView();
         webengine = webview.getEngine();
         JavascriptRuntime.engine = webengine;
@@ -63,7 +63,7 @@ public class GoogleMapComponent extends BorderPane {
                         }
                     }
                 });
-
+        webengine.load("http://maps.google.com");
         webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
     }
 

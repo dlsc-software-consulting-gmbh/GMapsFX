@@ -13,30 +13,6 @@
         </style>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
         <script>
-            var map;
-
-
-           function setCenter( lat, long ) {
-               map.setCenter( new google.maps.LatLng(lat, long) );
-           }
-            
-            
-           function initialize() {
-                var myLatlng = new google.maps.LatLng(-25.363882, 131.044922);
-                var mapOptions = {
-                    zoom: 4,
-                    center: myLatlng
-                };
-                 map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-
-               
-            };
-            
-            function hello() {
-                //hello
-            }
-
-            //google.maps.event.addDomListener(window, 'load', initialize);
 
         </script>
     </head>
