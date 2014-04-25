@@ -50,7 +50,7 @@ public class GoogleMapView extends BorderPane {
     public GoogleMapView() {
         webview = new WebView();
         webengine = webview.getEngine();
-        JavascriptRuntime.engine = webengine;
+        JavascriptRuntime.setDefaultWebEngine(webengine);
 
         setCenter(webview);
 
@@ -63,7 +63,6 @@ public class GoogleMapView extends BorderPane {
                         }
                     }
                 });
-        webengine.load("http://maps.google.com");
         webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
     }
 

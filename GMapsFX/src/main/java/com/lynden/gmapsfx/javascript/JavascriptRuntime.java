@@ -36,6 +36,10 @@ public class JavascriptRuntime implements IJavascriptRuntime {
         return runtime;
     }
     
+    public static void setDefaultWebEngine( WebEngine e ) {
+        engine = e;
+    }
+    
     @Override
     public JSObject execute(String command) {
         Object returnValue = engine.executeScript(command);
