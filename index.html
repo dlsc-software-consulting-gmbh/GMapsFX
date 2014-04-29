@@ -41,56 +41,121 @@ Currently there is only support for a fraction of the Google Maps Javascript API
 <br>
 <br>
 
-<img src="http://rterp.files.wordpress.com/2014/04/gmaps1.png"/>
+<img src="http://rterp.files.wordpress.com/2014/04/gmapsfx2.png"/>
 <br>
 <br>
-Source code example of creating a new map
+Source code for the sample map above.
+
+<br><br>
+<h3>
+A snippet from the FXML file which includes a reference to the GoogleMapView component within an AnchorPane.
+</h3>
+<br>
+<code><pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+
+&lt;?import java.lang.*?&gt;
+&lt;?import javafx.geometry.*?>
+&lt;?import javafx.scene.control.*?>
+&lt;?import javafx.scene.image.*?>
+&lt;?import javafx.scene.layout.*?>
+&lt;?import com.lynden.gmapsfx.*?>
+
+&lt;AnchorPane id="AnchorPane" fx:controller="com.lynden.gmapsexampleapp.FXMLController" prefHeight="616.0" prefWidth="737.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+    &lt;children>        
+        &lt;GoogleMapView fx:id="mapView" prefHeight="750.0" prefWidth="761.0" AnchorPane.bottomAnchor="-185.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-441.0" AnchorPane.topAnchor="0.0"/>
+        &lt;VBox alignment="TOP_CENTER" fillWidth="false" layoutX="26.0" layoutY="29.0" prefHeight="478.0" prefWidth="221.0" spacing="10.0" styleClass="panel-background" stylesheets="@../styles/Styles.css" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="88.0" BorderPane.alignment="CENTER">
+        ...........
+</code>
+</pre>
+<hr>
+<br>
+
+<h3>
+    The FXMLController class which initializes the map and the markers.
+</h3>
+
 <pre><code>
-public class MainApp extends Application implements MapComponentInitializedListener {
+package com.lynden.gmapsexampleapp;
 
-    protected GoogleMapView mapComponent;
-    protected GoogleMap map;
+import com.lynden.gmapsfx.GoogleMapView;
+import com.lynden.gmapsfx.MapComponentInitializedListener;
+import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapType;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 
-    @Override
-    public void start(final Stage stage) throws Exception {
-        mapComponent = new GoogleMapView();
-        mapComponent.addMapInializedListener(this);
 
-        Scene scene = new Scene(mapComponent);
-        stage.setScene(scene);
-        stage.show();
-    }
-
+public class FXMLController implements Initializable, MapComponentInitializedListener {
+    
+    @FXML
+    private Button button;
+    
+    @FXML
+    private GoogleMapView mapView;
+    
+    private GoogleMap map;
     
     @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        mapView.addMapInializedListener(this);
+    }    
+
+    @Override
     public void mapInitialized() {
-        //Once the map has been loaded by the Webview, initialize the map details.
-        LatLong center = new LatLong(47.606189, -122.335842);
-        MapOptions options = new MapOptions();
-        options.center(center)
-                .mapMarker(true)
-                .zoom(11)
+        
+        LatLong joeSmithLocation = new LatLong(47.6197, -122.3231);
+        LatLong joshAndersonLocation = new LatLong(47.6297, -122.3431);
+        LatLong bobUnderwoodLocation = new LatLong(47.6397, -122.3031);
+        LatLong tomChoiceLocation = new LatLong(47.6497, -122.3325);
+        LatLong fredWilkieLocation = new LatLong(47.6597, -122.3357);
+        
+        
+        //Set the initial properties of the map.
+        MapOptions mapOptions = new MapOptions();
+        
+        mapOptions.center(new LatLong(47.6097, -122.3331))
+                .mapType(MapType.ROADMAP)
                 .overviewMapControl(false)
                 .panControl(false)
                 .rotateControl(false)
                 .scaleControl(false)
                 .streetViewControl(false)
                 .zoomControl(false)
-                .mapType(MapType.ROADMAP);
+                .zoom(12);
+                   
+        map = mapView.createMap(mapOptions);
 
-        map = mapComponent.createMap(options);
-
+        //Add markers to the map
+        MarkerOptions markerOptions1 = new MarkerOptions();
+        markerOptions1.position(joeSmithLocation);
         
-        MarkerOptions markerOptions = new MarkerOptions();
-        LatLong markerLatLong = new LatLong(47.606189, -122.335842);
-        markerOptions.position( markerLatLong )
-                    .title("My new Marker")
-                    .visible(true);
-
-        Marker myMarker = new Marker(markerOptions);
-        map.addMarker(myMarker);
+        MarkerOptions markerOptions2 = new MarkerOptions();
+        markerOptions2.position(joshAndersonLocation);
         
-    }
+        MarkerOptions markerOptions3 = new MarkerOptions();
+        markerOptions3.position(bobUnderwoodLocation);
+        
+        MarkerOptions markerOptions4 = new MarkerOptions();
+        markerOptions4.position(tomChoiceLocation);
+        
+        MarkerOptions markerOptions5 = new MarkerOptions();
+        markerOptions5.position(fredWilkieLocation);
+        
+        map.addMarker( new Marker(markerOptions1) );
+        map.addMarker( new Marker(markerOptions2) );
+        map.addMarker( new Marker(markerOptions3) );
+        map.addMarker( new Marker(markerOptions4) );
+        map.addMarker( new Marker(markerOptions5) );
+    }   
+}
 </code></pre>
 
 <h3>
