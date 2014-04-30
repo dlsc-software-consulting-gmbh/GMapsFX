@@ -19,16 +19,13 @@ import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
-import com.lynden.gmapsfx.javascript.object.MapType;
-import com.lynden.gmapsfx.javascript.object.Marker;
-import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
@@ -37,7 +34,7 @@ import netscape.javascript.JSObject;
  *
  * @author Rob Terpilowski
  */
-public class GoogleMapView extends BorderPane {
+public class GoogleMapView extends AnchorPane {
 
     protected WebView webview;
     protected WebEngine webengine;
@@ -52,8 +49,12 @@ public class GoogleMapView extends BorderPane {
         webengine = webview.getEngine();
         JavascriptRuntime.setDefaultWebEngine(webengine);
 
-        setCenter(webview);
-
+        setTopAnchor(webview,0.0);
+        setLeftAnchor(webview,0.0);
+        setBottomAnchor(webview, 0.0);
+        setRightAnchor(webview, 0.0);
+        getChildren().add(webview);
+        
         webengine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
@@ -64,6 +65,7 @@ public class GoogleMapView extends BorderPane {
                     }
                 });
         webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
+        
     }
 
     public void setZoom(int zoom) {
@@ -123,7 +125,6 @@ public class GoogleMapView extends BorderPane {
 
     protected JSObject executeJavascript(String function) {
         Object returnObject = webengine.executeScript(function);
-        System.out.println("Return object: " + returnObject);
         return (JSObject) returnObject;
     }
 

@@ -40,7 +40,6 @@ public class JavascriptType {
         variableName = getNextVariableName();
         runtime.execute("var " + variableName + " = " + runtime.getConstructor(type, args));
         javascriptObject = runtime.execute(variableName);
-        System.out.println("JS Object: " + javascriptObject.toString());
     }
 
     public JSObject getJSObject() {

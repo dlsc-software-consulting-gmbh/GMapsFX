@@ -11,6 +11,13 @@ import static javafx.application.Application.launch;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
+
+/**
+ * Example Application for creating and loading a GoogleMap into a JavaFX application
+ *
+ * @author Rob Terpilowski
+ */
 public class MainApp extends Application implements MapComponentInitializedListener {
 
     protected GoogleMapView mapComponent;
@@ -53,7 +60,17 @@ public class MainApp extends Application implements MapComponentInitializedListe
                     .visible(true);
 
         Marker myMarker = new Marker(markerOptions);
+        
+        MarkerOptions markerOptions2 = new MarkerOptions();
+        //LatLong markerLatLong2 = ;
+        markerOptions2.position( new LatLong(47.906189, -122.335842) )
+                    .title("My new Marker")
+                    .visible(true);
+        
+    Marker myMarker2 = new Marker(markerOptions2);        
+        
         map.addMarker(myMarker);
+        map.addMarker(myMarker2);
         
     }
 
