@@ -13,32 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package com.lynden.gmapsfx.javascript;
+package com.lynden.gmapsfx.javascript.object;
 
 /**
  *
  * @author Rob Terpilowski
  */
-public enum ObjectType {
-    
-   OBJECT("Object"),
-   MAP("google.maps.Map"),
-   LAT_LNG("google.maps.LatLng"),
-   MARKER("google.maps.Marker");
-   
-   protected String typeString;
-   
-   ObjectType( String typeString ) {
-       this.typeString = typeString;
-   }
+public enum Animation {
+
+    NULL("null"),
+    BOUNCE("google.maps.Animation.BOUNCE"),
+    DROP("google.maps.Animation.DROP");
+
+    protected String typeString;
+
+    Animation(String typeString) {
+        this.typeString = typeString;
+    }
 
     @Override
     public String toString() {
         return typeString;
     }
-   
-   
 
-   
 }

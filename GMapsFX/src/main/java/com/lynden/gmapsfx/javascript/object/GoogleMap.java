@@ -16,14 +16,14 @@
 
 package com.lynden.gmapsfx.javascript.object;
 
-import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.ObjectType;
+import com.lynden.gmapsfx.javascript.JavascriptObject;
+import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  *
  * @author Rob Terpilowski
  */
-public class GoogleMap extends JavascriptType {
+public class GoogleMap extends JavascriptObject {
 
     protected LatLong latLong;
     protected int zoom;
@@ -31,11 +31,11 @@ public class GoogleMap extends JavascriptType {
     protected static String divArg = "document.getElementById('map-canvas')";
     
     public GoogleMap() {
-        super(ObjectType.MAP, divArg );
+        super(JavascriptObjectType.MAP, divArg );
     }
     
     public GoogleMap( MapOptions mapOptions ) {
-        super(ObjectType.MAP, new Object[]{ divArg, mapOptions} );
+        super(JavascriptObjectType.MAP, new Object[]{ divArg, mapOptions} );
     }
     
     

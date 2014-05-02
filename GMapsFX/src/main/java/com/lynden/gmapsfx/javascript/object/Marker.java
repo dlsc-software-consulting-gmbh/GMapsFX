@@ -16,15 +16,15 @@
 
 package com.lynden.gmapsfx.javascript.object;
 
-import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.ObjectType;
+import com.lynden.gmapsfx.javascript.JavascriptObject;
+import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  * Marker which can be placed on a GoogleMap.
  * 
  * @author Rob Terpilowski
  */
-public class Marker extends JavascriptType {
+public class Marker extends JavascriptObject {
 
 
     protected String title;
@@ -35,7 +35,7 @@ public class Marker extends JavascriptType {
      * @param markerOptions The options to use when constructing this marker.
      */
     public Marker(MarkerOptions markerOptions) {
-        super(ObjectType.MARKER, markerOptions);
+        super(JavascriptObjectType.MARKER, markerOptions);
     }
     
     
@@ -56,6 +56,15 @@ public class Marker extends JavascriptType {
      */
     protected void setMap( GoogleMap map ) {
         invokeJavascript("setMap", map);
+    }
+    
+    
+    /**
+     * Sets how the marker should be animated.  To clear the animation use Animation.NULL
+     * @param animation The animation to use for this marker.
+     */
+    public void setAnimation( Animation animation ) {
+        invokeJavascript("setAnimation", animation);
     }
     
     

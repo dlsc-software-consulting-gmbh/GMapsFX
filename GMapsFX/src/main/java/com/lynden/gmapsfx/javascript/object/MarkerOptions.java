@@ -16,23 +16,24 @@
 
 package com.lynden.gmapsfx.javascript.object;
 
-import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.ObjectType;
+import com.lynden.gmapsfx.javascript.JavascriptObject;
+import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  *
  * @author Rob Terpilowski
  */
-public class MarkerOptions extends JavascriptType {
+public class MarkerOptions extends JavascriptObject {
     
     protected LatLong position;
     protected String title;
     protected boolean visible = true;
     protected String icon;
+    protected Animation animation;
     
     
     public MarkerOptions() {
-        super(ObjectType.OBJECT);
+        super(JavascriptObjectType.OBJECT);
     }
     
     public MarkerOptions title( String title ) {
@@ -57,6 +58,11 @@ public class MarkerOptions extends JavascriptType {
     
     public MarkerOptions icon( String iconPath ) {
         setProperty("icon", iconPath);
+        return this;
+    }
+    
+    public MarkerOptions animation( Animation animation ) {
+        setProperty("animation", animation);
         return this;
     }
     

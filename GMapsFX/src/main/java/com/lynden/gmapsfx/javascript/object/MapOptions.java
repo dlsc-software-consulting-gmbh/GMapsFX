@@ -16,14 +16,14 @@
 
 package com.lynden.gmapsfx.javascript.object;
 
-import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.ObjectType;
+import com.lynden.gmapsfx.javascript.JavascriptObject;
+import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  *
  * @author robt
  */
-public class MapOptions extends JavascriptType {
+public class MapOptions extends JavascriptObject {
     
     protected LatLong center;
     protected MapType mapType;
@@ -38,7 +38,7 @@ public class MapOptions extends JavascriptType {
     
 
     public MapOptions() {
-        super(ObjectType.OBJECT);
+        super(JavascriptObjectType.OBJECT);
     }
     
     

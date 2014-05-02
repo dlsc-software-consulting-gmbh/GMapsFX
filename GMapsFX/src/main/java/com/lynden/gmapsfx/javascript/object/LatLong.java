@@ -16,20 +16,20 @@
 
 package com.lynden.gmapsfx.javascript.object;
 
-import com.lynden.gmapsfx.javascript.JavascriptType;
-import com.lynden.gmapsfx.javascript.ObjectType;
+import com.lynden.gmapsfx.javascript.JavascriptObject;
+import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  *
  * @author Rob Terpilowski
  */
-public class LatLong extends JavascriptType {
+public class LatLong extends JavascriptObject {
     
     protected double latitude;
     protected double longitude;
 
     public LatLong(double latitude, double longitude) {
-        super(ObjectType.LAT_LNG, latitude, longitude);
+        super(JavascriptObjectType.LAT_LNG, latitude, longitude);
         this.latitude = latitude;
         this.longitude = longitude;
     }

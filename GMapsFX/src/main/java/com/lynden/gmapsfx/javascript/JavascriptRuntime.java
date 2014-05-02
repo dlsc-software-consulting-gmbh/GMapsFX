@@ -52,7 +52,7 @@ public class JavascriptRuntime implements IJavascriptRuntime {
 
     
     @Override
-    public String getConstructor( ObjectType type, Object... args ) {
+    public String getConstructor( JavascriptObjectType type, Object... args ) {
         return getFunction( "new " + type, args );
     }
     
@@ -78,8 +78,8 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     
     
     protected String getArgString( Object arg ) {
-        if( arg instanceof JavascriptType ) {
-            return ((JavascriptType) arg).getProperties();
+        if( arg instanceof JavascriptObject ) {
+            return ((JavascriptObject) arg).getPropertiesAsString();
         } else {
             return arg.toString();
         }
