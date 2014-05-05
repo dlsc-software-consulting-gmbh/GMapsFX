@@ -36,12 +36,14 @@
 GMapsFX provides a wrapper to the Google Map's Javascript API, allowing you to use and interact with maps using a pure Java API.  Below is an example of creating a new map component and adding a map marker to it.  
 
 Currently there is only support for a fraction of the Google Maps Javascript API, and the documentation is sparse, but this project has been opened sourced with the hope that as others need additional functionality it can be added to the API and contributed back to the community.
+<br><br>
+Javadocs can be found <a href="http://rterp.github.io/GMapsFX/apidocs/">here</a>
 </p>
 
 <br>
 <br>
 
-<img src="http://rterp.files.wordpress.com/2014/04/gmapsfx2.png"/>
+<img src="http://rterp.files.wordpress.com/2014/05/gmapsfx.png"/>
 <br>
 <br>
 Source code for the sample map above.
@@ -72,7 +74,7 @@ A snippet from the FXML file which includes a reference to the GoogleMapView com
 <br>
 
 <h3>
-    The FXMLController class which initializes the map and the markers.
+    The FXMLController class which initializes the Map, Markers, and InfoWindow.
 </h3>
 
 <pre><code>
@@ -110,8 +112,7 @@ public class FXMLController implements Initializable, MapComponentInitializedLis
 
     @Override
     public void mapInitialized() {
-        
-        LatLong joeSmithLocation = new LatLong(47.6197, -122.3231);
+           LatLong joeSmithLocation = new LatLong(47.6197, -122.3231);
         LatLong joshAndersonLocation = new LatLong(47.6297, -122.3431);
         LatLong bobUnderwoodLocation = new LatLong(47.6397, -122.3031);
         LatLong tomChoiceLocation = new LatLong(47.6497, -122.3325);
@@ -149,11 +150,25 @@ public class FXMLController implements Initializable, MapComponentInitializedLis
         MarkerOptions markerOptions5 = new MarkerOptions();
         markerOptions5.position(fredWilkieLocation);
         
-        map.addMarker( new Marker(markerOptions1) );
-        map.addMarker( new Marker(markerOptions2) );
-        map.addMarker( new Marker(markerOptions3) );
-        map.addMarker( new Marker(markerOptions4) );
-        map.addMarker( new Marker(markerOptions5) );
+        Marker joeSmithMarker = new Marker(markerOptions1);
+        Marker joshAndersonMarker = new Marker(markerOptions2);
+        Marker bobUnderwoodMarker = new Marker(markerOptions3);
+        Marker tomChoiceMarker= new Marker(markerOptions4);
+        Marker fredWilkieMarker = new Marker(markerOptions5);
+        
+        map.addMarker( joeSmithMarker );
+        map.addMarker( joshAndersonMarker );
+        map.addMarker( bobUnderwoodMarker );
+        map.addMarker( tomChoiceMarker );
+        map.addMarker( fredWilkieMarker );
+        
+        InfoWindowOptions infoWindowOptions = new InfoWindowOptions();
+        infoWindowOptions.content("&lt;h2&gt;Fred Wilkie&lt;/h2&gt;"
+                                + "Current Location: Safeway&lt;br&gt;"
+                                + "ETA: 45 minutes" );
+
+        InfoWindow fredWilkeInfoWindow = new InfoWindow(infoWindowOptions);
+        fredWilkeInfoWindow.open(map, fredWilkieMarker);
     }   
 }
 </code></pre>
