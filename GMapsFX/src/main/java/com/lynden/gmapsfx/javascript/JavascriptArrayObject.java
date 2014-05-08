@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lynden, Inc.
+ * Copyright 2014 Geoff Capper.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,10 @@
 
 package com.lynden.gmapsfx.javascript;
 
-import netscape.javascript.JSObject;
-
 /**
  *
- * @author Rob Terpilowski
+ * @author Geoff Capper
  */
-public interface IJavascriptRuntime {
-
-    JSObject execute(String command);
-
-    String getConstructor(JavascriptObjectType type, Object... args);
-    
-    String getArrayConstructor(JavascriptObjectType type, Object[] ary);
-
-    String getFunction(String variable, String function, Object... args);
-
-    String getFunction(String function, Object... args);
-    
-    String getArrayFunction(String function, Object[] ary);
+public class JavascriptArrayObject {
     
 }

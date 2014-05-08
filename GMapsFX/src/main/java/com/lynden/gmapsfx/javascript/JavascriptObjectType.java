@@ -28,7 +28,13 @@ public enum JavascriptObjectType {
    LAT_LNG("google.maps.LatLng"),
    MAP("google.maps.Map"),
    MARKER("google.maps.Marker"),
-   SIZE("google.maps.Size");
+   SIZE("google.maps.Size"),
+   POLYLINE("google.maps.Polyline"),
+   POLYGON("google.maps.Polygon"),
+   RECTANGLE("google.maps.Rectangle"),
+   CIRCLE("google.maps.Circle"),
+   MVC_ARRAY("google.maps.MVCArray"),
+   LAT_LNG_BOUNDS("google.maps.LatLngBounds");
    
    protected String typeString;
    

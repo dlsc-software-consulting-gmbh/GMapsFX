@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lynden, Inc.
+ * Copyright 2014 Geoff Capper.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,30 @@
  * limitations under the License.
  */
 
-package com.lynden.gmapsfx.javascript;
+package com.lynden.gmapsfx.shapes;
 
-import netscape.javascript.JSObject;
+import com.lynden.gmapsfx.javascript.object.MVCArray;
 
 /**
  *
- * @author Rob Terpilowski
+ * @author Geoff Capper
  */
-public interface IJavascriptRuntime {
-
-    JSObject execute(String command);
-
-    String getConstructor(JavascriptObjectType type, Object... args);
+public class PolygonOptions extends FillableMapShapeOptions<PolygonOptions> {
     
-    String getArrayConstructor(JavascriptObjectType type, Object[] ary);
-
-    String getFunction(String variable, String function, Object... args);
-
-    String getFunction(String function, Object... args);
+    private MVCArray paths;
     
-    String getArrayFunction(String function, Object[] ary);
+    public PolygonOptions() {
+    }
+    
+    public PolygonOptions paths(MVCArray paths) {
+        setProperty("path", paths);
+        this.paths = paths;
+        return this;
+    }
+    
+    @Override
+    protected PolygonOptions getMe() {
+        return this;
+    }
     
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lynden, Inc.
+ * Copyright 2014 Geoff Capper.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-package com.lynden.gmapsfx.javascript;
+package com.lynden.gmapsfx.javascript.event;
 
-import netscape.javascript.JSObject;
-
-/**
+/** A tagging interface to allow us to store all event handlers in the one 
+ * {@link EventHandlers} object.
  *
- * @author Rob Terpilowski
+ * @author Geoff Capper
  */
-public interface IJavascriptRuntime {
-
-    JSObject execute(String command);
-
-    String getConstructor(JavascriptObjectType type, Object... args);
-    
-    String getArrayConstructor(JavascriptObjectType type, Object[] ary);
-
-    String getFunction(String variable, String function, Object... args);
-
-    String getFunction(String function, Object... args);
-    
-    String getArrayFunction(String function, Object[] ary);
-    
+public interface GFXEventHandler {
 }

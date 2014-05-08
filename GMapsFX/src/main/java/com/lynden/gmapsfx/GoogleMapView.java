@@ -83,13 +83,13 @@ public class GoogleMapView extends AnchorPane {
         checkInitialized();
         return map;
     }
-    
+
     public GoogleMap createMap( MapOptions mapOptions ) {
         checkInitialized();
         map = new GoogleMap(mapOptions);
         return map;
     }
-    
+
     public GoogleMap createMap() {
         map = new GoogleMap();
         return map;

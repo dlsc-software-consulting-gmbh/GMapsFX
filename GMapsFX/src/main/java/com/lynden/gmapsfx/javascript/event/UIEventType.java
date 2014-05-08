@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lynden, Inc.
+ * Copyright 2014 Geoff Capper.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package com.lynden.gmapsfx.javascript;
+package com.lynden.gmapsfx.javascript.event;
 
-import netscape.javascript.JSObject;
-
-/**
+/** Enum containing the strings for the event types passed to the Google Maps 
+ * APIs for UI events. Whilst drawn from those for the Map object, they should 
+ * be the same for most other objects.
+ * <p>
+ * See <a href="https://developers.google.com/maps/documentation/javascript/reference?csw=1#Map">Google Maps Javascript API V3 Reference</a>
  *
- * @author Rob Terpilowski
+ * @author Geoff Capper
  */
-public interface IJavascriptRuntime {
-
-    JSObject execute(String command);
-
-    String getConstructor(JavascriptObjectType type, Object... args);
-    
-    String getArrayConstructor(JavascriptObjectType type, Object[] ary);
-
-    String getFunction(String variable, String function, Object... args);
-
-    String getFunction(String function, Object... args);
-    
-    String getArrayFunction(String function, Object[] ary);
+public enum UIEventType {
+	
+	click, dblclick, mousemove, mouseup, mousedown, mouseover, mouseout, rightclick;
     
 }
