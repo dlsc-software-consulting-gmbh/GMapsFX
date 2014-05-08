@@ -7,11 +7,17 @@ import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.InfoWindow;
 import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
 import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MVCArray;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapType;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+import com.lynden.gmapsfx.javascript.object.Polyline;
+import com.lynden.gmapsfx.javascript.object.PolylineOptions;
 import javafx.application.Application;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
+import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -86,7 +92,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         MapOptions options = new MapOptions();
         options.center(center)
                 .mapMarker(true)
-                .zoom(11)
+                .zoom(9)
                 .overviewMapControl(false)
                 .panControl(false)
                 .rotateControl(false)
@@ -107,8 +113,8 @@ public class MainApp extends Application implements MapComponentInitializedListe
        final Marker myMarker = new Marker(markerOptions);
         
         MarkerOptions markerOptions2 = new MarkerOptions();
-        //LatLong markerLatLong2 = ;
-        markerOptions2.position( new LatLong(47.906189, -122.335842) )
+        LatLong markerLatLong2 = new LatLong(47.906189, -122.335842);
+        markerOptions2.position( markerLatLong2 )
                     .title("My new Marker")
                     .visible(true);
         
@@ -146,7 +152,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
 //		});
 
         map.addUIEventHandler(UIEventType.click, (JSObject obj) -> {
-            LatLong ll = new LatLong(obj);
+            LatLong ll = new LatLong((JSObject) obj.getMember("latLng"));
             //System.out.println("LatLong: lat: " + ll.getLatitude() + " lng: " + ll.getLongitude());
             lblClick.setText(ll.toString());
         });
@@ -154,6 +160,26 @@ public class MainApp extends Application implements MapComponentInitializedListe
         btnZoomIn.setDisable(false);
         btnZoomOut.setDisable(false);
         
+        LatLong extra = new LatLong(47.857403, -121.97845);
+        
+        PolylineOptions polyOpts = new PolylineOptions();
+        LatLong[] ary = new LatLong[]{markerLatLong, markerLatLong2, extra};
+        MVCArray mvc = new MVCArray(ary);
+//        System.out.println("ary: " + ary.getClass().getName());
+//        System.out.println("ary: " + ary.getClass().isArray());
+//        System.out.println("ary: " + (ary instanceof Object[]));
+        
+        polyOpts.path(mvc)
+                .strokeColor("red")
+                .strokeWeight(2);
+        
+        Polyline poly = new Polyline(polyOpts);
+        map.addPolyline(poly);
+        map.addUIEventHandler(poly, UIEventType.click,  (JSObject obj) -> {
+            LatLong ll = new LatLong((JSObject) obj.getMember("latLng"));
+            System.out.println("You clicked the line at LatLong: lat: " + ll.getLatitude() + " lng: " + ll.getLongitude());
+            //lblClick.setText(ll.toString());
+        });
         
     }
 

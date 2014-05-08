@@ -25,12 +25,9 @@ import com.lynden.gmapsfx.javascript.event.StateEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import netscape.javascript.JSObject;
 
@@ -141,6 +138,13 @@ public class GoogleMap extends JavascriptObject {
         invokeJavascript("setMapTypeId", type.toString() );
     }
     
+    public void addPolyline(Polyline line) {
+        line.setMap(this);
+    }
+    
+    public void removePolyline(Polyline line) {
+        line.setMap(null);
+    }
     
     /** Registers an event handler in the repository shared between Javascript 
      * and Java.
@@ -164,14 +168,30 @@ public class GoogleMap extends JavascriptObject {
      * @param h Handler that will be called when the event occurs.
      */
     public void addUIEventHandler(UIEventType type, UIEventHandler h) {
-        String key = registerEventHandler(h);
-        String mcall = "google.maps.event.addListener(" + getVariableName() + ", '" + type.name() + "', "
-                + "function(event) {document.jsHandlers.handleUIEvent('" + key + "', event.latLng);});";
-        //System.out.println("addUIEventHandler mcall: " + mcall);
-        runtime.execute(mcall);
+        this.addUIEventHandler(this, type, h);
+//        String key = registerEventHandler(h);
+//        String mcall = "google.maps.event.addListener(" + getVariableName() + ", '" + type.name() + "', "
+//                + "function(event) {document.jsHandlers.handleUIEvent('" + key + "', event.latLng);});";
+//        //System.out.println("addUIEventHandler mcall: " + mcall);
+//        runtime.execute(mcall);
 
     }
 
+    /** Adds a handler for a mouse type event on the map.
+     * 
+     * @param obj The object that the event should be registered on.
+     * @param type Type of the event to register against.
+     * @param h Handler that will be called when the event occurs.
+     */
+    public void addUIEventHandler(JavascriptObject obj, UIEventType type, UIEventHandler h) {
+        String key = registerEventHandler(h);
+        String mcall = "google.maps.event.addListener(" + obj.getVariableName() + ", '" + type.name() + "', "
+                + "function(event) {document.jsHandlers.handleUIEvent('" + key + "', event);});";//.latLng
+        //System.out.println("addUIEventHandler mcall: " + mcall);
+        runtime.execute(mcall);
+    }
+    
+    
     /** Adds a handler for a state type event on the map.
      * <p>
      * We could allow this to handle any state event by adding a parameter 

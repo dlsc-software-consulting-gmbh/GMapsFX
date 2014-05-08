@@ -52,7 +52,20 @@ public class JavascriptObject {
         runtime.execute("var " + variableName + " = " + runtime.getConstructor(type, args));
         jsObject = runtime.execute(variableName);
     }
-
+    
+    /**
+     * @param type The type of underlying Javascript object to create.
+     * @param ary The array to be passed in.
+     * @param isArray boolean to indicate the an array is to be created.
+     * 
+     */
+    protected JavascriptObject(JavascriptObjectType type, Object[] ary, boolean isArray) {
+        runtime = JavascriptRuntime.getInstance();
+        variableName = getNextVariableName();
+        runtime.execute("var " + variableName + " = " + runtime.getArrayConstructor(type, ary));
+        jsObject = runtime.execute(variableName);
+    }
+    
     /** Wraps a Javascript JSObject returned from a function.
      * 
      * @param type Type of Javascript object to create.

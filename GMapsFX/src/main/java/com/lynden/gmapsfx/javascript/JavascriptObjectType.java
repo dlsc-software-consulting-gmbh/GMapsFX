@@ -28,7 +28,9 @@ public enum JavascriptObjectType {
    LAT_LNG("google.maps.LatLng"),
    MAP("google.maps.Map"),
    MARKER("google.maps.Marker"),
-   SIZE("google.maps.Size");
+   SIZE("google.maps.Size"),
+   POLYLINE("google.maps.Polyline"),
+   MVC_ARRAY("google.maps.MVCArray");
    
    protected String typeString;
    

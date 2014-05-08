@@ -24,8 +24,7 @@ import netscape.javascript.JSObject;
  */
 public interface UIEventHandler extends GFXEventHandler {
     /**
-     * @param obj The Javascript google.maps.LatLng object from the MouseEvent, 
-     * wrapped as a JSObject.
+     * @param obj This object may be either a MouseEvent or one of it's subclasses.
      */
 	public void handle(JSObject obj);
 }

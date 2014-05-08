@@ -77,7 +77,7 @@ public class LatLong extends JavascriptObject {
     
     @Override
     public String toString() {
-        return "lat: " + String.format("%.3G", getLatitude()) + " lng: " + String.format("%.3G", getLongitude());
+        return "lat: " + String.format("%.8G", getLatitude()) + " lng: " + String.format("%.8G", getLongitude());
     }
     
     

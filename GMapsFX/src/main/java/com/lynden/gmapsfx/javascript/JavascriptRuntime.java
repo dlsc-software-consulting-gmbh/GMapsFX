@@ -57,6 +57,13 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     }
     
     @Override
+    public String getArrayConstructor(JavascriptObjectType type, Object[] ary) {
+        String fn = getArrayFunction("new " + type, ary);
+        //System.out.println("getArrayConstructor: " + fn);
+        return fn;
+    }
+    
+    @Override
     public String getFunction(String variable, String function, Object... args) {
         return getFunction( variable + "." + function, args );
     }
@@ -75,6 +82,26 @@ public class JavascriptRuntime implements IJavascriptRuntime {
 
         return sb.toString();
     }
+    
+    @Override
+    public String getArrayFunction(String function, Object[] ary) {
+        if( ary == null ) {
+            return function + "([]);";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(function).append("([");
+        for (Object arg : ary) {
+            if (arg instanceof JavascriptObject) {
+                sb.append(((JavascriptObject) arg).getVariableName()).append(",");
+            } else {
+                sb.append(getArgString(arg)).append(",");
+            }
+        }
+        sb.replace(sb.length() - 1, sb.length(), "]").append(")");
+
+        return sb.toString();
+    }
+    
     
     
     protected String getArgString( Object arg ) {
