@@ -53,7 +53,16 @@ public class JavascriptObject {
         jsObject = runtime.execute(variableName);
     }
 
-    
+    /** Wraps a Javascript JSObject returned from a function.
+     * 
+     * @param type Type of Javascript object to create.
+	 * @param jsObject Object returned from Javascript.
+     */
+    protected JavascriptObject(JavascriptObjectType type, JSObject jsObject) {
+        runtime =  JavascriptRuntime.getInstance();
+        variableName = getNextVariableName();
+		this.jsObject = jsObject;
+    }
     
     /**
      * Get the underlying object used by the Javascript runtime.
@@ -77,7 +86,7 @@ public class JavascriptObject {
      * Gets the name of this variable within the Javascript runtime
      * @return The name of this variable.
      */
-    protected String getVariableName() {
+    public String getVariableName() {
         
         return variableName;
     }
