@@ -30,7 +30,11 @@ public enum JavascriptObjectType {
    MARKER("google.maps.Marker"),
    SIZE("google.maps.Size"),
    POLYLINE("google.maps.Polyline"),
-   MVC_ARRAY("google.maps.MVCArray");
+   POLYGON("google.maps.Polygon"),
+   RECTANGLE("google.maps.Rectangle"),
+   CIRCLE("google.maps.Circle"),
+   MVC_ARRAY("google.maps.MVCArray"),
+   LAT_LNG_BOUNDS("google.maps.LatLngBounds");
    
    protected String typeString;
    

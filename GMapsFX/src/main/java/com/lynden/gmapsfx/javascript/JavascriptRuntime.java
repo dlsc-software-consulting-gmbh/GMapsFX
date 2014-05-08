@@ -15,6 +15,7 @@
  */
 package com.lynden.gmapsfx.javascript;
 
+import com.lynden.gmapsfx.javascript.object.LatLong;
 import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
@@ -105,7 +106,9 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     
     
     protected String getArgString( Object arg ) {
-        if( arg instanceof JavascriptObject ) {
+        if (arg instanceof LatLong) {
+            return ((LatLong) arg).getVariableName();
+        } else if( arg instanceof JavascriptObject ) {
             return ((JavascriptObject) arg).getPropertiesAsString();
         } else {
             return arg.toString();

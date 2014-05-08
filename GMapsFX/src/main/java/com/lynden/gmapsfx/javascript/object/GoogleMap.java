@@ -138,12 +138,12 @@ public class GoogleMap extends JavascriptObject {
         invokeJavascript("setMapTypeId", type.toString() );
     }
     
-    public void addPolyline(Polyline line) {
-        line.setMap(this);
+    public void addMapShape(MapShape shape) {
+        shape.setMap(this);
     }
     
-    public void removePolyline(Polyline line) {
-        line.setMap(null);
+    public void removeMapShape(MapShape shape) {
+        shape.setMap(null);
     }
     
     /** Registers an event handler in the repository shared between Javascript 

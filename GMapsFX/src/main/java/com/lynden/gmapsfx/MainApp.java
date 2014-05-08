@@ -1,23 +1,26 @@
 package com.lynden.gmapsfx;
 
-import com.lynden.gmapsfx.javascript.event.MapStateEventType;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.Animation;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.InfoWindow;
 import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
 import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.LatLongBounds;
 import com.lynden.gmapsfx.javascript.object.MVCArray;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapType;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
-import com.lynden.gmapsfx.javascript.object.Polyline;
-import com.lynden.gmapsfx.javascript.object.PolylineOptions;
+import com.lynden.gmapsfx.shapes.Circle;
+import com.lynden.gmapsfx.shapes.CircleOptions;
+import com.lynden.gmapsfx.shapes.Polygon;
+import com.lynden.gmapsfx.shapes.PolygonOptions;
+import com.lynden.gmapsfx.shapes.Polyline;
+import com.lynden.gmapsfx.shapes.PolylineOptions;
+import com.lynden.gmapsfx.shapes.Rectangle;
+import com.lynden.gmapsfx.shapes.RectangleOptions;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
-import static javafx.application.Application.launch;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -100,7 +103,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .streetViewControl(false)
                 .zoomControl(false)
                 .mapType(MapType.ROADMAP);
-
+        
         map = mapComponent.createMap(options);
 		        
         MarkerOptions markerOptions = new MarkerOptions();
@@ -132,16 +135,15 @@ public class MainApp extends Application implements MapComponentInitializedListe
         InfoWindow window = new InfoWindow(infoOptions);
         window.open(map,myMarker);
         
+        
         lblCenter.setText(map.getCenter().toString());
         map.centerProperty().addListener((ObservableValue<? extends LatLong> obs, LatLong o, LatLong n) -> {
             lblCenter.setText(n.toString());
-            //System.out.println("GoogleMap centre changed to: " + n);
         });
         
         lblZoom.setText(Integer.toString(map.getZoom()));
         map.zoomProperty().addListener((ObservableValue<? extends Number> obs, Number o, Number n) -> {
             lblZoom.setText(n.toString());
-//            System.out.println("GoogleMap zoom changed to: " + n);
         });
         
 //      map.addStateEventHandler(MapStateEventType.center_changed, () -> {
@@ -160,26 +162,68 @@ public class MainApp extends Application implements MapComponentInitializedListe
         btnZoomIn.setDisable(false);
         btnZoomOut.setDisable(false);
         
-        LatLong extra = new LatLong(47.857403, -121.97845);
         
-        PolylineOptions polyOpts = new PolylineOptions();
-        LatLong[] ary = new LatLong[]{markerLatLong, markerLatLong2, extra};
+        LatLong[] ary = new LatLong[]{markerLatLong, markerLatLong2};
         MVCArray mvc = new MVCArray(ary);
-//        System.out.println("ary: " + ary.getClass().getName());
-//        System.out.println("ary: " + ary.getClass().isArray());
-//        System.out.println("ary: " + (ary instanceof Object[]));
         
-        polyOpts.path(mvc)
+        PolylineOptions polyOpts = new PolylineOptions()
+                .path(mvc)
                 .strokeColor("red")
                 .strokeWeight(2);
         
         Polyline poly = new Polyline(polyOpts);
-        map.addPolyline(poly);
+        map.addMapShape(poly);
         map.addUIEventHandler(poly, UIEventType.click,  (JSObject obj) -> {
             LatLong ll = new LatLong((JSObject) obj.getMember("latLng"));
             System.out.println("You clicked the line at LatLong: lat: " + ll.getLatitude() + " lng: " + ll.getLongitude());
-            //lblClick.setText(ll.toString());
         });
+        
+        
+        LatLong poly1 = new LatLong(47.429945, -122.84363);
+        LatLong poly2 = new LatLong(47.361153, -123.03040);
+        LatLong poly3 = new LatLong(47.387193, -123.11554);
+        LatLong poly4 = new LatLong(47.585789, -122.96722);
+        LatLong[] pAry = new LatLong[]{poly1, poly2, poly3, poly4};
+        MVCArray pmvc = new MVCArray(pAry);
+        
+        PolygonOptions polygOpts = new PolygonOptions()
+                .paths(pmvc)
+                .strokeColor("blue")
+                .strokeWeight(2)
+                .editable(false)
+                .fillColor("lightBlue")
+                .fillOpacity(0.5);
+        
+        Polygon pg = new Polygon(polygOpts);
+        map.addMapShape(pg);
+        map.addUIEventHandler(pg, UIEventType.click,  (JSObject obj) -> {
+            //polygOpts.editable(true);
+            pg.setEditable(! pg.getEditable());
+        });
+        
+        
+        LatLong centreC = new LatLong(47.545481, -121.87384);
+        CircleOptions cOpts = new CircleOptions()
+                .center(centreC)
+                .radius(5000)
+                .strokeColor("green")
+                .strokeWeight(2)
+                .fillColor("orange")
+                .fillOpacity(0.3);
+        
+        Circle c = new Circle(cOpts);
+        map.addMapShape(c);
+        
+        
+        LatLongBounds llb = new LatLongBounds(new LatLong(47.533893, -122.89856), new LatLong(47.580694, -122.80312));
+        RectangleOptions rOpts = new RectangleOptions()
+                .bounds(llb)
+                .strokeColor("black")
+                .strokeWeight(2)
+                .fillColor("null");
+        
+        Rectangle rt = new Rectangle(rOpts);
+        map.addMapShape(rt);
         
     }
 

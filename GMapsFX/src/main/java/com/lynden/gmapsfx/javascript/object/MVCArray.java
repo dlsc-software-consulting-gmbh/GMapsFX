@@ -34,6 +34,10 @@ public class MVCArray extends JavascriptObject {
         super(JavascriptObjectType.MVC_ARRAY, ary, true);
     }
     
+    public MVCArray(JSObject obj) {
+        super(JavascriptObjectType.MVC_ARRAY, obj);
+    }
+    
     // Removes all elements from the array.
     public void clear() {
         invokeJavascript("clear");
