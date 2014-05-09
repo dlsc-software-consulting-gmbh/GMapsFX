@@ -18,6 +18,7 @@ package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import netscape.javascript.JSObject;
 
 /**
  *
@@ -33,7 +34,13 @@ public class LatLong extends JavascriptObject {
         this.latitude = latitude;
         this.longitude = longitude;
     }
-
+	
+	public LatLong(JSObject jsObject) {
+		super(JavascriptObjectType.LAT_LNG, jsObject);
+		this.latitude = (double) jsObject.call("lat", (Object) null);
+		this.longitude = (double) jsObject.call("lng", (Object) null);
+	}
+	
     public double getLatitude() {
         return latitude;
     }
@@ -68,7 +75,10 @@ public class LatLong extends JavascriptObject {
         return true;
     }
     
-    
+    @Override
+    public String toString() {
+        return "lat: " + String.format("%.8G", getLatitude()) + " lng: " + String.format("%.8G", getLongitude());
+    }
     
     
 }

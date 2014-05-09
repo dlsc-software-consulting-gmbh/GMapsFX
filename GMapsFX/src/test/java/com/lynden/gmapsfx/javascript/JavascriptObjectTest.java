@@ -69,6 +69,12 @@ public class JavascriptObjectTest {
     }
     
     @Test
+    public void testCreateJavascriptObject() {
+        JavascriptObject jso = new JavascriptObject(JavascriptObjectType.OBJECT, mockJsObject);
+        assertEquals( mockJsObject, jso.getJSObject());
+    }
+    
+    @Test
     public void testGetNextVariableName() {
         JavascriptObject.objectCounter = 1;
         assertEquals( "JavascriptObject1", testJavascriptObject.getNextVariableName() );
