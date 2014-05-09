@@ -46,6 +46,7 @@ public class JavascriptRuntimeTest {
         mockJSRuntime = Mockito.mock( IJavascriptRuntime.class );
         mockWebEngine = Mockito.mock( IWebEngine.class );
         mockJsObject = Mockito.mock( JSObject.class );
+        JavascriptRuntime.runtime = null;
         JavascriptRuntime.setDefaultWebEngine( mockWebEngine );
     }
     
