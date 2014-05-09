@@ -15,6 +15,7 @@
  */
 package com.lynden.gmapsfx;
 
+import com.lynden.gmapsfx.javascript.JavaFxWebEngine;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
@@ -37,7 +38,7 @@ import netscape.javascript.JSObject;
 public class GoogleMapView extends AnchorPane {
 
     protected WebView webview;
-    protected WebEngine webengine;
+    protected JavaFxWebEngine webengine;
     protected boolean initialized = false;
     protected final CyclicBarrier barrier = new CyclicBarrier(2);
     protected final List<MapComponentInitializedListener> mapInitializedListeners = new ArrayList<>();
@@ -46,8 +47,8 @@ public class GoogleMapView extends AnchorPane {
 
     public GoogleMapView() {
         webview = new WebView();
-        webengine = webview.getEngine();
-        JavascriptRuntime.setDefaultWebEngine(webengine);
+        webengine = new JavaFxWebEngine(webview.getEngine());
+        JavascriptRuntime.setDefaultWebEngine( webengine );
 
         setTopAnchor(webview,0.0);
         setLeftAnchor(webview,0.0);

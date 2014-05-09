@@ -16,11 +16,12 @@
 package com.lynden.gmapsfx.javascript;
 
 import com.lynden.gmapsfx.javascript.object.LatLong;
-import javafx.scene.web.WebEngine;
 import netscape.javascript.JSObject;
 
 /**
- *
+ * Class for interacting with the JavaScript environment.  This class is used by the JavaScript objects, but should not
+ * need to be used directly for creating or changing maps.
+ * 
  * @author Rob Terpilowski
  */
 public class JavascriptRuntime implements IJavascriptRuntime {
@@ -28,8 +29,12 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     protected static IJavascriptRuntime runtime = null;
     
        
-    public static WebEngine engine;
+    public static IWebEngine engine;
     
+    /**
+     * Gets a singleton instance of this class, creating one if it doesn't yet exist.
+     * @return A singleton instance
+     */
     public static IJavascriptRuntime getInstance() {
         if( runtime == null ) {
             runtime = new JavascriptRuntime();
@@ -37,10 +42,22 @@ public class JavascriptRuntime implements IJavascriptRuntime {
         return runtime;
     }
     
-    public static void setDefaultWebEngine( WebEngine e ) {
+    
+    /**
+     * Set the WebEngine that this runtime should use.
+     * @param e The underlying WebEngine to use.
+     */
+    public static void setDefaultWebEngine( IWebEngine e ) {
         engine = e;
     }
     
+    
+        /**
+     * Execute the specified command returning a value (if any)
+     *
+     * @param command The JavaScript command to execute
+     * @return The underlying JavaScript object that was returned by the script.
+     */
     @Override
     public JSObject execute(String command) {
         Object returnValue = engine.executeScript(command);
@@ -51,24 +68,60 @@ public class JavascriptRuntime implements IJavascriptRuntime {
         return null;
     }
 
-    
+        /**
+     * Gets a constructor as a string which then can be passed to the execute().
+     *
+     * @param type The type of JavaScript object to create
+     * @param args The args of the constructor
+     * @return A string which can be passed to the JavaScript environment to
+     * create a new object.
+     */
     @Override
     public String getConstructor( JavascriptObjectType type, Object... args ) {
         return getFunction( "new " + type, args );
     }
     
+        /**
+     * Gets an array constructor as a String, which then can be passed to the
+     * execute() method.
+     *
+     * @param type type The type of JavaScript object array to create
+     * @param ary The array elements
+     * @return A string which can be passed to the JavaScript environment to
+     * create a new array.
+     */
     @Override
     public String getArrayConstructor(JavascriptObjectType type, Object[] ary) {
         String fn = getArrayFunction("new " + type, ary);
-        //System.out.println("getArrayConstructor: " + fn);
         return fn;
     }
     
+    
+        /**
+     * Gets a function as a String, which then can be passed to the
+     * execute() method.
+     * 
+     * @param variable The variable to invoke the function on.
+     * @param function The function to invoke
+     * @param args Arguments the function requires
+     * @return A string which can be passed to the JavaScript environment to
+     * invoke the function
+     */
     @Override
     public String getFunction(String variable, String function, Object... args) {
         return getFunction( variable + "." + function, args );
     }
     
+    
+      /**
+     * Gets a function as a String, which then can be passed to the
+     * execute() method.
+     * 
+     * @param function The function to invoke
+     * @param args Arguments the function requires
+     * @return A string which can be passed to the JavaScript environment to
+     * invoke the function
+     */
     @Override
     public String getFunction(String function, Object... args) {
         if( args == null ) {
@@ -84,6 +137,15 @@ public class JavascriptRuntime implements IJavascriptRuntime {
         return sb.toString();
     }
     
+        /**
+     * Gets an array function as a String, which then can be passed to the
+     * execute() method.
+     * 
+     * @param function The function to invoke
+     * @param ary The array of arguments to pass to the function.
+     * @return A string which can be passed to the JavaScript environment to
+     * invoke the function
+     */
     @Override
     public String getArrayFunction(String function, Object[] ary) {
         if( ary == null ) {
@@ -105,6 +167,11 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     
     
     
+    /**
+     * Takes the specified object and converts the argument to a String.
+     * @param arg The object to convert
+     * @return A String representation of the argument.
+     */
     protected String getArgString( Object arg ) {
         if (arg instanceof LatLong) {
             return ((LatLong) arg).getVariableName();
