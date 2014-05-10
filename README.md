@@ -25,7 +25,7 @@ $ mvn exec:java
 
 
 ##### Development Notes
-The GMapsFX framework creates underyling JavaScript peer versions of their corresponding when their corresponding Java objects are instantiated.  For example when a new com.lynden.gmapsfx.javascript.object.LatLong object is created, the object's constructor will also creating a corresponding LatLong object in the JavaScript environment.
+The GMapsFX framework creates underyling JavaScript peer objects when their corresponding Java objects are instantiated.  For example when a new com.lynden.gmapsfx.javascript.object.LatLong object is created, the object's constructor will also create a corresponding LatLong object in the JavaScript environment.
 
 Because of this it is important to note that you cannot instantiate JavaScript objects until the JavaScript engine has been fully initialized.  The JavaScript engine is intialized asynchronously when a new GoogleMapView component is created.  You can register a MapComponentInitializedListener to be notified when the map and JavaScript environment has been fully initialized.  
 
