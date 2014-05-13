@@ -17,8 +17,8 @@ package com.lynden.gmapsfx;
 
 import com.lynden.gmapsfx.javascript.JavaFxWebEngine;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
-import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
+import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +26,9 @@ import java.util.concurrent.CyclicBarrier;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -61,6 +62,15 @@ public class GoogleMapView extends AnchorPane {
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                         if (newState == Worker.State.SUCCEEDED) {
                             setInitialized(true);
+//                            webview.getEngine().setOnAlert(new EventHandler<WebEvent<String>>() {
+//                                @Override
+//                                public void handle(WebEvent<String> event) {
+//                                    System.out.println("Alert: " + event.getData());
+//                                }
+//                            });
+//                            //webengine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
+//                            JSObject jsobj = (JSObject) webengine.executeScript("window");                      
+//                            jsobj.setMember("java", new JSListener());
                             fireMapInitializedListeners();
                         }
                     }
@@ -145,5 +155,11 @@ public class GoogleMapView extends AnchorPane {
             throw new MapNotInitializedException();
         }
     }
-
+    
+    public class JSListener { 
+        public void log(String text){
+            System.out.println(text);
+        }
+    }
+    
 }

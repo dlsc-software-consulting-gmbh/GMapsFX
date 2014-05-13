@@ -211,6 +211,4 @@ public class GoogleMap extends JavascriptObject {
 
     }
     
-    
-    
 }
