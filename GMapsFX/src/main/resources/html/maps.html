@@ -13,7 +13,33 @@
         </style>
         <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
         <script>
-
+			/*
+			var javaReady = function(callback){
+				if(typeof callback == 'function'){
+					if(typeof java != 'undefined'){
+						callback();
+					} else {
+						var javaTimeout = 0;
+						var readycall = setInterval(function(){
+						javaTimeout++; 
+							if(typeof java != 'undefined' || javaTimeout > 1000){
+								try{
+									callback();
+								} catch(s){};
+								clearInterval(readycall);
+							}
+						},1);
+					}
+				}
+			};
+            var errorlistener = function(msg, url, line){ 
+				javaReady(function(){
+					java.log(msg +", url: "+url+ ", line:" + line); 
+				}); 
+			};
+			//overide onerror 
+			var onerror = errorlistener;
+			*/
         </script>
     </head>
     <body>

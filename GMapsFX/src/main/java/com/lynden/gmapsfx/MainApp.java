@@ -1,5 +1,11 @@
 package com.lynden.gmapsfx;
 
+import com.lynden.gmapsfx.elevation.ElevationResult;
+import com.lynden.gmapsfx.elevation.ElevationService;
+import com.lynden.gmapsfx.elevation.ElevationServiceCallback;
+import com.lynden.gmapsfx.elevation.ElevationStatus;
+import com.lynden.gmapsfx.elevation.LocationElevationRequest;
+import com.lynden.gmapsfx.elevation.PathElevationRequest;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.Animation;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
@@ -21,6 +27,9 @@ import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import com.lynden.gmapsfx.shapes.Rectangle;
 import com.lynden.gmapsfx.shapes.RectangleOptions;
+import com.lynden.gmapsfx.zoom.MaxZoomResult;
+import com.lynden.gmapsfx.zoom.MaxZoomService;
+import com.lynden.gmapsfx.zoom.MaxZoomServiceCallback;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
@@ -238,45 +247,44 @@ public class MainApp extends Application implements MapComponentInitializedListe
         map.addUIEventHandler(arc, UIEventType.click, (JSObject obj) -> {
             arc.setEditable(!arc.getEditable());
         });
-
-        /*
-         LatLong poly1a = new LatLong(47.429945, -122.84363);
-         LatLong poly2a = new LatLong(47.361153, -123.03040);
-         LatLong poly3a = new LatLong(47.387193, -123.11554);
-         LatLong poly4a = new LatLong(47.585789, -122.96722);
-		
-         LatLong poly5a = new LatLong(47.585789, -121.96722);
-		
-         LatLong[] pArya = new LatLong[]{poly1a, poly2a, poly3a, poly4a};
-         MVCArray pmvca = new MVCArray(pArya);
-		
-         System.out.println("pmvca.length: " + pmvca.getLength());
-         pmvca.clear();
-         System.out.println("pmvca.length post clear: " + pmvca.getLength());
-         pmvca = new MVCArray(pArya);
-         System.out.println("pmvca.length: " + pmvca.getLength());
-         System.out.println("pmvca.getArray: " + pmvca.getArray());
-		
-         System.out.println("pmvca.getAt(2): " + pmvca.getAt(2));
-         pmvca.insertAt(2, poly5a);
-         System.out.println("pmvca.length after insert: " + pmvca.getLength());
-         System.out.println("pmvca.getAt(2): " + pmvca.getAt(2));
-		
-         System.out.println("pmvca.pop: " + pmvca.pop());
-         System.out.println("pmvca.length after pop: " + pmvca.getLength());
-		
-         System.out.println("pmvca.push: " + pmvca.push(poly4a));
-         System.out.println("pmvca.length after push: " + pmvca.getLength());
-         System.out.println("pmvca.getArray after push: " + pmvca.getArray());
-		
-         pmvca.removeAt(2);
-         System.out.println("pmvca.length after removeAt: " + pmvca.getLength());
-         System.out.println("pmvca.getArray after removeAt: " + pmvca.getArray());
-		
-         pmvca.setAt(2, poly5a);
-         System.out.println("pmvca.length after setAt: " + pmvca.getLength());
-         System.out.println("pmvca.getArray after setAt: " + pmvca.getArray());
-         */
+        
+        LatLong ll = new LatLong(-41.2, 145.9);
+        LocationElevationRequest ler = new LocationElevationRequest(new LatLong[]{ll});
+        
+        ElevationService es = new ElevationService();
+        es.getElevationForLocations(ler, new ElevationServiceCallback() {
+            @Override
+            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
+                System.out.println("We got results from the Location Elevation request:");
+                for (ElevationResult er : results) {
+                    System.out.println("LER: " + er.getElevation());
+                }
+            }
+        });
+        
+        LatLong lle = new LatLong(-42.2, 145.9);
+        PathElevationRequest per = new PathElevationRequest(new LatLong[]{ll, lle}, 3);
+        
+        ElevationService esb = new ElevationService();
+        esb.getElevationAlongPath(per, new ElevationServiceCallback() {
+            @Override
+            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
+                System.out.println("We got results from the Path Elevation Request:");
+                for (ElevationResult er : results) {
+                    System.out.println("PER: " + er.getElevation());
+                }
+            }
+        });
+        
+        MaxZoomService mzs = new MaxZoomService();
+        mzs.getMaxZoomAtLatLng(lle, new MaxZoomServiceCallback() {
+            @Override
+            public void maxZoomReceived(MaxZoomResult result) {
+                System.out.println("Max Zoom Status: " + result.getStatus());
+                System.out.println("Max Zoom: " + result.getMaxZoom());
+            }
+        });
+        
     }
 
     /**

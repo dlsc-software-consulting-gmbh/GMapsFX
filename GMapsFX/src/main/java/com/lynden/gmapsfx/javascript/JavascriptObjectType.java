@@ -34,7 +34,11 @@ public enum JavascriptObjectType {
    RECTANGLE("google.maps.Rectangle"),
    CIRCLE("google.maps.Circle"),
    MVC_ARRAY("google.maps.MVCArray"),
-   LAT_LNG_BOUNDS("google.maps.LatLngBounds");
+   LAT_LNG_BOUNDS("google.maps.LatLngBounds"),
+   ELEVATION_SERVICE("google.maps.ElevationService"),
+   ELEVATION_RESULT("google.maps.ElevationResult"),
+   MAX_ZOOM_SERVICE("google.maps.MaxZoomService"),
+   MAX_ZOOM_RESULT("google.maps.MaxZoomResult");
    
    protected String typeString;
    
