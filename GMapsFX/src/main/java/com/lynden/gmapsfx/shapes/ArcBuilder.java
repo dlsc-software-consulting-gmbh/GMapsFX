@@ -12,7 +12,7 @@ import javafx.scene.shape.ArcType;
 /**
  * Builds a Polygon or Polyline in the shape of an Arc. Based on the logic in
  * v3_polygon_exanple_arc.html from http://econym.org.uk/gmap/ which is based in
- * turn on the Latitude/longitude spherical geodesy formulae & scripts at
+ * turn on the Latitude/longitude spherical geodesy formulae and scripts at
  * http://www.movable-type.co.uk/scripts/latlong.html (c) Chris Veness 2002-2010
  *
  * @author Geoff Capper
