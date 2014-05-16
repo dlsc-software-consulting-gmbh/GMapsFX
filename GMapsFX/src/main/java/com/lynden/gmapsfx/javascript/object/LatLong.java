@@ -21,7 +21,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 import netscape.javascript.JSObject;
 
 /**
@@ -32,27 +31,21 @@ public class LatLong extends JavascriptObject {
 
     public static final double EarthRadiusMeters = 6378137.0; // meters
 
-    protected double latitude;
-    protected double longitude;
 
     public LatLong(double latitude, double longitude) {
-        super(JavascriptObjectType.LAT_LNG, latitude, longitude);
-        this.latitude = latitude;
-        this.longitude = longitude;
+        super(GMapObjectType.LAT_LNG, latitude, longitude);
     }
 
     public LatLong(JSObject jsObject) {
-        super(JavascriptObjectType.LAT_LNG, jsObject);
-        this.latitude = (double) jsObject.call("lat", (Object) null);
-        this.longitude = (double) jsObject.call("lng", (Object) null);
+        super(GMapObjectType.LAT_LNG, jsObject);
     }
 
     public double getLatitude() {
-        return latitude;
+        return invokeJavascriptReturnValue("lat", Double.class );
     }
 
     public double getLongitude() {
-        return longitude;
+        return invokeJavascriptReturnValue("lng", Double.class );
     }
 
     /**
@@ -156,31 +149,8 @@ public class LatLong extends JavascriptObject {
         return Math.toDegrees(angle);
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.latitude) ^ (Double.doubleToLongBits(this.latitude) >>> 32));
-        hash = 97 * hash + (int) (Double.doubleToLongBits(this.longitude) ^ (Double.doubleToLongBits(this.longitude) >>> 32));
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final LatLong other = (LatLong) obj;
-        if (Double.doubleToLongBits(this.latitude) != Double.doubleToLongBits(other.latitude)) {
-            return false;
-        }
-        if (Double.doubleToLongBits(this.longitude) != Double.doubleToLongBits(other.longitude)) {
-            return false;
-        }
-        return true;
-    }
+    
+    
 
     @Override
     public String toString() {

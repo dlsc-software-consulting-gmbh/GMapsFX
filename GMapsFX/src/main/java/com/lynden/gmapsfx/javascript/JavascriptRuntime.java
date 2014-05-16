@@ -72,28 +72,28 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     /**
      * Gets a constructor as a string which then can be passed to the execute().
      *
-     * @param type The type of JavaScript object to create
+     * @param javascriptObjectType The type of JavaScript object to create
      * @param args The args of the constructor
      * @return A string which can be passed to the JavaScript environment to
      * create a new object.
      */
     @Override
-    public String getConstructor(JavascriptObjectType type, Object... args) {
-        return getFunction("new " + type, args);
+    public String getConstructor(String javascriptObjectType, Object... args) {
+        return getFunction("new " + javascriptObjectType, args);
     }
 
     /**
      * Gets an array constructor as a String, which then can be passed to the
      * execute() method.
      *
-     * @param type type The type of JavaScript object array to create
+     * @param javascriptObjectType type The type of JavaScript object array to create
      * @param ary The array elements
      * @return A string which can be passed to the JavaScript environment to
      * create a new array.
      */
     @Override
-    public String getArrayConstructor(JavascriptObjectType type, Object[] ary) {
-        String fn = getArrayFunction("new " + type, ary);
+    public String getArrayConstructor(String javascriptObjectType, Object[] ary) {
+        String fn = getArrayFunction("new " + javascriptObjectType, ary);
         return fn;
     }
 
@@ -171,10 +171,14 @@ public class JavascriptRuntime implements IJavascriptRuntime {
      * @return A String representation of the argument.
      */
     protected String getArgString(Object arg) {
-        if (arg instanceof LatLong) {
-            return ((LatLong) arg).getVariableName();
-        } else if (arg instanceof JavascriptObject) {
-            return ((JavascriptObject) arg).getPropertiesAsString();
+        //if (arg instanceof LatLong) {
+        //    return ((LatLong) arg).getVariableName();
+        //} else 
+        if (arg instanceof JavascriptObject) {
+             return ((JavascriptObject) arg).getVariableName();
+           // return ((JavascriptObject) arg).getPropertiesAsString();
+        } else if( arg instanceof JavascriptEnum ) {
+            return ((JavascriptEnum) arg).getEnumValue().toString();
         } else {
             return arg.toString();
         }

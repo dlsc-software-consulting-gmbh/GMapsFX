@@ -17,8 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
-import java.util.List;
 
 /**
  *
@@ -41,7 +39,7 @@ public class PolylineOptions extends JavascriptObject {
     
     
     public PolylineOptions() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     public PolylineOptions clickable(boolean clickable) {

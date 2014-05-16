@@ -7,7 +7,7 @@
 package com.lynden.gmapsfx.zoom;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import netscape.javascript.JSObject;
 
@@ -20,7 +20,7 @@ public class MaxZoomService extends JavascriptObject {
     private MaxZoomServiceCallback callback;
     
     public MaxZoomService() {
-        super(JavascriptObjectType.MAX_ZOOM_SERVICE);
+        super(GMapObjectType.MAX_ZOOM_SERVICE);
     }
     
     public void getMaxZoomAtLatLng(LatLong loc, MaxZoomServiceCallback callback) {

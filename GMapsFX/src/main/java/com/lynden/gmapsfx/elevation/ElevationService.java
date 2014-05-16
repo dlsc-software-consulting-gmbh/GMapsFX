@@ -7,7 +7,7 @@
 package com.lynden.gmapsfx.elevation;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import netscape.javascript.JSObject;
 
 /** Makes a request to the Google Maps Elevation Service.
@@ -22,7 +22,7 @@ public class ElevationService extends JavascriptObject {
     private ElevationServiceCallback callback;
     
     public ElevationService() {
-        super(JavascriptObjectType.ELEVATION_SERVICE);
+        super(GMapObjectType.ELEVATION_SERVICE);
     }
     
     /** Create a request for elevations for multiple locations.

@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  * An overlay that looks like a bubble and is often connected to a marker.
@@ -28,15 +27,15 @@ import com.lynden.gmapsfx.javascript.JavascriptObjectType;
  */
 public class InfoWindow extends JavascriptObject {
 
-    
+    public static final String INFO_WINDOW_TYPE = "google.maps.InfoWindow";
     
     public InfoWindow() {
-        super(JavascriptObjectType.INFO_WINDOW);
+        super(INFO_WINDOW_TYPE);
     }
     
     
     public InfoWindow( InfoWindowOptions options ) {
-        super(JavascriptObjectType.INFO_WINDOW, options);
+        super(GMapObjectType.INFO_WINDOW, options);
     }
     
     

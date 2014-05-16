@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  * Options for setting an InfoWindow on a Map.  This class corresponds to <a href="https://developers.google.com/maps/documentation/javascript/reference#InfoWindowOptions">google.maps.InfoWindowOptions"</a> in
@@ -31,7 +30,7 @@ public class InfoWindowOptions extends JavascriptObject {
      * Default constructor
      */
     public InfoWindowOptions() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     /**

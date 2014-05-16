@@ -37,23 +37,23 @@ public interface IJavascriptRuntime {
     /**
      * Gets a constructor as a string which then can be passed to the execute().
      *
-     * @param type The type of JavaScript object to create
+     * @param javascriptObjectType The type of JavaScript object to create
      * @param args The args of the constructor
      * @return A string which can be passed to the JavaScript environment to
      * create a new object.
      */
-    String getConstructor(JavascriptObjectType type, Object... args);
+    String getConstructor(String javascriptObjectType, Object... args);
 
     /**
      * Gets an array constructor as a String, which then can be passed to the
      * execute() method.
      *
-     * @param type type The type of JavaScript object array to create
+     * @param javascriptObjectType type The type of JavaScript object array to create
      * @param ary The array elements
      * @return A string which can be passed to the JavaScript environment to
      * create a new array.
      */
-    String getArrayConstructor(JavascriptObjectType type, Object[] ary);
+    String getArrayConstructor(String javascriptObjectType, Object[] ary);
 
     /**
      * Gets a function as a String, which then can be passed to the

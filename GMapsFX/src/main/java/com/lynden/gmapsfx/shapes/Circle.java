@@ -16,7 +16,7 @@
 
 package com.lynden.gmapsfx.shapes;
 
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapShape;
 import netscape.javascript.JSObject;
@@ -28,11 +28,11 @@ import netscape.javascript.JSObject;
 public class Circle extends MapShape {
     
     public Circle() {
-        super(JavascriptObjectType.CIRCLE);
+        super(GMapObjectType.CIRCLE);
     }
     
     public Circle(CircleOptions opts) {
-        super(JavascriptObjectType.CIRCLE, opts);
+        super(GMapObjectType.CIRCLE, opts);
     }
     
     //getCenter

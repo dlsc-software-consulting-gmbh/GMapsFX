@@ -13,30 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.lynden.gmapsfx.javascript;
 
-package com.lynden.gmapsfx.javascript.object;
+import netscape.javascript.JSObject;
 
 /**
- * Various types of maps that are available.
- * 
+ *
  * @author Rob Terpilowski
  */
-public enum MapType {
+public class JavascriptEnum  {
+
+    protected IJavascriptRuntime runtime;
+    protected String type;
+    protected String name;
+    protected Object value;
+
     
-    ROADMAP( "google.maps.MapTypeId.ROADMAP" ),
-    SATELLITE( "google.maps.MapTypeId.SATELLITE"),
-    HYBRID( "google.maps.MapTypeId.HYBRID" ),
-    TERRAIN( "google.maps.MapTypeId.TERRAIN");
-    
-    
-    protected String typeString;
-    
-    MapType( String typeString ) {
-        this.typeString = typeString;
+    protected JavascriptEnum(String type, String name) {
+        this.type = type;
+        this.name = name;
+        runtime = JavascriptRuntime.getInstance();
+
     }
-    
-    @Override
-    public String toString() {
-        return typeString;
+
+    public Object getEnumValue() {
+        if (value == null) {
+            JSObject jsObject = runtime.execute(type);
+            value = jsObject.getMember(name);
+        }
+        return value;
     }
 }

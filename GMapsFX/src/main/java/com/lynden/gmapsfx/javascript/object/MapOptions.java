@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  *
@@ -26,7 +25,7 @@ import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 public class MapOptions extends JavascriptObject {
     
     protected LatLong center;
-    protected MapType mapType;
+    protected MapTypeIdEnum mapType;
     protected boolean mapMarker;
     protected boolean overviewMapControl;
     protected boolean panControl;
@@ -39,7 +38,7 @@ public class MapOptions extends JavascriptObject {
     
 
     public MapOptions() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     
@@ -55,7 +54,7 @@ public class MapOptions extends JavascriptObject {
         return this;
     }
     
-    public MapOptions mapType( MapType mapType ) {
+    public MapOptions mapType( MapTypeIdEnum mapType ) {
         setProperty( "mapTypeId", mapType );
         this.mapType = mapType;
         return this;

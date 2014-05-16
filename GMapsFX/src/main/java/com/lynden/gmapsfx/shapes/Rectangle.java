@@ -16,7 +16,7 @@
 
 package com.lynden.gmapsfx.shapes;
 
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLongBounds;
 import com.lynden.gmapsfx.javascript.object.MapShape;
 
@@ -27,11 +27,11 @@ import com.lynden.gmapsfx.javascript.object.MapShape;
 public class Rectangle extends MapShape {
     
     public Rectangle() {
-        super(JavascriptObjectType.RECTANGLE);
+        super(GMapObjectType.RECTANGLE);
     }
     
     public Rectangle(RectangleOptions opts) {
-        super(JavascriptObjectType.RECTANGLE, opts);
+        super(GMapObjectType.RECTANGLE, opts);
     }
     
     //setBounds

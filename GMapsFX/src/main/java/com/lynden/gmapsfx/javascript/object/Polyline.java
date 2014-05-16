@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /** Wraps a google.maps.Polyline object.
  *
@@ -26,11 +25,11 @@ import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 public class Polyline extends JavascriptObject {
     
     public Polyline() {
-        super(JavascriptObjectType.POLYLINE);
+        super(GMapObjectType.POLYLINE);
     }
     
     public Polyline(PolylineOptions opts) {
-        super(JavascriptObjectType.POLYLINE, opts);
+        super(GMapObjectType.POLYLINE, opts);
     }
     
     /**

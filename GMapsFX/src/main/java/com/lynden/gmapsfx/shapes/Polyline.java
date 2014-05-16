@@ -16,7 +16,7 @@
 
 package com.lynden.gmapsfx.shapes;
 
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.MVCArray;
 import com.lynden.gmapsfx.javascript.object.MapShape;
 import netscape.javascript.JSObject;
@@ -28,11 +28,11 @@ import netscape.javascript.JSObject;
 public class Polyline extends MapShape {
     
     public Polyline() {
-        super(JavascriptObjectType.POLYLINE);
+        super(GMapObjectType.POLYLINE);
     }
     
     public Polyline(PolylineOptions opts) {
-        super(JavascriptObjectType.POLYLINE, opts);
+        super(GMapObjectType.POLYLINE, opts);
     }
     
     public MVCArray getPath() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Geoff Capper.
+ * Copyright 2014 Lynden, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx.javascript.object;
 
-import com.lynden.gmapsfx.javascript.JavascriptObject;
-import netscape.javascript.JSObject;
+import com.lynden.gmapsfx.javascript.JavascriptEnum;
 
 /**
  *
- * @author Geoff Capper
+ * @author robt
  */
-public class LatLongBounds extends JavascriptObject {
-    
-    public LatLongBounds() {
-        super(GMapObjectType.LAT_LNG_BOUNDS);
-    }
-    
-    public LatLongBounds(LatLong sw, LatLong ne) {
-        super(GMapObjectType.LAT_LNG_BOUNDS, sw, ne);
-    }
-    
-    public LatLongBounds(JSObject obj) {
-        super(GMapObjectType.LAT_LNG_BOUNDS, obj);
+public class MapTypeIdEnum extends JavascriptEnum {
+
+    public static String MAP_ENUM = "google.maps.MapTypeId";
+
+    public static MapTypeIdEnum TERRAIN = new MapTypeIdEnum("TERRAIN");
+    public static MapTypeIdEnum ROADMAP = new MapTypeIdEnum("ROADMAP");
+    public static MapTypeIdEnum SATELLITE = new MapTypeIdEnum("SATELLITE");
+    public static MapTypeIdEnum HYBRID = new MapTypeIdEnum("HYBRID");
+
+    protected MapTypeIdEnum(String value) {
+        super(MAP_ENUM, value);
     }
     
 }

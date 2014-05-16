@@ -7,7 +7,7 @@
 package com.lynden.gmapsfx.elevation;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 
 /**
@@ -17,11 +17,11 @@ import com.lynden.gmapsfx.javascript.object.LatLong;
 public class PathElevationRequest extends JavascriptObject {
     
     public PathElevationRequest() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     public PathElevationRequest(LatLong[] path, int samples) {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
         getJSObject().setMember("path", getJSObject().eval("[]"));
         for (int i = 0; i < path.length; i++) {
             getJSObject().eval(getVariableName()+".path.push("+path[i].getVariableName()+")");

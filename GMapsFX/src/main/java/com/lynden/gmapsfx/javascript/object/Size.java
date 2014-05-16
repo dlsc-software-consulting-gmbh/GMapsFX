@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  * Size object corresponding to <a href="https://developers.google.com/maps/documentation/javascript/reference#Size">google.maps.Size</a>
@@ -41,7 +40,7 @@ public class Size extends JavascriptObject {
      * @param height distance on y-axis
      */
     public Size(int width, int height) {
-        super(JavascriptObjectType.SIZE, width, height);
+        super(GMapObjectType.SIZE, width, height);
     }
     
     /**
@@ -52,7 +51,7 @@ public class Size extends JavascriptObject {
      * @param heightUnit 
      */
     public Size( int width, int height, String widthUnit, String heightUnit ) {
-        super( JavascriptObjectType.SIZE, width, height, widthUnit, heightUnit );
+        super( GMapObjectType.SIZE, width, height, widthUnit, heightUnit );
     }
 
     public int getWidth() {
