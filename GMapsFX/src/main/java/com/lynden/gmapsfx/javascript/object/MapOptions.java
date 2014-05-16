@@ -35,6 +35,7 @@ public class MapOptions extends JavascriptObject {
     protected boolean streetViewControl;
     protected int zoom;
     protected boolean zoomControl;
+    protected boolean mapTypeControl;
     
 
     public MapOptions() {
@@ -96,11 +97,16 @@ public class MapOptions extends JavascriptObject {
         return this;
     }
     
-    public MapOptions zoomControl( boolean zoomControl ){
+    public MapOptions zoomControl( boolean zoomControl ) {
         setProperty( "zoomControl", zoomControl );
         this.zoomControl = zoomControl;
         return this;
     }
     
+    public MapOptions mapTypeControl( boolean mapTypeControl ) {
+        setProperty( "mapTypeControl", mapTypeControl);
+        this.mapTypeControl = mapTypeControl;
+        return this;
+    }
     
 }
