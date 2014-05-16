@@ -43,4 +43,13 @@ public class JavascriptEnum  {
         }
         return value;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+    
 }

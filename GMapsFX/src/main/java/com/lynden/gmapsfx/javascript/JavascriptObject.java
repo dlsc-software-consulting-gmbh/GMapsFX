@@ -189,6 +189,8 @@ public class JavascriptObject {
         for (int i = 0; i < jsArgs.length; i++) {
             if (args[i] instanceof JavascriptObject) {
                 jsArgs[i] = ((JavascriptObject) args[i]).getJSObject();
+            } else if (args[i] instanceof JavascriptEnum) {
+                jsArgs[i] = ((JavascriptEnum) args[i]).getEnumValue();
             } else {
                 jsArgs[i] = args[i];
             }
