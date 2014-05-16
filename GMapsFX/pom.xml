@@ -6,7 +6,7 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>1.1.0</version>
+    <version>1.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <licenses>
         <license>
@@ -83,7 +83,7 @@
           </archive>
         </configuration>
       </plugin>            
-      
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
