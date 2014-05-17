@@ -15,7 +15,6 @@
  */
 package com.lynden.gmapsfx.javascript;
 
-import com.lynden.gmapsfx.javascript.object.LatLong;
 import netscape.javascript.JSObject;
 
 /**
@@ -83,8 +82,8 @@ public class JavascriptRuntime implements IJavascriptRuntime {
     }
 
     /**
-     * Gets an array constructor as a String, which then can be passed to the
-     * execute() method.
+     * Gets an array parameter constructor as a String, which then can be 
+     * passed to the execute() method.
      *
      * @param javascriptObjectType type The type of JavaScript object array to create
      * @param ary The array elements
