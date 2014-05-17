@@ -146,7 +146,7 @@ public class JavascriptObject {
      * @return The value of the property
      */
     protected Object getProperty(String key) {
-        return jsObject.getMember(key);
+        return checkUndefined(jsObject.getMember(key));
     }
 
     /**
@@ -195,7 +195,7 @@ public class JavascriptObject {
                 jsArgs[i] = args[i];
             }
         }
-        return jsObject.call(function, (Object[]) jsArgs);
+        return checkUndefined(jsObject.call(function, (Object[]) jsArgs));
     }
 
     /**
@@ -231,5 +231,29 @@ public class JavascriptObject {
         } else {
             return null;
         }
+    }
+    
+    /** JSObject will return the String "undefined" at certain times, so we 
+     * need to make sure we're not getting a value that looks valid, but isn't.
+     * 
+     * @param val The value from Javascript to be checked.
+     * @return Either null or the value passed in.
+     */
+    private Object checkUndefined(Object val) {
+        if (val instanceof String && ((String) val).equals("undefined")) {
+            return null;
+        }
+        return val;
+    }
+    
+    /** Checks a returned Javascript value where we expect a boolean but could 
+     * get null.
+     * 
+     * @param val The value from Javascript to be checked.
+     * @param def The default return value, which can be null.
+     * @return The actual value, or if null, returns false.
+     */
+    protected Boolean checkBoolean(Object val, Boolean def) {
+        return (val == null) ? def : (Boolean) val;
     }
 }
