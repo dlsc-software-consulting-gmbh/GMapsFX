@@ -7,7 +7,7 @@
 package com.lynden.gmapsfx.elevation;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 
 /** Creates a request that can be passed in to the {@link ElevationService} to 
@@ -18,11 +18,11 @@ import com.lynden.gmapsfx.javascript.object.LatLong;
 public class LocationElevationRequest extends JavascriptObject {
     
     public LocationElevationRequest() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     public LocationElevationRequest(LatLong[] locations) {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
         getJSObject().setMember("locations", getJSObject().eval("[]"));
         for (int i = 0; i < locations.length; i++) {
             getJSObject().eval(getVariableName()+".locations.push("+locations[i].getVariableName()+")");

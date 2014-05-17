@@ -17,7 +17,7 @@
 package com.lynden.gmapsfx.shapes;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 
 /** Abstract base class for our shape options, as they all have a lot of 
  * common properties.
@@ -40,7 +40,7 @@ public abstract class MapShapeOptions<T extends MapShapeOptions> extends Javascr
 //    private T me;
     
     public MapShapeOptions() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     protected abstract T getMe();

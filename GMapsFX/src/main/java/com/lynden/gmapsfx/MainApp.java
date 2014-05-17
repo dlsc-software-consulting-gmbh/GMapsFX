@@ -15,7 +15,7 @@ import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.LatLongBounds;
 import com.lynden.gmapsfx.javascript.object.MVCArray;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
-import com.lynden.gmapsfx.javascript.object.MapType;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import com.lynden.gmapsfx.shapes.ArcBuilder;
@@ -35,6 +35,7 @@ import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
@@ -57,6 +58,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
     private Label lblZoom;
     private Label lblCenter;
     private Label lblClick;
+    private ComboBox<MapTypeIdEnum> mapTypeCombo;
 
     @Override
     public void start(final Stage stage) throws Exception {
@@ -67,6 +69,8 @@ public class MainApp extends Application implements MapComponentInitializedListe
         ToolBar tb = new ToolBar();
 
         btnZoomIn = new Button("Zoom In");
+        
+        
         btnZoomIn.setOnAction(e -> {
             map.zoomProperty().set(map.getZoom() + 1);
         });
@@ -81,8 +85,23 @@ public class MainApp extends Application implements MapComponentInitializedListe
         lblZoom = new Label();
         lblCenter = new Label();
         lblClick = new Label();
+        
+        
+        mapTypeCombo = new ComboBox<>();
+        mapTypeCombo.setOnAction( e -> {
+           map.setMapType(mapTypeCombo.getSelectionModel().getSelectedItem() );
+        });
+        mapTypeCombo.setDisable(true);
+        
+        
+                Button btnType = new Button("Map type");
+                
+        btnType.setOnAction(e -> {
+            map.setMapType(MapTypeIdEnum.HYBRID);
+        });
 
-        tb.getItems().addAll(btnZoomIn, btnZoomOut,
+        
+        tb.getItems().addAll(btnZoomIn, btnZoomOut, mapTypeCombo,
                 new Label("Zoom: "), lblZoom,
                 new Label("Center: "), lblCenter,
                 new Label("Click: "), lblClick);
@@ -109,7 +128,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .scaleControl(false)
                 .streetViewControl(false)
                 .zoomControl(false)
-                .mapType(MapType.ROADMAP);
+                .mapType(MapTypeIdEnum.TERRAIN);
 
         map = mapComponent.createMap(options);
 
@@ -164,6 +183,9 @@ public class MainApp extends Application implements MapComponentInitializedListe
 
         btnZoomIn.setDisable(false);
         btnZoomOut.setDisable(false);
+        mapTypeCombo.setDisable(false);
+        
+        mapTypeCombo.getItems().addAll( MapTypeIdEnum.ALL );
 
         LatLong[] ary = new LatLong[]{markerLatLong, markerLatLong2};
         MVCArray mvc = new MVCArray(ary);

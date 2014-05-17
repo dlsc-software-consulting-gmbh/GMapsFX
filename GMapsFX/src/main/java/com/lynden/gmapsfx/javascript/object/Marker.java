@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  * Marker which can be placed on a GoogleMap.
@@ -35,7 +34,7 @@ public class Marker extends JavascriptObject {
      * @param markerOptions The options to use when constructing this marker.
      */
     public Marker(MarkerOptions markerOptions) {
-        super(JavascriptObjectType.MARKER, markerOptions);
+        super(GMapObjectType.MARKER, markerOptions);
     }
     
     

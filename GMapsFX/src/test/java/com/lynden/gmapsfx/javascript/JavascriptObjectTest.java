@@ -15,7 +15,9 @@
  */
 package com.lynden.gmapsfx.javascript;
 
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import netscape.javascript.JSObject;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -55,7 +57,7 @@ public class JavascriptObjectTest {
         JavascriptRuntime.runtime = mockJSRuntime;
         when(mockJSRuntime.execute(any(String.class))).thenReturn(mockJsObject);
          JavascriptObject.objectCounter = 0;
-        testJavascriptObject = new JavascriptObject(JavascriptObjectType.OBJECT);
+        testJavascriptObject = new JavascriptObject(GMapObjectType.OBJECT);
        
     }
 
@@ -70,7 +72,7 @@ public class JavascriptObjectTest {
     
     @Test
     public void testCreateJavascriptObject() {
-        JavascriptObject jso = new JavascriptObject(JavascriptObjectType.OBJECT, mockJsObject);
+        JavascriptObject jso = new JavascriptObject(GMapObjectType.OBJECT, mockJsObject);
         assertEquals( mockJsObject, jso.getJSObject());
     }
     
@@ -88,7 +90,6 @@ public class JavascriptObjectTest {
     @Test
     public void testSetProperty_Object() {
         testJavascriptObject.setProperty("MyBoolProp", Boolean.FALSE);
-        assertEquals( Boolean.FALSE, testJavascriptObject.properties.get("MyBoolProp" ) );
         verify(mockJsObject).setMember("MyBoolProp", Boolean.FALSE);
     }
     
@@ -96,20 +97,30 @@ public class JavascriptObjectTest {
     public void testSetProperty_JavascriptObject() {
         LatLong latLong = new LatLong(1, 1);
         testJavascriptObject.setProperty("LatLong", latLong);
-        assertEquals( latLong, testJavascriptObject.properties.get("LatLong" ) );
-        verify(mockJsObject).setMember("LatLong", latLong.getVariableName());
+        verify(mockJsObject).setMember("LatLong", latLong.getJSObject());
     }    
     
     @Test
+    public void testSetProperty_JavascriptEnum() {
+        MapTypeIdEnum mapType = MapTypeIdEnum.TERRAIN;
+        testJavascriptObject.setProperty("MapType", mapType);
+        verify(mockJsObject).setMember("MapType", mapType.getEnumValue());
+    }  
+    
+    
+    @Test
     public void testGetProperty() {
-        testJavascriptObject.properties.put("myprop", "myvalue");
+        
+        when(mockJsObject.getMember("myprop")).thenReturn("myvalue");
         assertEquals( testJavascriptObject.getProperty("myprop"), "myvalue");
     }
+    
+      
     
     @Test
     public void testGetPropertyGeneric() {
         LatLong latLong = new LatLong(1, 1);
-        testJavascriptObject.setProperty("LatLong", latLong);    
+        when(mockJsObject.getMember("LatLong")).thenReturn(latLong);
         LatLong actualLatLong = testJavascriptObject.getProperty("LatLong", LatLong.class);
         assertEquals( latLong, actualLatLong);
     }    
@@ -120,37 +131,6 @@ public class JavascriptObjectTest {
     }
     
     
-    @Test
-    public void testGetPropertyAsString_String() {
-        testJavascriptObject.properties.put("MyString", "MyStringValue");
-        assertEquals( "\"MyStringValue\"", testJavascriptObject.getPropertyAsString("MyString") );
-    }
-    
-    @Test
-    public void testGetPropertyAsString_Boolean() {
-        testJavascriptObject.properties.put( "MyBool", true);
-        assertEquals("true", testJavascriptObject.getPropertyAsString("MyBool"));
-    }
-    
-    @Test
-    public void testGetPropertyAsString_JavascriptType() {
-        JavascriptObject myJSType = new JavascriptObject(JavascriptObjectType.OBJECT);
-        myJSType.variableName = "MyJSType1";
-        testJavascriptObject.properties.put("MyJSType",myJSType);
-        assertEquals("MyJSType1", testJavascriptObject.getPropertyAsString("MyJSType"));
-    }
-    
-    @Test
-    public void testGetPropertiesAsString() {
-        StringBuilder expectedString = new StringBuilder();
-        expectedString.append("{\n").append("prop1: \"value1\",\n").append("prop2: true\n}");
-        testJavascriptObject.setProperty("prop1", "value1");
-        testJavascriptObject.setProperty("prop2", true);
-        
-        assertEquals( expectedString.toString(), testJavascriptObject.getPropertiesAsString() );
-        
-    }
-
     @Test
     public void testInvokeJavascript() {
         String arg = "myArg";

@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 import com.lynden.gmapsfx.shapes.MapShapeOptions;
 import netscape.javascript.JSObject;
 
@@ -27,11 +26,11 @@ import netscape.javascript.JSObject;
  */
 public abstract class MapShape extends JavascriptObject {
     
-    public MapShape(JavascriptObjectType type) {
+    public MapShape(String type) {
         super(type);
     }
     
-    public MapShape(JavascriptObjectType type, MapShapeOptions opts) {
+    public MapShape(String type, MapShapeOptions opts) {
         super(type, opts);
     }
     

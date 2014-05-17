@@ -13,30 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx.javascript.object;
 
+import com.lynden.gmapsfx.javascript.JavascriptEnum;
+
 /**
- * Various types of maps that are available.
- * 
+ *
  * @author Rob Terpilowski
  */
-public enum MapType {
+public class MapTypeIdEnum extends JavascriptEnum {
+
+    public static final String MAP_ENUM = "google.maps.MapTypeId";
+
+    public static final MapTypeIdEnum TERRAIN = new MapTypeIdEnum("TERRAIN");
+    public static final MapTypeIdEnum ROADMAP = new MapTypeIdEnum("ROADMAP");
+    public static final MapTypeIdEnum SATELLITE = new MapTypeIdEnum("SATELLITE");
+    public static final MapTypeIdEnum HYBRID = new MapTypeIdEnum("HYBRID");
     
-    ROADMAP( "google.maps.MapTypeId.ROADMAP" ),
-    SATELLITE( "google.maps.MapTypeId.SATELLITE"),
-    HYBRID( "google.maps.MapTypeId.HYBRID" ),
-    TERRAIN( "google.maps.MapTypeId.TERRAIN");
-    
-    
-    protected String typeString;
-    
-    MapType( String typeString ) {
-        this.typeString = typeString;
+    public static final MapTypeIdEnum[] ALL = { TERRAIN, ROADMAP, SATELLITE, HYBRID };
+
+    protected MapTypeIdEnum(String value) {
+        super(MAP_ENUM, value);
     }
-    
+
     @Override
     public String toString() {
-        return typeString;
+        return getName();
     }
+    
+    
+    
 }

@@ -7,7 +7,7 @@
 package com.lynden.gmapsfx.elevation;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import netscape.javascript.JSObject;
 
@@ -21,7 +21,7 @@ public class ElevationResult extends JavascriptObject {
     private LatLong location;
     
     public ElevationResult(JSObject jsObject) {
-        super(JavascriptObjectType.ELEVATION_RESULT, jsObject);
+        super(GMapObjectType.ELEVATION_RESULT, jsObject);
     }
     
     /** The elevation returned from the ElevationService.

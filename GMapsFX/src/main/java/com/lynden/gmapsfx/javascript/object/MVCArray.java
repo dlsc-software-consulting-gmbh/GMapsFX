@@ -16,7 +16,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 import netscape.javascript.JSObject;
 
 /**
@@ -32,11 +31,11 @@ public class MVCArray extends JavascriptObject {
     }
 
     public MVCArray(Object[] ary) {
-        super(JavascriptObjectType.MVC_ARRAY, ary, true);
+        super(GMapObjectType.MVC_ARRAY, ary, true);
     }
 
     public MVCArray(JSObject obj) {
-        super(JavascriptObjectType.MVC_ARRAY, obj);
+        super(GMapObjectType.MVC_ARRAY, obj);
     }
 
     /**

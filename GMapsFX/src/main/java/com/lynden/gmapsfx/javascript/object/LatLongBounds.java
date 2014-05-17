@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 import netscape.javascript.JSObject;
 
 /**
@@ -27,15 +26,15 @@ import netscape.javascript.JSObject;
 public class LatLongBounds extends JavascriptObject {
     
     public LatLongBounds() {
-        super(JavascriptObjectType.LAT_LNG_BOUNDS);
+        super(GMapObjectType.LAT_LNG_BOUNDS);
     }
     
     public LatLongBounds(LatLong sw, LatLong ne) {
-        super(JavascriptObjectType.LAT_LNG_BOUNDS, sw, ne);
+        super(GMapObjectType.LAT_LNG_BOUNDS, sw, ne);
     }
     
     public LatLongBounds(JSObject obj) {
-        super(JavascriptObjectType.LAT_LNG_BOUNDS, obj);
+        super(GMapObjectType.LAT_LNG_BOUNDS, obj);
     }
     
 }

@@ -7,7 +7,7 @@
 package com.lynden.gmapsfx.zoom;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import netscape.javascript.JSObject;
 
 /**
@@ -19,15 +19,15 @@ public class MaxZoomResult extends JavascriptObject {
     private MaxZoomStatus status;
     
     public MaxZoomResult() {
-        super(JavascriptObjectType.MAX_ZOOM_RESULT);
+        super(GMapObjectType.MAX_ZOOM_RESULT);
     }
     
     public MaxZoomResult(JSObject obj) {
-        super(JavascriptObjectType.MAX_ZOOM_RESULT, obj);
+        super(GMapObjectType.MAX_ZOOM_RESULT, obj);
     }
     
     public MaxZoomResult(MaxZoomStatus status) {
-        super(JavascriptObjectType.MAX_ZOOM_RESULT);
+        super(GMapObjectType.MAX_ZOOM_RESULT);
         this.status = status;
     }
     

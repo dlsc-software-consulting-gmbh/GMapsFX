@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 
 /**
  *
@@ -33,7 +32,7 @@ public class MarkerOptions extends JavascriptObject {
     
     
     public MarkerOptions() {
-        super(JavascriptObjectType.OBJECT);
+        super(GMapObjectType.OBJECT);
     }
     
     public MarkerOptions title( String title ) {

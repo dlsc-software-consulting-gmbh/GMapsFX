@@ -99,10 +99,10 @@ public class JavascriptRuntimeTest {
         JavascriptObject object = Mockito.mock(JavascriptObject.class);
         String myProps = "myProps";
         
-        when(object.getPropertiesAsString()).thenReturn(myProps);
+        when(object.getVariableName()).thenReturn("PropVar1");
                 
         JavascriptRuntime rt = (JavascriptRuntime) JavascriptRuntime.getInstance();
-        assertEquals( "myProps", rt.getArgString( object ) );
+        assertEquals( "PropVar1", rt.getArgString( object ) );
     }
     
     
@@ -115,9 +115,5 @@ public class JavascriptRuntimeTest {
         
     }
 
-    // TODO add test methods here.
-    // The methods must be annotated with annotation @Test. For example:
-    //
-    // @Test
-    // public void hello() {}
+
 }

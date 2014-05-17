@@ -17,7 +17,6 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
 import com.lynden.gmapsfx.javascript.event.EventHandlers;
 import com.lynden.gmapsfx.javascript.event.GFXEventHandler;
 import com.lynden.gmapsfx.javascript.event.MapStateEventType;
@@ -37,7 +36,8 @@ import netscape.javascript.JSObject;
  */
 public class GoogleMap extends JavascriptObject {
 
-    protected LatLong latLong;
+    
+ //   protected LatLong latLong;
 //    protected int zoom;
     protected MapOptions options;
     protected static String divArg = "document.getElementById('map-canvas')";
@@ -50,11 +50,11 @@ public class GoogleMap extends JavascriptObject {
     
     
     public GoogleMap() {
-        super(JavascriptObjectType.MAP, divArg );
+        super(GMapObjectType.MAP, divArg );
     }
     
     public GoogleMap( MapOptions mapOptions ) {
-        super(JavascriptObjectType.MAP, new Object[]{ divArg, mapOptions} );
+        super(GMapObjectType.MAP, new Object[]{ divArg, mapOptions} );
     }
     
     
@@ -105,11 +105,10 @@ public class GoogleMap extends JavascriptObject {
     
     public void setCenter( LatLong latLong ) {
         invokeJavascript("setCenter", latLong);
-        this.latLong = latLong;
     }
     
     public LatLong getLatLong() {
-        return latLong;
+        return getProperty("setCenter", LatLong.class);
     }
     
     public final ReadOnlyObjectProperty<LatLong> centerProperty() {
@@ -134,8 +133,8 @@ public class GoogleMap extends JavascriptObject {
         marker.setMap(null);
     }
     
-    public void setMapType( MapType type ) {
-        invokeJavascript("setMapTypeId", type.toString() );
+    public void setMapType( MapTypeIdEnum type ) {
+        invokeJavascript("setMapTypeId", type );
     }
     
     public void addMapShape(MapShape shape) {

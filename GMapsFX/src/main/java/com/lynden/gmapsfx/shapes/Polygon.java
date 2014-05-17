@@ -16,7 +16,7 @@
 
 package com.lynden.gmapsfx.shapes;
 
-import com.lynden.gmapsfx.javascript.JavascriptObjectType;
+import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.MVCArray;
 import com.lynden.gmapsfx.javascript.object.MapShape;
 import netscape.javascript.JSObject;
@@ -28,11 +28,11 @@ import netscape.javascript.JSObject;
 public class Polygon extends MapShape {
     
     public Polygon() {
-        super(JavascriptObjectType.POLYGON);
+        super(GMapObjectType.POLYGON);
     }
     
     public Polygon(PolygonOptions opts) {
-        super(JavascriptObjectType.POLYGON, opts);
+        super(GMapObjectType.POLYGON, opts);
     }
     
     public MVCArray getPath() {
