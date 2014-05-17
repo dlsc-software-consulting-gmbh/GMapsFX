@@ -15,8 +15,6 @@
  */
 package com.lynden.gmapsfx.javascript;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import netscape.javascript.JSObject;
 
 /**
@@ -30,6 +28,13 @@ public class JavascriptObject {
     protected JSObject jsObject;
     protected static int objectCounter = 0;
     protected String variableName;
+    
+    /**
+     */
+    protected JavascriptObject() {
+        runtime = JavascriptRuntime.getInstance();
+        variableName = getNextVariableName();
+    }
     
     /**
      *
@@ -53,7 +58,8 @@ public class JavascriptObject {
     /**
      * @param type The type of underlying Javascript object to create.
      * @param ary The array to be passed in.
-     * @param isArray boolean to indicate the an array is to be created.
+     * @param isArray boolean to indicate the an array is to be used as the parameter 
+     * rather than breaking up into individual parameters.
      *
      */
     protected JavascriptObject(String type, Object[] ary, boolean isArray) {
@@ -233,13 +239,20 @@ public class JavascriptObject {
         }
     }
     
+    
+    protected boolean isMemberDefined(String member) {
+        Object res = jsObject.getMember(member);
+        return (res instanceof String && ! ((String) res).equals("undefined"));
+        
+    }
+    
     /** JSObject will return the String "undefined" at certain times, so we 
      * need to make sure we're not getting a value that looks valid, but isn't.
      * 
      * @param val The value from Javascript to be checked.
      * @return Either null or the value passed in.
      */
-    private Object checkUndefined(Object val) {
+    protected Object checkUndefined(Object val) {
         if (val instanceof String && ((String) val).equals("undefined")) {
             return null;
         }
@@ -255,5 +268,9 @@ public class JavascriptObject {
      */
     protected Boolean checkBoolean(Object val, Boolean def) {
         return (val == null) ? def : (Boolean) val;
+    }
+    
+    protected Integer checkInteger(Object val, Integer def) {
+        return (val == null) ? def : (Integer) val;
     }
 }
