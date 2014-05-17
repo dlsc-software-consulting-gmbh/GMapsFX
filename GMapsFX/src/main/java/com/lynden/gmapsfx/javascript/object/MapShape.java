@@ -51,17 +51,17 @@ public abstract class MapShape extends JavascriptObject {
     
     // Returns whether this circle can be dragged by the user.
     public boolean getDraggable() {
-        return (boolean) invokeJavascript("getDraggable");
+        return checkBoolean(invokeJavascript("getDraggable"), Boolean.FALSE);
     }
     
     // Returns whether this circle can be edited by the user.
     public boolean getEditable() {
-        return (boolean) invokeJavascript("getEditable");
+        return checkBoolean(invokeJavascript("getEditable"), Boolean.FALSE);
     }
     
     //Returns whether this circle is visible on the map.
     public boolean getVisible() {
-        return (boolean) invokeJavascript("getVisible");
+        return checkBoolean(invokeJavascript("getVisible"), Boolean.FALSE);
     }
     
     //If set to true, the user can drag this circle over the map.
