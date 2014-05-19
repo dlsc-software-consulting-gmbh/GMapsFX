@@ -28,6 +28,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Point2D;
 import netscape.javascript.JSObject;
 
 /**
@@ -145,6 +146,66 @@ public class GoogleMap extends JavascriptObject {
         shape.setMap(null);
     }
     
+    public Projection getProjection() {
+        Object obj = invokeJavascript("getProjection");
+        return (obj == null) ? null : new Projection((JSObject) obj);
+    }
+    
+    /** Returns the LatLongBounds of the visual area. Note: on zoom changes 
+     * the bounds are reset after the zoom event is fired, which can cause 
+     * unexpected results.
+     * 
+     * @return 
+     */
+    private LatLongBounds getBounds() {
+        Object obj = invokeJavascript("getBounds");
+        return new LatLongBounds((JSObject) obj);
+    }
+    
+    /** Returns the screen point for the provided LatLong. Note: Unexpected 
+     * results can be obtained if this method is called as a result of a zoom 
+     * change, as the zoom event is fired before the bounds are updated, and 
+     * bounds need to be used to obtain the answer!
+     * <p>
+     * One workaround is to only operate off bounds_changed events.
+     * 
+     * @param loc
+     * @return 
+     */
+    public Point2D fromLatLngToPoint(LatLong loc) {
+//        System.out.println("GoogleMap.fromLatLngToPoint loc: " + loc);
+        Projection proj = getProjection();
+        //System.out.println("map.fromLatLngToPoint Projection: " + proj);
+        LatLongBounds llb = getBounds();
+//        System.out.println("GoogleMap.fromLatLngToPoint Bounds: " + llb);
+        
+        GMapPoint topRight = proj.fromLatLngToPoint(llb.getNorthEast());
+//        System.out.println("GoogleMap.fromLatLngToPoint topRight: " + topRight);
+        GMapPoint bottomLeft = proj.fromLatLngToPoint(llb.getSouthWest());
+//        System.out.println("GoogleMap.fromLatLngToPoint bottomLeft: " + bottomLeft);
+        
+        double scale = Math.pow(2, getZoom());
+        GMapPoint worldPoint = proj.fromLatLngToPoint(loc);
+//        System.out.println("GoogleMap.fromLatLngToPoint worldPoint: " + worldPoint);
+        
+        double x = (worldPoint.getX() - bottomLeft.getX()) * scale;
+        double y = (worldPoint.getY() - topRight.getY()) * scale;
+        
+//        System.out.println("GoogleMap.fromLatLngToPoint x: " + x + " y: " + y);
+        return new Point2D(x, y);
+    }
+    
+    /** Pans the map by the supplied values.
+     * 
+     * @param x delta x value in pixels.
+     * @param y delta y value in pixels.
+     */
+    public void panBy(double x, double y) {
+//        System.out.println("panBy x: " + x + ", y: " + y);
+        invokeJavascript("panBy", new Object[]{x, y});
+    }
+    
+    
     /** Registers an event handler in the repository shared between Javascript 
      * and Java.
      * 
@@ -168,12 +229,6 @@ public class GoogleMap extends JavascriptObject {
      */
     public void addUIEventHandler(UIEventType type, UIEventHandler h) {
         this.addUIEventHandler(this, type, h);
-//        String key = registerEventHandler(h);
-//        String mcall = "google.maps.event.addListener(" + getVariableName() + ", '" + type.name() + "', "
-//                + "function(event) {document.jsHandlers.handleUIEvent('" + key + "', event.latLng);});";
-//        //System.out.println("addUIEventHandler mcall: " + mcall);
-//        runtime.execute(mcall);
-
     }
 
     /** Adds a handler for a mouse type event on the map.
