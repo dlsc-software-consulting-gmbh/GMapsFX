@@ -17,6 +17,7 @@ package com.lynden.gmapsfx;
 
 import com.lynden.gmapsfx.javascript.JavaFxWebEngine;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
+import com.lynden.gmapsfx.javascript.event.MapStateEventType;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
@@ -26,9 +27,8 @@ import java.util.concurrent.CyclicBarrier;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
-import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -43,6 +43,7 @@ public class GoogleMapView extends AnchorPane {
     protected boolean initialized = false;
     protected final CyclicBarrier barrier = new CyclicBarrier(2);
     protected final List<MapComponentInitializedListener> mapInitializedListeners = new ArrayList<>();
+    protected final List<MapReadyListener> mapReadyListeners = new ArrayList<>();
     protected GoogleMap map;
 
 
@@ -56,6 +57,9 @@ public class GoogleMapView extends AnchorPane {
         setBottomAnchor(webview, 0.0);
         setRightAnchor(webview, 0.0);
         getChildren().add(webview);
+        
+        webview.widthProperty().addListener(e -> mapResized());
+        webview.heightProperty().addListener(e -> mapResized());
         
         webengine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
@@ -72,13 +76,23 @@ public class GoogleMapView extends AnchorPane {
 //                            JSObject jsobj = (JSObject) webengine.executeScript("window");                      
 //                            jsobj.setMember("java", new JSListener());
                             fireMapInitializedListeners();
+                            
                         }
                     }
                 });
         webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
         
     }
-
+    
+    private void mapResized() {
+        if (initialized) {
+            //map.triggerResized();
+            System.out.println("GoogleMapView.mapResized: triggering resize event");
+            webengine.executeScript("google.maps.event.trigger("+map.getVariableName()+", 'resize')");
+            System.out.println("GoogleMapView.mapResized: triggering resize event done");
+        }
+    }
+    
     public void setZoom(int zoom) {
         checkInitialized();
         map.setZoom(zoom);
@@ -98,6 +112,13 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMap createMap( MapOptions mapOptions ) {
         checkInitialized();
         map = new GoogleMap(mapOptions);
+        map.addStateEventHandler(MapStateEventType.projection_changed, () -> {
+            if (map.getProjection() != null) {
+                mapResized();
+                fireMapReadyListeners();
+            }
+        });
+        
         return map;
     }
 
@@ -117,7 +138,29 @@ public class GoogleMapView extends AnchorPane {
             mapInitializedListeners.remove(listener);
         }
     }
+    
+    public void addMapReadyListener(MapReadyListener listener) {
+        synchronized (mapReadyListeners) {
+            mapReadyListeners.add(listener);
+        }
+    }
 
+    public void removeReadyListener(MapReadyListener listener) {
+        synchronized (mapReadyListeners) {
+            mapReadyListeners.remove(listener);
+        }
+    }
+    
+    public Point2D fromLatLngToPoint(LatLong loc) {
+        checkInitialized();
+        return map.fromLatLngToPoint(loc);
+    }
+    
+    public void panBy(double x, double y) {
+        checkInitialized();
+        map.panBy(x, y);
+    }
+    
     protected void init() {
 
     }
@@ -134,6 +177,14 @@ public class GoogleMapView extends AnchorPane {
         }
     }
 
+    protected void fireMapReadyListeners() {
+        synchronized (mapReadyListeners) {
+            for (MapReadyListener listener : mapReadyListeners) {
+                listener.mapReady();
+            }
+        }
+    }
+    
     protected JSObject executeJavascript(String function) {
         Object returnObject = webengine.executeScript(function);
         return (JSObject) returnObject;
