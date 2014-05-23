@@ -41,11 +41,11 @@ public class LatLong extends JavascriptObject {
     }
 
     public double getLatitude() {
-        return invokeJavascriptReturnValue("lat", Double.class );
+        return invokeJavascriptReturnValue("lat", Number.class ).doubleValue();
     }
 
     public double getLongitude() {
-        return invokeJavascriptReturnValue("lng", Double.class );
+        return invokeJavascriptReturnValue("lng", Number.class ).doubleValue();
     }
 
     /**

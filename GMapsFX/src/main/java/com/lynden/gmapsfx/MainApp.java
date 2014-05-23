@@ -33,6 +33,7 @@ import com.lynden.gmapsfx.zoom.MaxZoomServiceCallback;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -62,15 +63,13 @@ public class MainApp extends Application implements MapComponentInitializedListe
 
     @Override
     public void start(final Stage stage) throws Exception {
-        mapComponent = new GoogleMapView(true);
+        mapComponent = new GoogleMapView();
         mapComponent.addMapInializedListener(this);
-
+        
         BorderPane bp = new BorderPane();
         ToolBar tb = new ToolBar();
 
         btnZoomIn = new Button("Zoom In");
-        
-        
         btnZoomIn.setOnAction(e -> {
             map.zoomProperty().set(map.getZoom() + 1);
         });
@@ -86,21 +85,16 @@ public class MainApp extends Application implements MapComponentInitializedListe
         lblCenter = new Label();
         lblClick = new Label();
         
-        
         mapTypeCombo = new ComboBox<>();
         mapTypeCombo.setOnAction( e -> {
            map.setMapType(mapTypeCombo.getSelectionModel().getSelectedItem() );
         });
         mapTypeCombo.setDisable(true);
         
-        
-                Button btnType = new Button("Map type");
-                
+        Button btnType = new Button("Map type");
         btnType.setOnAction(e -> {
             map.setMapType(MapTypeIdEnum.HYBRID);
         });
-
-        
         tb.getItems().addAll(btnZoomIn, btnZoomOut, mapTypeCombo,
                 new Label("Zoom: "), lblZoom,
                 new Label("Center: "), lblCenter,
@@ -118,6 +112,11 @@ public class MainApp extends Application implements MapComponentInitializedListe
     public void mapInitialized() {
         //Once the map has been loaded by the Webview, initialize the map details.
         LatLong center = new LatLong(47.606189, -122.335842);
+        mapComponent.addMapReadyListener(() -> {
+            // This call will fail unless the map is completely ready.
+            checkCenter(center);
+        });
+        
         MapOptions options = new MapOptions();
         options.center(center)
                 .mapMarker(true)
@@ -307,8 +306,16 @@ public class MainApp extends Application implements MapComponentInitializedListe
             }
         });
         
+        
     }
 
+    private void checkCenter(LatLong center) {
+        System.out.println("Testing fromLatLngToPoint using: " + center);
+        Point2D p = map.fromLatLngToPoint(center);
+        System.out.println("Testing fromLatLngToPoint result: " + p);
+        System.out.println("Testing fromLatLngToPoint expected: " + mapComponent.getWidth()/2 + ", " + mapComponent.getHeight()/2);
+    }
+    
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
      * main() serves only as fallback in case the application can not be

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lynden, Inc.
+ * Copyright 2014 GMapsFX.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,16 @@
 
 package com.lynden.gmapsfx;
 
-/**
+/** A MapReadyListener is called when the MapOptions have been loaded and the 
+ * Javascript map object is set up ready to be accessed. While the MapType is 
+ * null many methods will cause errors, so this listener is notified when 
+ * projection_changed returns a non-null value, as this is expected to happen 
+ * after the MapType is set.
  *
- * @author Rob Terpilowski
+ * @author Geoff Capper
  */
-public interface MapComponentInitializedListener {
+public interface MapReadyListener {
     
-    public void mapInitialized();
+    public void mapReady();
     
 }

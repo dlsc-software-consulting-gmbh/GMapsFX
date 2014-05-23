@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 GMapsFX
+ * Copyright 2014 GMapsFX.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,32 +23,23 @@ import netscape.javascript.JSObject;
  *
  * @author Geoff Capper
  */
-public class LatLongBounds extends JavascriptObject {
+public class GMapPoint extends JavascriptObject {
     
-    public LatLongBounds() {
-        super(GMapObjectType.LAT_LNG_BOUNDS);
+    public GMapPoint(JSObject obj) {
+        super(GMapObjectType.POINT, obj);
     }
     
-    public LatLongBounds(LatLong sw, LatLong ne) {
-        super(GMapObjectType.LAT_LNG_BOUNDS, sw, ne);
+    public double getX() {
+        return getProperty("x", Double.class );
     }
-    
-    public LatLongBounds(JSObject obj) {
-        super(GMapObjectType.LAT_LNG_BOUNDS, obj);
-    }
-    
-    public LatLong getNorthEast() {
-        Object obj = invokeJavascript("getNorthEast");
-        return new LatLong((JSObject) obj);
-    }
-    
-    public LatLong getSouthWest() {
-        Object obj = invokeJavascript("getSouthWest");
-        return new LatLong((JSObject) obj);
+
+    public double getY() {
+        return getProperty("y", Double.class );
     }
     
     @Override
     public String toString() {
-        return "LatLongBounds[NE:" + getNorthEast() + ", SW:" + getSouthWest() + "]";
+        return "GMapPoint[" + getX() + ", " + getY() + "]";
     }
+    
 }

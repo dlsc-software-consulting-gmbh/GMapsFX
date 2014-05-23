@@ -15,8 +15,6 @@
  */
 package com.lynden.gmapsfx.javascript;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import netscape.javascript.JSObject;
 
 /**
@@ -30,6 +28,13 @@ public class JavascriptObject {
     protected JSObject jsObject;
     protected static int objectCounter = 0;
     protected String variableName;
+    
+    /**
+     */
+    protected JavascriptObject() {
+        runtime = JavascriptRuntime.getInstance();
+        variableName = getNextVariableName();
+    }
     
     /**
      *
@@ -53,7 +58,8 @@ public class JavascriptObject {
     /**
      * @param type The type of underlying Javascript object to create.
      * @param ary The array to be passed in.
-     * @param isArray boolean to indicate the an array is to be created.
+     * @param isArray boolean to indicate the an array is to be used as the parameter 
+     * rather than breaking up into individual parameters.
      *
      */
     protected JavascriptObject(String type, Object[] ary, boolean isArray) {
@@ -146,7 +152,7 @@ public class JavascriptObject {
      * @return The value of the property
      */
     protected Object getProperty(String key) {
-        return jsObject.getMember(key);
+        return checkUndefined(jsObject.getMember(key));
     }
 
     /**
@@ -195,7 +201,7 @@ public class JavascriptObject {
                 jsArgs[i] = args[i];
             }
         }
-        return jsObject.call(function, (Object[]) jsArgs);
+        return checkUndefined(jsObject.call(function, (Object[]) jsArgs));
     }
 
     /**
@@ -231,5 +237,40 @@ public class JavascriptObject {
         } else {
             return null;
         }
+    }
+    
+    
+    protected boolean isMemberDefined(String member) {
+        Object res = jsObject.getMember(member);
+        return (res instanceof String && ! ((String) res).equals("undefined"));
+        
+    }
+    
+    /** JSObject will return the String "undefined" at certain times, so we 
+     * need to make sure we're not getting a value that looks valid, but isn't.
+     * 
+     * @param val The value from Javascript to be checked.
+     * @return Either null or the value passed in.
+     */
+    protected Object checkUndefined(Object val) {
+        if (val instanceof String && ((String) val).equals("undefined")) {
+            return null;
+        }
+        return val;
+    }
+    
+    /** Checks a returned Javascript value where we expect a boolean but could 
+     * get null.
+     * 
+     * @param val The value from Javascript to be checked.
+     * @param def The default return value, which can be null.
+     * @return The actual value, or if null, returns false.
+     */
+    protected Boolean checkBoolean(Object val, Boolean def) {
+        return (val == null) ? def : (Boolean) val;
+    }
+    
+    protected Integer checkInteger(Object val, Integer def) {
+        return (val == null) ? def : (Integer) val;
     }
 }
