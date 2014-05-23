@@ -62,7 +62,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
 
     @Override
     public void start(final Stage stage) throws Exception {
-        mapComponent = new GoogleMapView();
+        mapComponent = new GoogleMapView(true);
         mapComponent.addMapInializedListener(this);
 
         BorderPane bp = new BorderPane();
