@@ -47,7 +47,23 @@ public class GoogleMapView extends AnchorPane {
     protected GoogleMap map;
 
 
+    
     public GoogleMapView() {
+        this(false);
+    }
+    
+    
+    /**
+     * Creates a new map view and specifies if the FireBug pane should be displayed in the WebView
+     * @param debug true if the FireBug pane should be displayed in the WebView.
+     */
+    public GoogleMapView( boolean debug ) {
+        String htmlFile;
+        if( debug ) {
+            htmlFile = "/html/maps-debug.html";
+        } else {
+            htmlFile = "/html/maps.html";
+        }
         webview = new WebView();
         webengine = new JavaFxWebEngine(webview.getEngine());
         JavascriptRuntime.setDefaultWebEngine( webengine );
@@ -61,26 +77,20 @@ public class GoogleMapView extends AnchorPane {
         webview.widthProperty().addListener(e -> mapResized());
         webview.heightProperty().addListener(e -> mapResized());
         
+        webview.widthProperty().addListener(e -> mapResized());
+        webview.heightProperty().addListener(e -> mapResized());
+        
         webengine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                         if (newState == Worker.State.SUCCEEDED) {
                             setInitialized(true);
-//                            webview.getEngine().setOnAlert(new EventHandler<WebEvent<String>>() {
-//                                @Override
-//                                public void handle(WebEvent<String> event) {
-//                                    System.out.println("Alert: " + event.getData());
-//                                }
-//                            });
-//                            //webengine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
-//                            JSObject jsobj = (JSObject) webengine.executeScript("window");                      
-//                            jsobj.setMember("java", new JSListener());
                             fireMapInitializedListeners();
                             
                         }
                     }
                 });
-        webengine.load(getClass().getResource("/html/maps.html").toExternalForm());
+        webengine.load(getClass().getResource(htmlFile).toExternalForm());
         
     }
     
