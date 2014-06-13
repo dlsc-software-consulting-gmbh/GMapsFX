@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.lynden.gmapsfx.elevation;
+package com.lynden.gmapsfx.service.elevation;
 
 /** Parties interested in receiving the results from a call to the 
  * {@link ElevationService} must implement this interface. The results may be 

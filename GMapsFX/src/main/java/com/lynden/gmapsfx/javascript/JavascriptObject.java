@@ -43,6 +43,21 @@ public class JavascriptObject {
     protected JavascriptObject(String type) {
         this(type, (Object[]) null);
     }
+    
+    
+    /**
+     * Builds a new JavascriptObject based on a string representation of the object.
+     * This is useful when constructing functions as objects
+     * @param type The type of object to build
+     * @param stringRepresentation A string representation of the object, which can be executed by
+     * the Javascript runtime.
+     */
+    protected JavascriptObject( String type, String stringRepresentation ) {
+        runtime = JavascriptRuntime.getInstance();
+        variableName = getNextVariableName();
+        runtime.execute( "var " + variableName + " = " + stringRepresentation );
+        jsObject = runtime.execute(variableName);
+    }
 
     /**
      * @param type The type of underlying Javascript object to create.
@@ -68,7 +83,8 @@ public class JavascriptObject {
         runtime.execute("var " + variableName + " = " + runtime.getArrayConstructor(type, ary));
         jsObject = runtime.execute(variableName);
     }
-
+    
+    
     /**
      * Wraps a Javascript JSObject returned from a function.
      *

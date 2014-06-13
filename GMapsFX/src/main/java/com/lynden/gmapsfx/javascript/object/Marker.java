@@ -67,4 +67,9 @@ public class Marker extends JavascriptObject {
     }
     
     
+    public void setPosition( LatLong latLong ) {
+        invokeJavascript( "setPosition", latLong );
+    }
+    
+    
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package com.lynden.gmapsfx.elevation;
+package com.lynden.gmapsfx.service.elevation;
 
 /** Status responses from the ElevationService.
  *
