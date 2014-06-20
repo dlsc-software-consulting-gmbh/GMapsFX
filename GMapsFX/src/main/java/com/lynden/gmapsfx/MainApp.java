@@ -130,6 +130,9 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .mapType(MapTypeIdEnum.TERRAIN);
 
         map = mapComponent.createMap(options);
+        
+        map.setHeading(123.2);
+        System.out.println("Heading is: " + map.getHeading() );
 
         MarkerOptions markerOptions = new MarkerOptions();
         LatLong markerLatLong = new LatLong(47.606189, -122.335842);
@@ -157,6 +160,10 @@ public class MainApp extends Application implements MapComponentInitializedListe
 
         InfoWindow window = new InfoWindow(infoOptions);
         window.open(map, myMarker);
+        
+        
+        map.fitBounds(new LatLongBounds(new LatLong(30, 120), center));
+        System.out.println("Bounds : " + map.getBounds());
 
         lblCenter.setText(map.getCenter().toString());
         map.centerProperty().addListener((ObservableValue<? extends LatLong> obs, LatLong o, LatLong n) -> {

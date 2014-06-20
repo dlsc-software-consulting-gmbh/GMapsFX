@@ -15,6 +15,11 @@
  */
 package com.lynden.gmapsfx.javascript;
 
+import java.lang.reflect.Constructor;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import netscape.javascript.JSObject;
 
 /**
@@ -24,6 +29,7 @@ import netscape.javascript.JSObject;
  */
 public class JavascriptObject {
 
+    protected static Map<JSObject,JavascriptObject> peerRegistry = new WeakHashMap<>();
     protected IJavascriptRuntime runtime;
     protected JSObject jsObject;
     protected static int objectCounter = 0;
@@ -57,6 +63,7 @@ public class JavascriptObject {
         variableName = getNextVariableName();
         runtime.execute( "var " + variableName + " = " + stringRepresentation );
         jsObject = runtime.execute(variableName);
+        peerRegistry.put(jsObject, this);
     }
 
     /**
@@ -68,6 +75,7 @@ public class JavascriptObject {
         variableName = getNextVariableName();
         runtime.execute("var " + variableName + " = " + runtime.getConstructor(type, args));
         jsObject = runtime.execute(variableName);
+        peerRegistry.put(jsObject, this);
     }
 
     /**
@@ -82,6 +90,7 @@ public class JavascriptObject {
         variableName = getNextVariableName();
         runtime.execute("var " + variableName + " = " + runtime.getArrayConstructor(type, ary));
         jsObject = runtime.execute(variableName);
+        peerRegistry.put(jsObject, this);
     }
     
     
@@ -95,6 +104,7 @@ public class JavascriptObject {
         runtime = JavascriptRuntime.getInstance();
         variableName = getNextVariableName();
         this.jsObject = jsObject;
+        peerRegistry.put(jsObject, this);
     }
 
     /**
@@ -196,7 +206,7 @@ public class JavascriptObject {
      * @return The return value of the function call.
      */
     protected Object invokeJavascript(String function) {
-        return invokeJavascript(function, (Object) null);
+        return checkUndefined(jsObject.call(function));
     }
 
     /**
@@ -229,11 +239,16 @@ public class JavascriptObject {
      * @return The result of the function.
      */
     protected <T> T invokeJavascriptReturnValue(String function, Class<T> returnType) {
-        Object returnObject = invokeJavascript(function, (Object) null);
-        if (returnObject != null) {
-            return (T) returnObject;
+        Object returnObject = invokeJavascript(function);
+        if (returnObject instanceof JSObject) {
+            try {
+                Constructor<T> constructor = returnType.getConstructor(JSObject.class);
+                return constructor.newInstance((JSObject) returnObject);
+            } catch (Exception ex) {
+                throw new IllegalStateException(ex);
+            }
         } else {
-            return null;
+            return (T) returnObject;
         }
     }
 

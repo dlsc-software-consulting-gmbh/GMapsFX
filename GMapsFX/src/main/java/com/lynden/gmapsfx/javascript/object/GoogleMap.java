@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
@@ -37,63 +36,53 @@ import netscape.javascript.JSObject;
  */
 public class GoogleMap extends JavascriptObject {
 
-    
- //   protected LatLong latLong;
-//    protected int zoom;
+    private boolean userPromptedZoomChange;
+    private boolean mapPromptedZoomChange;
     protected MapOptions options;
     protected static String divArg = "document.getElementById('map-canvas')";
-    
+
     private ReadOnlyObjectWrapper<LatLong> center;
     private IntegerProperty zoom;
-    
+
     private final EventHandlers jsHandlers = new EventHandlers();
     private boolean registeredOnJS;
-    
-    
+
     public GoogleMap() {
-        super(GMapObjectType.MAP, divArg );
+        super(GMapObjectType.MAP, divArg);
     }
-    
-    public GoogleMap( MapOptions mapOptions ) {
-        super(GMapObjectType.MAP, new Object[]{ divArg, mapOptions} );
+
+    public GoogleMap(MapOptions mapOptions) {
+        super(GMapObjectType.MAP, new Object[]{divArg, mapOptions});
     }
-    
-    
-    public void setZoom( int zoom ) {
+
+    public void setZoom(int zoom) {
         zoomProperty().set(zoom);
-//        invokeJavascript("setZoom", zoom);
-//        this.zoom = zoom;
     }
-    
+
     public int getZoom() {
         return zoomProperty().get();
-//        return zoom;
-//        return (int) invokeJavascript("getZoom");
     }
-    
+
     private int internalGetZoom() {
         return (int) invokeJavascript("getZoom");
     }
-    
+
     private void internalSetZoom(int zoom) {
         invokeJavascript("setZoom", zoom);
     }
-        
-    private boolean userPromptedZoomChange;
-    private boolean mapPromptedZoomChange;
-    
+
     public IntegerProperty zoomProperty() {
         if (zoom == null) {
             zoom = new SimpleIntegerProperty(internalGetZoom());
             addStateEventHandler(MapStateEventType.zoom_changed, () -> {
-                if (! userPromptedZoomChange) {
+                if (!userPromptedZoomChange) {
                     mapPromptedZoomChange = true;
                     zoom.set(internalGetZoom());
                     mapPromptedZoomChange = false;
                 }
             });
             zoom.addListener((ObservableValue<? extends Number> obs, Number o, Number n) -> {
-                if (! mapPromptedZoomChange) {
+                if (!mapPromptedZoomChange) {
                     userPromptedZoomChange = true;
                     internalSetZoom(n.intValue());
                     userPromptedZoomChange = false;
@@ -102,16 +91,20 @@ public class GoogleMap extends JavascriptObject {
         }
         return zoom;
     }
-    
-    
-    public void setCenter( LatLong latLong ) {
+
+    public void setCenter(LatLong latLong) {
         invokeJavascript("setCenter", latLong);
     }
-    
+
     public LatLong getLatLong() {
         return getProperty("setCenter", LatLong.class);
     }
     
+    public void fitBounds( LatLongBounds bounds ) {
+        invokeJavascript("fitBounds", bounds );
+    }
+    
+
     public final ReadOnlyObjectProperty<LatLong> centerProperty() {
         if (center == null) {
             center = new ReadOnlyObjectWrapper<>(getCenter());
@@ -121,56 +114,66 @@ public class GoogleMap extends JavascriptObject {
         }
         return center.getReadOnlyProperty();
     }
-    
+
     public LatLong getCenter() {
         return new LatLong((JSObject) invokeJavascript("getCenter"));
     }
     
-    public void addMarker( Marker marker ) {
+    
+    public void setHeading( double heading ) {
+        invokeJavascript("setHeading", heading);
+    }
+    
+    public double getHeading() {
+        return invokeJavascriptReturnValue("getHeading", Double.class );
+    }
+
+    public void addMarker(Marker marker) {
         marker.setMap(this);
     }
-    
-    public void removeMarker( Marker marker ) {
+
+    public void removeMarker(Marker marker) {
         marker.setMap(null);
     }
-    
-    public void setMapType( MapTypeIdEnum type ) {
-        invokeJavascript("setMapTypeId", type );
+
+    public void setMapType(MapTypeIdEnum type) {
+        invokeJavascript("setMapTypeId", type);
     }
-    
+
     public void addMapShape(MapShape shape) {
         shape.setMap(this);
     }
-    
+
     public void removeMapShape(MapShape shape) {
         shape.setMap(null);
     }
-    
+
     public Projection getProjection() {
         Object obj = invokeJavascript("getProjection");
         return (obj == null) ? null : new Projection((JSObject) obj);
     }
-    
-    /** Returns the LatLongBounds of the visual area. Note: on zoom changes 
-     * the bounds are reset after the zoom event is fired, which can cause 
+
+    /**
+     * Returns the LatLongBounds of the visual area. Note: on zoom changes the
+     * bounds are reset after the zoom event is fired, which can cause
      * unexpected results.
-     * 
-     * @return 
+     *
+     * @return
      */
-    private LatLongBounds getBounds() {
-        Object obj = invokeJavascript("getBounds");
-        return new LatLongBounds((JSObject) obj);
+    public LatLongBounds getBounds() {
+        return invokeJavascriptReturnValue("getBounds", LatLongBounds.class);
     }
-    
-    /** Returns the screen point for the provided LatLong. Note: Unexpected 
-     * results can be obtained if this method is called as a result of a zoom 
-     * change, as the zoom event is fired before the bounds are updated, and 
+
+    /**
+     * Returns the screen point for the provided LatLong. Note: Unexpected
+     * results can be obtained if this method is called as a result of a zoom
+     * change, as the zoom event is fired before the bounds are updated, and
      * bounds need to be used to obtain the answer!
      * <p>
      * One workaround is to only operate off bounds_changed events.
-     * 
+     *
      * @param loc
-     * @return 
+     * @return
      */
     public Point2D fromLatLngToPoint(LatLong loc) {
 //        System.out.println("GoogleMap.fromLatLngToPoint loc: " + loc);
@@ -178,25 +181,26 @@ public class GoogleMap extends JavascriptObject {
         //System.out.println("map.fromLatLngToPoint Projection: " + proj);
         LatLongBounds llb = getBounds();
 //        System.out.println("GoogleMap.fromLatLngToPoint Bounds: " + llb);
-        
+
         GMapPoint topRight = proj.fromLatLngToPoint(llb.getNorthEast());
 //        System.out.println("GoogleMap.fromLatLngToPoint topRight: " + topRight);
         GMapPoint bottomLeft = proj.fromLatLngToPoint(llb.getSouthWest());
 //        System.out.println("GoogleMap.fromLatLngToPoint bottomLeft: " + bottomLeft);
-        
+
         double scale = Math.pow(2, getZoom());
         GMapPoint worldPoint = proj.fromLatLngToPoint(loc);
 //        System.out.println("GoogleMap.fromLatLngToPoint worldPoint: " + worldPoint);
-        
+
         double x = (worldPoint.getX() - bottomLeft.getX()) * scale;
         double y = (worldPoint.getY() - topRight.getY()) * scale;
-        
+
 //        System.out.println("GoogleMap.fromLatLngToPoint x: " + x + " y: " + y);
         return new Point2D(x, y);
     }
-    
-    /** Pans the map by the supplied values.
-     * 
+
+    /**
+     * Pans the map by the supplied values.
+     *
      * @param x delta x value in pixels.
      * @param y delta y value in pixels.
      */
@@ -204,26 +208,27 @@ public class GoogleMap extends JavascriptObject {
 //        System.out.println("panBy x: " + x + ", y: " + y);
         invokeJavascript("panBy", new Object[]{x, y});
     }
-    
-    
-    /** Registers an event handler in the repository shared between Javascript 
+
+    /**
+     * Registers an event handler in the repository shared between Javascript
      * and Java.
-     * 
+     *
      * @param h Event handler to be registered.
      * @return Callback key that Javascript will use to find this handler.
      */
     private String registerEventHandler(GFXEventHandler h) {
         //checkInitialized();
-        if (! registeredOnJS) {
+        if (!registeredOnJS) {
             JSObject doc = (JSObject) runtime.execute("document");
             doc.setMember("jsHandlers", jsHandlers);
             registeredOnJS = true;
         }
         return jsHandlers.registerHandler(h);
     }
-    
-    /** Adds a handler for a mouse type event on the map.
-     * 
+
+    /**
+     * Adds a handler for a mouse type event on the map.
+     *
      * @param type Type of the event to register against.
      * @param h Handler that will be called when the event occurs.
      */
@@ -231,8 +236,9 @@ public class GoogleMap extends JavascriptObject {
         this.addUIEventHandler(this, type, h);
     }
 
-    /** Adds a handler for a mouse type event on the map.
-     * 
+    /**
+     * Adds a handler for a mouse type event on the map.
+     *
      * @param obj The object that the event should be registered on.
      * @param type Type of the event to register against.
      * @param h Handler that will be called when the event occurs.
@@ -244,15 +250,15 @@ public class GoogleMap extends JavascriptObject {
         //System.out.println("addUIEventHandler mcall: " + mcall);
         runtime.execute(mcall);
     }
-    
-    
-    /** Adds a handler for a state type event on the map.
+
+    /**
+     * Adds a handler for a state type event on the map.
      * <p>
-     * We could allow this to handle any state event by adding a parameter 
-     * JavascriptObject obj, but we would then need to loosen up the event type 
-     * and either accept a String value, or fill an enum with all potential 
+     * We could allow this to handle any state event by adding a parameter
+     * JavascriptObject obj, but we would then need to loosen up the event type
+     * and either accept a String value, or fill an enum with all potential
      * state events.
-     * 
+     *
      * @param type Type of the event to register against.
      * @param h Handler that will be called when the event occurs.
      */
@@ -264,5 +270,5 @@ public class GoogleMap extends JavascriptObject {
         runtime.execute(mcall);
 
     }
-    
+
 }
