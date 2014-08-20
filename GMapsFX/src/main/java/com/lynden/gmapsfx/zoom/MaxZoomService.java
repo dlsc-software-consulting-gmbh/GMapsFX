@@ -39,7 +39,7 @@ public class MaxZoomService extends JavascriptObject {
               .append(getVariableName())
               .append(".processResponse(result);});");
         
-        System.out.println("MaxZoomService direct call: " + r.toString());
+//        System.out.println("MaxZoomService direct call: " + r.toString());
         
         getJSObject().eval(r.toString());
         

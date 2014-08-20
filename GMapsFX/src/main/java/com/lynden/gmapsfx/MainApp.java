@@ -132,7 +132,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         map = mapComponent.createMap(options);
         
         map.setHeading(123.2);
-        System.out.println("Heading is: " + map.getHeading() );
+//        System.out.println("Heading is: " + map.getHeading() );
 
         MarkerOptions markerOptions = new MarkerOptions();
         LatLong markerLatLong = new LatLong(47.606189, -122.335842);
@@ -163,7 +163,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         
         
         map.fitBounds(new LatLongBounds(new LatLong(30, 120), center));
-        System.out.println("Bounds : " + map.getBounds());
+//        System.out.println("Bounds : " + map.getBounds());
 
         lblCenter.setText(map.getCenter().toString());
         map.centerProperty().addListener((ObservableValue<? extends LatLong> obs, LatLong o, LatLong n) -> {
@@ -205,7 +205,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         map.addMapShape(poly);
         map.addUIEventHandler(poly, UIEventType.click, (JSObject obj) -> {
             LatLong ll = new LatLong((JSObject) obj.getMember("latLng"));
-            System.out.println("You clicked the line at LatLong: lat: " + ll.getLatitude() + " lng: " + ll.getLongitude());
+//            System.out.println("You clicked the line at LatLong: lat: " + ll.getLatitude() + " lng: " + ll.getLongitude());
         });
 
         LatLong poly1 = new LatLong(47.429945, -122.84363);
@@ -276,51 +276,51 @@ public class MainApp extends Application implements MapComponentInitializedListe
             arc.setEditable(!arc.getEditable());
         });
         
-        LatLong ll = new LatLong(-41.2, 145.9);
-        LocationElevationRequest ler = new LocationElevationRequest(new LatLong[]{ll});
+//        LatLong ll = new LatLong(-41.2, 145.9);
+//        LocationElevationRequest ler = new LocationElevationRequest(new LatLong[]{ll});
+//        
+//        ElevationService es = new ElevationService();
+//        es.getElevationForLocations(ler, new ElevationServiceCallback() {
+//            @Override
+//            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
+////                System.out.println("We got results from the Location Elevation request:");
+//                for (ElevationResult er : results) {
+//                    System.out.println("LER: " + er.getElevation());
+//                }
+//            }
+//        });
         
-        ElevationService es = new ElevationService();
-        es.getElevationForLocations(ler, new ElevationServiceCallback() {
-            @Override
-            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
-                System.out.println("We got results from the Location Elevation request:");
-                for (ElevationResult er : results) {
-                    System.out.println("LER: " + er.getElevation());
-                }
-            }
-        });
+//        LatLong lle = new LatLong(-42.2, 145.9);
+//        PathElevationRequest per = new PathElevationRequest(new LatLong[]{ll, lle}, 3);
+//        
+//        ElevationService esb = new ElevationService();
+//        esb.getElevationAlongPath(per, new ElevationServiceCallback() {
+//            @Override
+//            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
+////                System.out.println("We got results from the Path Elevation Request:");
+//                for (ElevationResult er : results) {
+//                    System.out.println("PER: " + er.getElevation());
+//                }
+//            }
+//        });
         
-        LatLong lle = new LatLong(-42.2, 145.9);
-        PathElevationRequest per = new PathElevationRequest(new LatLong[]{ll, lle}, 3);
-        
-        ElevationService esb = new ElevationService();
-        esb.getElevationAlongPath(per, new ElevationServiceCallback() {
-            @Override
-            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
-                System.out.println("We got results from the Path Elevation Request:");
-                for (ElevationResult er : results) {
-                    System.out.println("PER: " + er.getElevation());
-                }
-            }
-        });
-        
-        MaxZoomService mzs = new MaxZoomService();
-        mzs.getMaxZoomAtLatLng(lle, new MaxZoomServiceCallback() {
-            @Override
-            public void maxZoomReceived(MaxZoomResult result) {
-                System.out.println("Max Zoom Status: " + result.getStatus());
-                System.out.println("Max Zoom: " + result.getMaxZoom());
-            }
-        });
+//        MaxZoomService mzs = new MaxZoomService();
+//        mzs.getMaxZoomAtLatLng(lle, new MaxZoomServiceCallback() {
+//            @Override
+//            public void maxZoomReceived(MaxZoomResult result) {
+//                System.out.println("Max Zoom Status: " + result.getStatus());
+//                System.out.println("Max Zoom: " + result.getMaxZoom());
+//            }
+//        });
         
         
     }
 
     private void checkCenter(LatLong center) {
-        System.out.println("Testing fromLatLngToPoint using: " + center);
-        Point2D p = map.fromLatLngToPoint(center);
-        System.out.println("Testing fromLatLngToPoint result: " + p);
-        System.out.println("Testing fromLatLngToPoint expected: " + mapComponent.getWidth()/2 + ", " + mapComponent.getHeight()/2);
+//        System.out.println("Testing fromLatLngToPoint using: " + center);
+//        Point2D p = map.fromLatLngToPoint(center);
+//        System.out.println("Testing fromLatLngToPoint result: " + p);
+//        System.out.println("Testing fromLatLngToPoint expected: " + mapComponent.getWidth()/2 + ", " + mapComponent.getHeight()/2);
     }
     
     /**

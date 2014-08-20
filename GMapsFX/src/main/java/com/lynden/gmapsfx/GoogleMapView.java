@@ -97,9 +97,9 @@ public class GoogleMapView extends AnchorPane {
     private void mapResized() {
         if (initialized) {
             //map.triggerResized();
-            System.out.println("GoogleMapView.mapResized: triggering resize event");
+//            System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger("+map.getVariableName()+", 'resize')");
-            System.out.println("GoogleMapView.mapResized: triggering resize event done");
+//            System.out.println("GoogleMapView.mapResized: triggering resize event done");
         }
     }
     
