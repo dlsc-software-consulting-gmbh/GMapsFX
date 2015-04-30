@@ -49,7 +49,7 @@ public class Marker extends JavascriptObject {
     
     
     /**
-     * This method is called from the GoogleMap.addMarker() method, it should not be invoked directory.
+     * This method is called from the GoogleMap.addMarker() method, it should not be invoked directly.
      *
      * @param map The map to add this Marker to.
      */
@@ -70,6 +70,17 @@ public class Marker extends JavascriptObject {
     public void setPosition( LatLong latLong ) {
         invokeJavascript( "setPosition", latLong );
     }
+
+	public void setOptions(MarkerOptions markerOptions2) {
+		invokeJavascript("setOptions", markerOptions2);
+	}
     
+	public void setVisible(boolean visible) {
+		invokeJavascript("setVisible", visible);
+	}
+	
+	public boolean getVisible() {
+		return invokeJavascriptReturnValue("getVisible", Boolean.class );
+	}
     
 }
