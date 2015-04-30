@@ -60,7 +60,12 @@ public class MainApp extends Application implements MapComponentInitializedListe
     private Label lblCenter;
     private Label lblClick;
     private ComboBox<MapTypeIdEnum> mapTypeCombo;
-
+	
+	private MarkerOptions markerOptions2;
+	private Marker myMarker2;
+	private Button btnHideMarker;
+	private Button btnDeleteMarker;
+	
     @Override
     public void start(final Stage stage) throws Exception {
         mapComponent = new GoogleMapView();
@@ -95,10 +100,18 @@ public class MainApp extends Application implements MapComponentInitializedListe
         btnType.setOnAction(e -> {
             map.setMapType(MapTypeIdEnum.HYBRID);
         });
+		
+		btnHideMarker = new Button("Hide Marker");
+		btnHideMarker.setOnAction(e -> {hideMarker();});
+		
+		btnDeleteMarker = new Button("Delete Marker");
+		btnDeleteMarker.setOnAction(e -> {deleteMarker();});
+		
         tb.getItems().addAll(btnZoomIn, btnZoomOut, mapTypeCombo,
                 new Label("Zoom: "), lblZoom,
                 new Label("Center: "), lblCenter,
-                new Label("Click: "), lblClick);
+                new Label("Click: "), lblClick,
+				btnHideMarker, btnDeleteMarker);
 
         bp.setTop(tb);
         bp.setCenter(mapComponent);
@@ -143,13 +156,13 @@ public class MainApp extends Application implements MapComponentInitializedListe
 
         final Marker myMarker = new Marker(markerOptions);
 
-        MarkerOptions markerOptions2 = new MarkerOptions();
+        markerOptions2 = new MarkerOptions();
         LatLong markerLatLong2 = new LatLong(47.906189, -122.335842);
         markerOptions2.position(markerLatLong2)
                 .title("My new Marker")
                 .visible(true);
 
-        Marker myMarker2 = new Marker(markerOptions2);
+        myMarker2 = new Marker(markerOptions2);
 
         map.addMarker(myMarker);
         map.addMarker(myMarker2);
@@ -315,7 +328,27 @@ public class MainApp extends Application implements MapComponentInitializedListe
         
         
     }
+	
+	
+	private void hideMarker() {
+//		System.out.println("deleteMarker");
+		
+		boolean visible = myMarker2.getVisible();
+		
+		//System.out.println("Marker was visible? " + visible);
+		
+		myMarker2.setVisible(! visible);
 
+//				markerOptions2.visible(Boolean.FALSE);
+//				myMarker2.setOptions(markerOptions2);
+//		System.out.println("deleteMarker - made invisible?");
+	}
+	
+	private void deleteMarker() {
+		//System.out.println("Marker was removed?");
+		map.removeMarker(myMarker2);
+	}
+	
     private void checkCenter(LatLong center) {
 //        System.out.println("Testing fromLatLngToPoint using: " + center);
 //        Point2D p = map.fromLatLngToPoint(center);
