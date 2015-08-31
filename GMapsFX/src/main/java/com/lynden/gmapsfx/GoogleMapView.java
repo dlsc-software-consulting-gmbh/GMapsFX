@@ -46,63 +46,120 @@ public class GoogleMapView extends AnchorPane {
     protected final List<MapReadyListener> mapReadyListeners = new ArrayList<>();
     protected GoogleMap map;
 
-
-    
     public GoogleMapView() {
         this(false);
     }
-    
-    
+
+    public GoogleMapView(boolean debug) {
+        this(null, debug);
+    }
+
     /**
-     * Creates a new map view and specifies if the FireBug pane should be displayed in the WebView
+     * Allows for the creation of the map using external resources from another
+     * jar for the html page and markers. The map html page must be sourced from
+     * the jar containing any marker images for those to function.
+     * <p>
+     * The html page is, at it's simplest:
+     * {@code 
+	 * <!DOCTYPE html>
+     * <html>
+     *   <head>
+     *     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+     *     <meta charset="utf-8">
+     *     <title>My Map</title>
+     *     <style>
+     *     html, body, #map-canvas {
+     *       height: 100%;
+     *       margin: 0px;
+     *       padding: 0px
+     *     }
+     * </style>
+     * <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+     * </head>
+     * <body>
+     * <div id="map-canvas"></div>
+     * </body>
+     * </html>
+     * }
+     * <p>
+     * If you store this file in your project jar, under
+     * my.gmapsfx.project.resources as mymap.html then you should call using
+     * "/my/gmapsfx/project/resources/mymap.html" for the mapResourcePath.
+     * <p>
+     * Your marker images should be stored in the same folder as, or below the
+     * map file. You then reference them using relative notation. If you put
+     * them in a subpackage "markers" you would create your MarkerOptions object
+     * as follows:
+     * {@code
+	 * myMarkerOptions.position(myLatLong)
+     *     .title("My Marker")
+     *     .icon("markers/mymarker.png")
+     *     .visible(true);
+     * }
+     *
+     * @param mapResourcePath
+     */
+    public GoogleMapView(String mapResourcePath) {
+        this(mapResourcePath, false);
+    }
+
+    /**
+     * Creates a new map view and specifies if the FireBug pane should be
+     * displayed in the WebView
+     *
+     * @param mapResourcePath
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
-    public GoogleMapView( boolean debug ) {
+    public GoogleMapView(String mapResourcePath, boolean debug) {
         String htmlFile;
-        if( debug ) {
-            htmlFile = "/html/maps-debug.html";
+        if (mapResourcePath == null) {
+            if (debug) {
+                htmlFile = "/html/maps-debug.html";
+            } else {
+                htmlFile = "/html/maps.html";
+            }
         } else {
-            htmlFile = "/html/maps.html";
+            htmlFile = mapResourcePath;
         }
         webview = new WebView();
         webengine = new JavaFxWebEngine(webview.getEngine());
-        JavascriptRuntime.setDefaultWebEngine( webengine );
+        JavascriptRuntime.setDefaultWebEngine(webengine);
 
-        setTopAnchor(webview,0.0);
-        setLeftAnchor(webview,0.0);
+        setTopAnchor(webview, 0.0);
+        setLeftAnchor(webview, 0.0);
         setBottomAnchor(webview, 0.0);
         setRightAnchor(webview, 0.0);
         getChildren().add(webview);
-        
+
         webview.widthProperty().addListener(e -> mapResized());
         webview.heightProperty().addListener(e -> mapResized());
-        
+
         webview.widthProperty().addListener(e -> mapResized());
         webview.heightProperty().addListener(e -> mapResized());
-        
+
         webengine.getLoadWorker().stateProperty().addListener(
                 new ChangeListener<Worker.State>() {
                     public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                         if (newState == Worker.State.SUCCEEDED) {
                             setInitialized(true);
                             fireMapInitializedListeners();
-                            
+
                         }
                     }
                 });
         webengine.load(getClass().getResource(htmlFile).toExternalForm());
-        
+
     }
-    
+
     private void mapResized() {
         if (initialized) {
             //map.triggerResized();
 //            System.out.println("GoogleMapView.mapResized: triggering resize event");
-            webengine.executeScript("google.maps.event.trigger("+map.getVariableName()+", 'resize')");
+            webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
 //            System.out.println("GoogleMapView.mapResized: triggering resize event done");
         }
     }
-    
+
     public void setZoom(int zoom) {
         checkInitialized();
         map.setZoom(zoom);
@@ -119,7 +176,7 @@ public class GoogleMapView extends AnchorPane {
         return map;
     }
 
-    public GoogleMap createMap( MapOptions mapOptions ) {
+    public GoogleMap createMap(MapOptions mapOptions) {
         checkInitialized();
         map = new GoogleMap(mapOptions);
         map.addStateEventHandler(MapStateEventType.projection_changed, () -> {
@@ -128,7 +185,7 @@ public class GoogleMapView extends AnchorPane {
                 fireMapReadyListeners();
             }
         });
-        
+
         return map;
     }
 
@@ -148,7 +205,7 @@ public class GoogleMapView extends AnchorPane {
             mapInitializedListeners.remove(listener);
         }
     }
-    
+
     public void addMapReadyListener(MapReadyListener listener) {
         synchronized (mapReadyListeners) {
             mapReadyListeners.add(listener);
@@ -160,17 +217,17 @@ public class GoogleMapView extends AnchorPane {
             mapReadyListeners.remove(listener);
         }
     }
-    
+
     public Point2D fromLatLngToPoint(LatLong loc) {
         checkInitialized();
         return map.fromLatLngToPoint(loc);
     }
-    
+
     public void panBy(double x, double y) {
         checkInitialized();
         map.panBy(x, y);
     }
-    
+
     protected void init() {
 
     }
@@ -194,7 +251,7 @@ public class GoogleMapView extends AnchorPane {
             }
         }
     }
-    
+
     protected JSObject executeJavascript(String function) {
         Object returnObject = webengine.executeScript(function);
         return (JSObject) returnObject;
@@ -216,11 +273,12 @@ public class GoogleMapView extends AnchorPane {
             throw new MapNotInitializedException();
         }
     }
-    
-    public class JSListener { 
-        public void log(String text){
+
+    public class JSListener {
+
+        public void log(String text) {
             System.out.println(text);
         }
     }
-    
+
 }
