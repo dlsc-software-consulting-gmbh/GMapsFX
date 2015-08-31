@@ -46,24 +46,77 @@ public class GoogleMapView extends AnchorPane {
     protected final List<MapReadyListener> mapReadyListeners = new ArrayList<>();
     protected GoogleMap map;
 
-
-    
     public GoogleMapView() {
         this(false);
     }
     
+	public GoogleMapView(boolean debug) {
+		this(null, debug);
+	}
     
+	/** Allows for the creation of the map using external resources from another jar
+	 * for the html page and markers. The map html page must be sourced from the 
+	 * jar containing any marker images for those to function.
+	 * <p>
+	 * The html page is, at it's simplest:
+	 * {@code 
+	 * <!DOCTYPE html>
+	 * <html>
+	 *   <head>
+	 *     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	 *     <meta charset="utf-8">
+	 *     <title>My Map</title>
+	 *     <style>
+	 *     html, body, #map-canvas {
+	 *       height: 100%;
+	 *       margin: 0px;
+	 *       padding: 0px
+	 *     }
+	 *     </style>
+	 *     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+	 *   </head>
+	 *   <body>
+	 *     <div id="map-canvas"></div>
+	 *   </body>
+	 * </html>
+	 * }
+	 * <p>
+	 * If you store this file in your project jar, under my.gmapsfx.project.resources 
+	 * as mymap.html then you should call using "/my/gmapsfx/project/resources/mymap.html" 
+	 * for the mapResourcePath.
+	 * <p>
+	 * Your marker images should be stored in the same folder as, or below the map file. You then 
+	 * reference them using relative notation. If you put them in a 
+	 * subpackage "markers" you would create your MarkerOptions object as follows:
+	 * {@code
+	 * myMarkerOptions.position(myLatLong)
+	 *     .title("My Marker")
+	 *     .icon("markers/mymarker.png")
+	 *     .visible(true);
+	 * }
+	 * 
+	 * @param mapResourcePath 
+	 */
+	public GoogleMapView(String mapResourcePath) {
+		this(mapResourcePath, false);
+	}
+	
     /**
      * Creates a new map view and specifies if the FireBug pane should be displayed in the WebView
+	 * @param mapResourcePath
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
-    public GoogleMapView( boolean debug ) {
+    public GoogleMapView(String mapResourcePath, boolean debug ) {
         String htmlFile;
-        if( debug ) {
-            htmlFile = "/html/maps-debug.html";
-        } else {
-            htmlFile = "/html/maps.html";
-        }
+		if (mapResourcePath == null) {
+			if( debug ) {
+				htmlFile = "/html/maps-debug.html";
+			} else {
+				htmlFile = "/html/maps.html";
+			}
+		} else {
+			htmlFile = mapResourcePath;
+		}
         webview = new WebView();
         webengine = new JavaFxWebEngine(webview.getEngine());
         JavascriptRuntime.setDefaultWebEngine( webengine );
