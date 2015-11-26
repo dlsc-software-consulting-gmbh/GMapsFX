@@ -36,7 +36,7 @@ The latest Javadocs can be found [here.] (http://rterp.github.io/GMapsFX/apidocs
 
 ## Authors
 
-- Rob Terpilowski  ::  Twitter: [@RobTerp](https://www.twitter.com/RobTerp)
+- Rob Terpilowski  ::  Twitter: [@RobTerpilowski](https://www.twitter.com/RobTerpilowski)
 - Geoff Capper
 
 ## License
