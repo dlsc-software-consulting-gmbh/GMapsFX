@@ -21,6 +21,9 @@ import com.lynden.gmapsfx.javascript.event.MapStateEventType;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
+
+import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CyclicBarrier;
@@ -46,11 +49,11 @@ public class GoogleMapView extends AnchorPane {
     protected final List<MapReadyListener> mapReadyListeners = new ArrayList<>();
     protected GoogleMap map;
 
-    public GoogleMapView() {
+    public GoogleMapView() throws FileNotFoundException {
         this(false);
     }
 
-    public GoogleMapView(boolean debug) {
+    public GoogleMapView(boolean debug) throws FileNotFoundException {
         this(null, debug);
     }
 
@@ -98,8 +101,9 @@ public class GoogleMapView extends AnchorPane {
      * }
      *
      * @param mapResourcePath
+     * @throws FileNotFoundException if the map resource can not be found.
      */
-    public GoogleMapView(String mapResourcePath) {
+    public GoogleMapView(String mapResourcePath) throws FileNotFoundException {
         this(mapResourcePath, false);
     }
 
@@ -109,8 +113,9 @@ public class GoogleMapView extends AnchorPane {
      *
      * @param mapResourcePath
      * @param debug true if the FireBug pane should be displayed in the WebView.
+     * @throws FileNotFoundException if the map resource can not be found.
      */
-    public GoogleMapView(String mapResourcePath, boolean debug) {
+    public GoogleMapView(String mapResourcePath, boolean debug) throws FileNotFoundException {
         String htmlFile;
         if (mapResourcePath == null) {
             if (debug) {
@@ -147,12 +152,16 @@ public class GoogleMapView extends AnchorPane {
                         }
                     }
                 });
-        webengine.load(getClass().getResource(htmlFile).toExternalForm());
+        URL rsc = getClass().getResource(htmlFile);
+        if(rsc == null){
+        	throw new FileNotFoundException(String.format("The map resource was not found at the given path ('%s').", htmlFile));
+        }
+        webengine.load(rsc.toExternalForm());
 
     }
 
     private void mapResized() {
-        if (initialized) {
+        if (initialized && map != null) {
             //map.triggerResized();
 //            System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
