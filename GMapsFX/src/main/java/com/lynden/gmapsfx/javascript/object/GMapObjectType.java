@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx.javascript.object;
 
 /**
  *
- * @author Rob Terpilowski 
+ * @author Rob Terpilowski
  */
 public interface GMapObjectType {
-    
+
     public static final String OBJECT = "Object";
     public static final String MAP = "google.maps.Map";
     public static final String INFO_WINDOW = "google.maps.InfoWindow";
@@ -40,5 +39,11 @@ public interface GMapObjectType {
     public static final String MAX_ZOOM_RESULT = "google.maps.MaxZoomResult";
     public static final String PROJECTION = "google.maps.Projection";
     public static final String POINT = "google.maps.Point";
-    
+    public static final String GEOCODER = "google.maps.Geocoder";
+    public static final String GEOCODER_REQUEST = "google.maps.GeocoderRequest";
+    public static final String GEOCODER_RESULT = "google.maps.GeocoderResult";
+    public static final String GEOCODER_COMPONENT_RESTRICTIONS = "google.maps.GeocoderComponentRestrictions";
+    public static final String GEOCODER_GEOMETRY = "google.maps.GeocoderGeometry";
+    public static final String GEOCODER_ADDRESS_COMPONENT = "google.maps.GeocoderAddressComponent";
+
 }
