@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lynden.gmapsfx.service.geocoding;
+package com.lynden.gmapsfx.service.directions;
+
+import netscape.javascript.JSObject;
 
 /**
  *
  * @author Andre
  */
-public enum GeocoderLocationType {
-    ROOFTOP,RANGE_INTERPOLATED,GEOMETRIC_CENTER,APPROXIMATE;
+public interface DirectionsServiceCallback {
+    public void directionsReceived(DirectionsResult results, DirectionStatus status);
 }
