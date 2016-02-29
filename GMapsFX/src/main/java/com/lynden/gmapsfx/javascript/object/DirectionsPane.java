@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Lynden, Inc.
+ * Copyright 2015 Andre.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,13 @@ import netscape.javascript.JSObject;
 
 /**
  *
- * @author Rob Terpilowski
+ * @author Andre
  */
-public class GoogleMap extends JavascriptObject {
-
+public class DirectionsPane extends JavascriptObject{
     private boolean userPromptedZoomChange;
     private boolean mapPromptedZoomChange;
     protected MapOptions options;
-    protected static String divArg = "document.getElementById('map-canvas')";
+    protected static String divArg = "document.getElementById('directions')";
 
     private ReadOnlyObjectWrapper<LatLong> center;
     private IntegerProperty zoom;
@@ -47,12 +46,12 @@ public class GoogleMap extends JavascriptObject {
     private final EventHandlers jsHandlers = new EventHandlers();
     private boolean registeredOnJS;
 
-    public GoogleMap() {
-        super(GMapObjectType.MAP, divArg);
+    public DirectionsPane() {
+        super(GMapObjectType.PANE, divArg);
     }
 
-    public GoogleMap(MapOptions mapOptions) {
-        super(GMapObjectType.MAP, new Object[]{divArg, mapOptions});
+    public DirectionsPane(MapOptions mapOptions) {
+        super(GMapObjectType.PANE, new Object[]{divArg, mapOptions});
     }
 
     public void setZoom(int zoom) {
@@ -128,9 +127,6 @@ public class GoogleMap extends JavascriptObject {
         return invokeJavascriptReturnValue("getHeading", Double.class );
     }
 
-    public void addMarker(Marker marker) {
-        marker.setMap(this);
-    }
 
     public void removeMarker(Marker marker) {
         marker.setMap(null);
@@ -138,10 +134,6 @@ public class GoogleMap extends JavascriptObject {
 
     public void setMapType(MapTypeIdEnum type) {
         invokeJavascript("setMapTypeId", type);
-    }
-
-    public void addMapShape(MapShape shape) {
-        shape.setMap(this);
     }
 
     public void removeMapShape(MapShape shape) {
@@ -270,5 +262,4 @@ public class GoogleMap extends JavascriptObject {
         runtime.execute(mcall);
 
     }
-
 }

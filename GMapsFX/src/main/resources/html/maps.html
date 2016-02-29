@@ -1,17 +1,31 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="style.css" type="text/css"/>
+
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <title>Simple markers</title>
         <style>
-            html, body, #map-canvas {
+            html, body{
                 height: 100%;
                 margin: 0px;
                 padding: 0px
             }
+            #map-canvas{
+                height: 100%;
+                width: 75%;
+                float: right;
+            }
+            #directions{
+                height: 100%;
+                width: 25%;
+                float: left;
+                overflow-y: scroll;
+                display: inline-block;
+            }
         </style>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&language=pt-BR"></script>
         <script>
 			/*
 			var javaReady = function(callback){
@@ -43,6 +57,7 @@
         </script>
     </head>
     <body>
+        <div id="directions"></div>
         <div id="map-canvas"></div>
     </body>
 </html>

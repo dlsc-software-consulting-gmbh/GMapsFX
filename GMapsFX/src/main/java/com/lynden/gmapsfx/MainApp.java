@@ -8,6 +8,7 @@ import com.lynden.gmapsfx.service.elevation.LocationElevationRequest;
 import com.lynden.gmapsfx.service.elevation.PathElevationRequest;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.Animation;
+import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.InfoWindow;
 import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
@@ -18,6 +19,22 @@ import com.lynden.gmapsfx.javascript.object.MapOptions;
 import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
+import com.lynden.gmapsfx.service.directions.DirectionStatus;
+import com.lynden.gmapsfx.service.directions.DirectionsGeocodedWaypoint;
+import com.lynden.gmapsfx.service.directions.DirectionsLeg;
+import com.lynden.gmapsfx.service.directions.DirectionsRenderer;
+import com.lynden.gmapsfx.service.directions.DirectionsRequest;
+import com.lynden.gmapsfx.service.directions.DirectionsResult;
+import com.lynden.gmapsfx.service.directions.DirectionsService;
+import com.lynden.gmapsfx.service.directions.DirectionsServiceCallback;
+import com.lynden.gmapsfx.service.directions.DirectionsSteps;
+import com.lynden.gmapsfx.service.directions.DirectionsWaypoint;
+import com.lynden.gmapsfx.service.directions.TravelModes;
+import com.lynden.gmapsfx.service.geocoding.GeocoderRequest;
+import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
+import com.lynden.gmapsfx.service.geocoding.GeocodingResult;
+import com.lynden.gmapsfx.service.geocoding.GeocodingService;
+import com.lynden.gmapsfx.service.geocoding.GeocodingServiceCallback;
 import com.lynden.gmapsfx.shapes.ArcBuilder;
 import com.lynden.gmapsfx.shapes.Circle;
 import com.lynden.gmapsfx.shapes.CircleOptions;
@@ -30,6 +47,7 @@ import com.lynden.gmapsfx.shapes.RectangleOptions;
 import com.lynden.gmapsfx.zoom.MaxZoomResult;
 import com.lynden.gmapsfx.zoom.MaxZoomService;
 import com.lynden.gmapsfx.zoom.MaxZoomServiceCallback;
+import java.util.List;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
@@ -39,6 +57,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
@@ -49,10 +68,12 @@ import netscape.javascript.JSObject;
  *
  * @author Rob Terpilowski
  */
-public class MainApp extends Application implements MapComponentInitializedListener {
+public class MainApp extends Application implements MapComponentInitializedListener, 
+        ElevationServiceCallback, GeocodingServiceCallback, DirectionsServiceCallback{
 
     protected GoogleMapView mapComponent;
     protected GoogleMap map;
+    protected DirectionsPane directions;
 
     private Button btnZoomIn;
     private Button btnZoomOut;
@@ -65,12 +86,13 @@ public class MainApp extends Application implements MapComponentInitializedListe
 	private Marker myMarker2;
 	private Button btnHideMarker;
 	private Button btnDeleteMarker;
-	
+
+        
     @Override
     public void start(final Stage stage) throws Exception {
         mapComponent = new GoogleMapView();
         mapComponent.addMapInializedListener(this);
-        
+                
         BorderPane bp = new BorderPane();
         ToolBar tb = new ToolBar();
 
@@ -114,6 +136,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
 				btnHideMarker, btnDeleteMarker);
 
         bp.setTop(tb);
+        
         bp.setCenter(mapComponent);
 
         Scene scene = new Scene(bp);
@@ -121,6 +144,8 @@ public class MainApp extends Application implements MapComponentInitializedListe
         stage.show();
     }
 
+    DirectionsRenderer renderer;
+    
     @Override
     public void mapInitialized() {
         //Once the map has been loaded by the Webview, initialize the map details.
@@ -143,6 +168,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .mapType(MapTypeIdEnum.TERRAIN);
 
         map = mapComponent.createMap(options);
+        directions = mapComponent.getDirec();
         
         map.setHeading(123.2);
 //        System.out.println("Heading is: " + map.getHeading() );
@@ -289,43 +315,28 @@ public class MainApp extends Application implements MapComponentInitializedListe
             arc.setEditable(!arc.getEditable());
         });
         
-//        LatLong ll = new LatLong(-41.2, 145.9);
-//        LocationElevationRequest ler = new LocationElevationRequest(new LatLong[]{ll});
-//        
-//        ElevationService es = new ElevationService();
-//        es.getElevationForLocations(ler, new ElevationServiceCallback() {
-//            @Override
-//            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
-////                System.out.println("We got results from the Location Elevation request:");
-//                for (ElevationResult er : results) {
-//                    System.out.println("LER: " + er.getElevation());
-//                }
-//            }
-//        });
+        GeocodingService gs = new GeocodingService();
         
-//        LatLong lle = new LatLong(-42.2, 145.9);
-//        PathElevationRequest per = new PathElevationRequest(new LatLong[]{ll, lle}, 3);
-//        
-//        ElevationService esb = new ElevationService();
-//        esb.getElevationAlongPath(per, new ElevationServiceCallback() {
-//            @Override
-//            public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
-////                System.out.println("We got results from the Path Elevation Request:");
-//                for (ElevationResult er : results) {
-//                    System.out.println("PER: " + er.getElevation());
-//                }
-//            }
-//        });
         
-//        MaxZoomService mzs = new MaxZoomService();
-//        mzs.getMaxZoomAtLatLng(lle, new MaxZoomServiceCallback() {
-//            @Override
-//            public void maxZoomReceived(MaxZoomResult result) {
-//                System.out.println("Max Zoom Status: " + result.getStatus());
-//                System.out.println("Max Zoom: " + result.getMaxZoom());
-//            }
-//        });
+        DirectionsService ds = new DirectionsService();
+        renderer = new DirectionsRenderer(true, map, directions);
         
+        DirectionsWaypoint[] dw = new DirectionsWaypoint[2];
+        dw[0] = new DirectionsWaypoint("São Paulo - SP");
+        dw[1] = new DirectionsWaypoint("Juiz de Fora - MG");
+        
+        DirectionsRequest dr = new DirectionsRequest(
+                "Belo Horizonte - MG",
+                "Rio de Janeiro - RJ",
+                TravelModes.DRIVING,
+                dw);
+        ds.getRoute(dr, this, renderer);
+        
+        LatLong[] location = new LatLong[1];
+        location[0] = new LatLong(-19.744056, -43.958699);
+        LocationElevationRequest loc = new LocationElevationRequest(location);
+        ElevationService es = new ElevationService();
+        //es.getElevationForLocations(loc, this);
         
     }
 	
@@ -369,4 +380,64 @@ public class MainApp extends Application implements MapComponentInitializedListe
         launch(args);
     }
 
+    @Override
+    public void elevationsReceived(ElevationResult[] results, ElevationStatus status) {
+        if(status.equals(ElevationStatus.OK)){
+            for(ElevationResult e : results){
+                System.out.println(" Elevation on "+ e.getLocation().toString() + " is " + e.getElevation());
+            }
+        }
+    }
+
+    @Override
+    public void geocodedResultsReceived(GeocodingResult[] results, GeocoderStatus status) {
+        if(status.equals(GeocoderStatus.OK)){
+            for(GeocodingResult e : results){
+                System.out.println(e.getVariableName());
+                System.out.println("GEOCODE: " + e.getFormattedAddress() + "\n" + e.toString());
+            }
+            
+        }
+        
+    }
+
+    @Override
+    public void directionsReceived(DirectionsResult results, DirectionStatus status) {
+        if(status.equals(DirectionStatus.OK)){
+            
+            System.out.println("OK");
+            
+            DirectionsResult e = results;
+            GeocodingService gs = new GeocodingService();
+            
+            System.out.println("SIZE ROUTES: " + e.getRoutes().size() + "\n" + "ORIGIN: " + e.getRoutes().get(0).getLegs().get(0).getStartLocation());
+            //gs.reverseGeocode(e.getRoutes().get(0).getLegs().get(0).getStartLocation().getLatitude(), e.getRoutes().get(0).getLegs().get(0).getStartLocation().getLongitude(), this);
+            System.out.println("LEGS SIZE: " + e.getRoutes().get(0).getLegs().size());
+            System.out.println("WAYPOINTS " +e.getGeocodedWaypoints().size());
+            /*double d = 0;
+            for(DirectionsLeg g : e.getRoutes().get(0).getLegs()){
+                d += g.getDistance().getValue();
+                System.out.println("DISTANCE " + g.getDistance().getValue());
+            }*/
+            try{
+                System.out.println("Distancia total = " + e.getRoutes().get(0).getLegs().get(0).getDistance().getText());
+            } catch(Exception ex){
+                System.out.println("ERRO: " + ex.getMessage());
+            }
+            System.out.println("LEG(0)");
+            System.out.println(e.getRoutes().get(0).getLegs().get(0).getSteps().size());
+            /*for(DirectionsSteps ds : e.getRoutes().get(0).getLegs().get(0).getSteps()){
+                System.out.println(ds.getStartLocation().toString() + " x " + ds.getEndLocation().toString());
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(ds.getStartLocation())
+                        .title(ds.getInstructions())
+                        .animation(Animation.DROP)
+                        .visible(true);
+                Marker myMarker = new Marker(markerOptions);
+                map.addMarker(myMarker);
+            }
+                    */
+            System.out.println(renderer.toString());
+        }
+    }
 }
