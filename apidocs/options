@@ -1,0 +1,23 @@
+-classpath
+'/Users/RobTerpilowski/Lynden/JavaSource/OpenSource/GMapsFX/GMapsFX/target/classes'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/Users/RobTerpilowski/Lynden/JavaSource/OpenSource/GMapsFX/GMapsFX/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2016. All Rights Reserved.'
+-charset
+'UTF-8'
+-d
+'/Users/RobTerpilowski/Lynden/JavaSource/OpenSource/GMapsFX/GMapsFX/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'GMapsFX 2.0.0 API'
+-linkoffline
+'http://download.oracle.com/javase/7/docs/api' '/Users/RobTerpilowski/Lynden/JavaSource/OpenSource/GMapsFX/GMapsFX/target/javadoc-bundle-options'
+-version
+-windowtitle
+'GMapsFX 2.0.0 API'
