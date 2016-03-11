@@ -31,6 +31,7 @@
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
+        <tag>2.0.1</tag>
     </scm>    
     
     <properties>
@@ -106,6 +107,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
                     <archive>
                         <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
