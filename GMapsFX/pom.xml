@@ -171,7 +171,7 @@
                     <!-- Avoid issue: http://jira.codehaus.org/browse/MGPG-9 -->
                     <mavenExecutorId>forked-path</mavenExecutorId>
                     <useReleaseProfile>false</useReleaseProfile>
-                    <arguments>-Prelease-sign-artifacts</arguments>
+                    <arguments>${arguments} -Prelease-sign-artifacts</arguments>
                 </configuration>
             </plugin>
             
