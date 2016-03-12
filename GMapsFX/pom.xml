@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
         <version>9</version>
     </parent>
-    
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lynden</groupId>
     <artifactId>GMapsFX</artifactId>
@@ -20,9 +18,8 @@
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>        
+        </license>
     </licenses>
-    
     <developers>
         <developer>
             <name>Rob Terpilowski</name>
@@ -32,9 +29,8 @@
         </developer>
         <developer>
             <name>Geoff Capper</name>
-        </developer>    
-    </developers>    
-    
+        </developer>
+    </developers>
     <distributionManagement>
         <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
@@ -46,23 +42,19 @@
             <name>Sonatype Nexus release repository</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
-    </distributionManagement>    
-    
+    </distributionManagement>
     <scm>
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
         <tag>HEAD</tag>
-    </scm>    
-    
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
-
     <profiles>
         <profile>
             <id>release-sign-artifacts</id>
@@ -74,7 +66,6 @@
             </activation>
             <build>
                 <plugins>
- 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -104,7 +95,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>                      
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
@@ -122,8 +113,6 @@
             </build>
         </profile>
     </profiles>
-
-
     <build>
         <plugins>
             <!--
@@ -148,7 +137,7 @@
                         <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
-            </plugin>            
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -180,8 +169,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.16</version>
-                <configuration>
-                </configuration>
+                <configuration/>
             </plugin>
             <!-- License headers -->
             <plugin>
@@ -209,22 +197,18 @@
                     <arguments>${arguments} -Prelease-sign-artifacts</arguments>
                 </configuration>
             </plugin>
-            
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.3</version>
+                <version>1.6.6</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>sonatype-nexus-staging</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
-            </plugin>            
-            
+            </plugin>
         </plugins>
-        
-        
     </build>
     <dependencies>
         <dependency>
