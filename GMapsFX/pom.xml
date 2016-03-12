@@ -11,7 +11,7 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>2.0.2-9-SNAPSHOT</version>
+    <version>2.0.2-10-SNAPSHOT</version>
     <packaging>jar</packaging>
     <licenses>
         <license>
@@ -188,7 +188,7 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5</version>
                 <configuration>
-                    <goals>deploy</goals>
+                    <goals>deploy nexus-staging:release</goals>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                     <tagNameFormat>@{project.version}</tagNameFormat>
                     <!-- Avoid issue: http://jira.codehaus.org/browse/MGPG-9 -->
