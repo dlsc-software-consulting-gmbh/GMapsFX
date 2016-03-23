@@ -43,3 +43,6 @@ The latest Javadocs can be found [here.] (http://rterp.github.io/GMapsFX/apidocs
 
 Apache License, Version 2.0 (current)
 http://www.apache.org/licenses/LICENSE-2.0
+
+Also, please be aware, in order to use this library, you must also accept the Google Terms of Service.
+https://developers.google.com/maps/faq#understanding-terms-of-service
