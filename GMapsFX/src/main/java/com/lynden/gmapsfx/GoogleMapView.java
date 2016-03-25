@@ -24,7 +24,10 @@ import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -123,34 +126,53 @@ public class GoogleMapView extends AnchorPane {
         } else {
             htmlFile = mapResourcePath;
         }
-        webview = new WebView();
-        webengine = new JavaFxWebEngine(webview.getEngine());
-        JavascriptRuntime.setDefaultWebEngine(webengine);
 
-        setTopAnchor(webview, 0.0);
-        setLeftAnchor(webview, 0.0);
-        setBottomAnchor(webview, 0.0);
-        setRightAnchor(webview, 0.0);
-        getChildren().add(webview);
+        CountDownLatch latch = new CountDownLatch(1);
+        Runnable initWebView = () -> {
+            try {
+                webview = new WebView();
+                webengine = new JavaFxWebEngine(webview.getEngine());
+                JavascriptRuntime.setDefaultWebEngine(webengine);
 
-        webview.widthProperty().addListener(e -> mapResized());
-        webview.heightProperty().addListener(e -> mapResized());
+                setTopAnchor(webview, 0.0);
+                setLeftAnchor(webview, 0.0);
+                setBottomAnchor(webview, 0.0);
+                setRightAnchor(webview, 0.0);
+                getChildren().add(webview);
 
-        webview.widthProperty().addListener(e -> mapResized());
-        webview.heightProperty().addListener(e -> mapResized());
+                webview.widthProperty().addListener(e -> mapResized());
+                webview.heightProperty().addListener(e -> mapResized());
 
-        webengine.getLoadWorker().stateProperty().addListener(
-                new ChangeListener<Worker.State>() {
-                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                        if (newState == Worker.State.SUCCEEDED) {
-                            setInitialized(true);
-                            fireMapInitializedListeners();
+                webview.widthProperty().addListener(e -> mapResized());
+                webview.heightProperty().addListener(e -> mapResized());
 
-                        }
-                    }
-                });
-        webengine.load(getClass().getResource(htmlFile).toExternalForm());
+                webengine.getLoadWorker().stateProperty().addListener(
+                        new ChangeListener<Worker.State>() {
+                            public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                                if (newState == Worker.State.SUCCEEDED) {
+                                    setInitialized(true);
+                                    fireMapInitializedListeners();
 
+                                }
+                            }
+                        });
+                webengine.load(getClass().getResource(htmlFile).toExternalForm());
+            } finally {
+                latch.countDown();
+            }
+        };
+
+        if (Platform.isFxApplicationThread()) {
+            initWebView.run();
+        } else {
+            Platform.runLater(initWebView);
+        }
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     private void mapResized() {
