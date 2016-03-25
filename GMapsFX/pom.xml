@@ -34,14 +34,12 @@
     </repository>
 </distributionManagement>
     <!--mvn -P bintray clean deploy -->
-<!--
     <scm>
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
-        <tag>2.0.2-23</tag>
+        <!--<tag>2.0.2-23</tag>-->
     </scm>
-    -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
