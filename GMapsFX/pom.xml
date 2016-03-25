@@ -7,7 +7,7 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>0.0.3</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>jar</packaging>
     <licenses>
         <license>
@@ -33,14 +33,15 @@
         <url>https://api.bintray.com/maven/rterp/maven/GMapsFX/;publish=1</url>
     </repository>
 </distributionManagement>
-    
-
+    <!--mvn -P bintray clean deploy -->
+<!--
     <scm>
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
         <tag>2.0.2-23</tag>
     </scm>
+    -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
