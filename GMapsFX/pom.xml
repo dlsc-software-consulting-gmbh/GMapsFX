@@ -7,7 +7,7 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4</version>
     <packaging>jar</packaging>
     <licenses>
         <license>
@@ -27,18 +27,19 @@
         </developer>
     </developers>
     <distributionManagement>
-    <repository>
-        <id>bintray-rterp-maven</id>
-        <name>rterp-maven</name>
-        <url>https://api.bintray.com/maven/rterp/maven/GMapsFX/;publish=1</url>
-    </repository>
-</distributionManagement>
+        <repository>
+            <id>bintray-rterp-maven</id>
+            <name>rterp-maven</name>
+            <url>https://api.bintray.com/maven/rterp/maven/GMapsFX/;publish=1</url>
+        </repository>
+    </distributionManagement>
     <!--mvn -P bintray clean deploy -->
     <scm>
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
         <!--<tag>2.0.2-23</tag>-->
+        <tag>HEAD</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -174,7 +175,31 @@
                     </includes>
                 </configuration>
             </plugin>
-        </plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>                    
+        </plugins>        
     </build>
     <dependencies>
         <dependency>
