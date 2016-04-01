@@ -22,6 +22,8 @@ import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
+
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -42,6 +44,10 @@ import netscape.javascript.JSObject;
  */
 public class GoogleMapView extends AnchorPane {
 
+    protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
+
+    protected final String language;
+    protected final String key;
     protected WebView webview;
     protected JavaFxWebEngine webengine;
     protected boolean initialized = false;
@@ -116,6 +122,21 @@ public class GoogleMapView extends AnchorPane {
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
     public GoogleMapView(String mapResourcePath, boolean debug) {
+        this(mapResourcePath, null, null, debug);
+    }
+
+    /**
+     * Creates a new map view and specifies the display language and API key.
+     *
+     * @param mapResourcePath
+     * @param language map display language, null for default
+     * @param key Google Maps API key or null
+     * @param debug true if the FireBug pane should be displayed in the WebView.
+     */
+    public GoogleMapView(String mapResourcePath, String language, String key, boolean debug) {
+        this.language = language;
+        this.key = key;
+
         String htmlFile;
         if (mapResourcePath == null) {
             if (debug) {
@@ -125,6 +146,20 @@ public class GoogleMapView extends AnchorPane {
             }
         } else {
             htmlFile = mapResourcePath;
+        }
+
+        String htmlText;
+        try {
+            StringBuilder text = loadText(htmlFile);
+            text = modifyHtml(text);
+
+            htmlText = text.toString();
+        } catch (Exception e) {
+            String exception = e.getClass().getSimpleName();
+            if (e.getMessage() != null)
+                exception += ": " + e.getMessage();
+
+            throw new IllegalStateException("Couldn't load map file '" + htmlFile + "': " + exception);
         }
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -156,7 +191,7 @@ public class GoogleMapView extends AnchorPane {
                                 }
                             }
                         });
-                webengine.load(getClass().getResource(htmlFile).toExternalForm());
+                webengine.loadContent(htmlText);
             } finally {
                 latch.countDown();
             }
@@ -173,6 +208,35 @@ public class GoogleMapView extends AnchorPane {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    protected StringBuilder loadText(String path) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path), "UTF-8"))) {
+            reader.lines().forEach(sb::append);
+        } catch (UncheckedIOException e) {
+            throw e.getCause();
+        }
+        return sb;
+    }
+
+    protected StringBuilder modifyHtml(StringBuilder text) {
+        int index = getGoogleMapsApiParamsIndex(text);
+        if (index != -1) {
+            if (language != null)
+                text.insert(index, "&language=" + language);
+            if (key != null)
+                text.insert(index, "&key=" + key);
+        }
+
+        return text;
+    }
+
+    protected static int getGoogleMapsApiParamsIndex(StringBuilder text) {
+        int index = text.indexOf(GOOGLE_MAPS_API_LINK);
+        if (index != -1)
+            index += GOOGLE_MAPS_API_LINK.length();
+        return index;
     }
 
     private void mapResized() {

@@ -38,4 +38,10 @@ public interface IWebEngine {
      */
     public void load(String url);
 
+    /**
+     * Loads the given HTML content directly.
+     *
+     * @param content The HTML text to load in the engine.
+     */
+    public void loadContent(String content);
 }
