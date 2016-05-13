@@ -185,6 +185,7 @@ public class GoogleMapView extends AnchorPane {
                         new ChangeListener<Worker.State>() {
                             public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                                 if (newState == Worker.State.SUCCEEDED) {
+                                    
                                     setInitialized(true);
                                     fireMapInitializedListeners();
 
@@ -265,9 +266,31 @@ public class GoogleMapView extends AnchorPane {
     }
 
     public GoogleMap createMap(MapOptions mapOptions) {
+        return createMap(mapOptions,false);
+    }
+
+    public GoogleMap createMap() {
+        return createMap(null, false);
+    }
+    
+    public GoogleMap createMap(boolean withDirectionsPanel) {
+        return createMap(null, withDirectionsPanel);
+    }
+    
+    public GoogleMap createMap(MapOptions mapOptions, boolean withDirectionsPanel ) {
         checkInitialized();
-        map = new GoogleMap(mapOptions);
-        direc = new DirectionsPane();
+        if( mapOptions != null ) {
+            map = new GoogleMap(mapOptions);
+        } else {
+            map = new GoogleMap();
+        }
+        
+        
+        if( withDirectionsPanel ) {
+            map.showDirectionsPane();
+            direc = new DirectionsPane();
+        }
+        
         map.addStateEventHandler(MapStateEventType.projection_changed, () -> {
             if (map.getProjection() != null) {
                 mapResized();
@@ -275,13 +298,7 @@ public class GoogleMapView extends AnchorPane {
             }
         });
 
-        return map;
-    }
-
-    public GoogleMap createMap() {
-        direc = new DirectionsPane();
-        map = new GoogleMap();
-        return map;
+        return map;        
     }
 
     public DirectionsPane getDirec() {

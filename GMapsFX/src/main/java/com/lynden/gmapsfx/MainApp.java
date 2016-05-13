@@ -61,6 +61,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
+import static javafx.application.Application.launch;
 
 /**
  * Example Application for creating and loading a GoogleMap into a JavaFX
@@ -167,7 +168,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .zoomControl(false)
                 .mapType(MapTypeIdEnum.TERRAIN);
 
-        map = mapComponent.createMap(options);
+        map = mapComponent.createMap(options,true);
         directions = mapComponent.getDirec();
         
         map.setHeading(123.2);
@@ -317,7 +318,6 @@ public class MainApp extends Application implements MapComponentInitializedListe
         
         GeocodingService gs = new GeocodingService();
         
-        
         DirectionsService ds = new DirectionsService();
         renderer = new DirectionsRenderer(true, map, directions);
         
@@ -336,7 +336,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         location[0] = new LatLong(-19.744056, -43.958699);
         LocationElevationRequest loc = new LocationElevationRequest(location);
         ElevationService es = new ElevationService();
-        //es.getElevationForLocations(loc, this);
+        es.getElevationForLocations(loc, this);
         
     }
 	

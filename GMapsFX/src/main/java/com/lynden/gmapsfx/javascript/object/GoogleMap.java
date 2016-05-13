@@ -16,6 +16,7 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
+import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.event.EventHandlers;
 import com.lynden.gmapsfx.javascript.event.GFXEventHandler;
 import com.lynden.gmapsfx.javascript.event.MapStateEventType;
@@ -69,6 +70,14 @@ public class GoogleMap extends JavascriptObject {
 
     private void internalSetZoom(int zoom) {
         invokeJavascript("setZoom", zoom);
+    }
+    
+    public void showDirectionsPane() {
+        JavascriptRuntime.getInstance().execute("showDirections()");
+    }
+    
+    public void hideDirectionsPane() {
+        JavascriptRuntime.getInstance().execute("hideDirections()");
     }
 
     public IntegerProperty zoomProperty() {
