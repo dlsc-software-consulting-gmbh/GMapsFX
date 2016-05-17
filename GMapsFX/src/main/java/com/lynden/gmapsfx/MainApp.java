@@ -48,6 +48,7 @@ import com.lynden.gmapsfx.zoom.MaxZoomResult;
 import com.lynden.gmapsfx.zoom.MaxZoomService;
 import com.lynden.gmapsfx.zoom.MaxZoomServiceCallback;
 import java.util.List;
+import java.util.Locale;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
@@ -91,7 +92,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         
     @Override
     public void start(final Stage stage) throws Exception {
-        mapComponent = new GoogleMapView();
+        mapComponent = new GoogleMapView(Locale.getDefault().getLanguage(), null);
         mapComponent.addMapInializedListener(this);
                 
         BorderPane bp = new BorderPane();
