@@ -168,7 +168,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .zoomControl(false)
                 .mapType(MapTypeIdEnum.TERRAIN);
 
-        map = mapComponent.createMap(options,true);
+        map = mapComponent.createMap(options,false);
         directions = mapComponent.getDirec();
         
         map.setHeading(123.2);
@@ -404,7 +404,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
     @Override
     public void directionsReceived(DirectionsResult results, DirectionStatus status) {
         if(status.equals(DirectionStatus.OK)){
-            
+            mapComponent.getMap().showDirectionsPane();
             System.out.println("OK");
             
             DirectionsResult e = results;

@@ -285,10 +285,9 @@ public class GoogleMapView extends AnchorPane {
             map = new GoogleMap();
         }
         
-        
+        direc = new DirectionsPane();
         if( withDirectionsPanel ) {
             map.showDirectionsPane();
-            direc = new DirectionsPane();
         }
         
         map.addStateEventHandler(MapStateEventType.projection_changed, () -> {
