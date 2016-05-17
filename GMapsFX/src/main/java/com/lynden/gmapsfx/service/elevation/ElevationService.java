@@ -46,7 +46,7 @@ public class ElevationService extends JavascriptObject {
               .append(getVariableName())
               .append(".processResponse(results, status);});");
         
-//        System.out.println("ElevationService direct call: " + r.toString());
+        System.out.println("ElevationService direct call: " + r.toString());
         
         getJSObject().eval(r.toString());
         
@@ -93,7 +93,6 @@ public class ElevationService extends JavascriptObject {
                 Object len = jsres.getMember("length");
                 if (len instanceof Number) {
                     int n = ((Number)len).intValue();
-//                    System.out.println("n: " + n);
                     ElevationResult[] ers = new ElevationResult[n];
                     for (int i = 0; i < n; i++) {
                         Object obj = jsres.getSlot(i);

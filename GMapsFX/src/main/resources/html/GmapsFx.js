@@ -1,5 +1,5 @@
-/*
- * Copyright 2015 Andre.
+/* 
+ * Copyright 2016 RobTerpilowski.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lynden.gmapsfx.service.geocoding;
 
-/**
- *
- * @author Andre
- */
-public enum GeocoderLocationType {
-    ROOFTOP,RANGE_INTERPOLATED,GEOMETRIC_CENTER,APPROXIMATE;
-}
+
+

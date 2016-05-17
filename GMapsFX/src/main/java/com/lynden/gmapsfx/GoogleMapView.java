@@ -18,15 +18,18 @@ package com.lynden.gmapsfx;
 import com.lynden.gmapsfx.javascript.JavaFxWebEngine;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.event.MapStateEventType;
+import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 
-import java.io.FileNotFoundException;
-import java.net.URL;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -41,6 +44,10 @@ import netscape.javascript.JSObject;
  */
 public class GoogleMapView extends AnchorPane {
 
+    protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
+
+    protected final String language;
+    protected final String key;
     protected WebView webview;
     protected JavaFxWebEngine webengine;
     protected boolean initialized = false;
@@ -48,12 +55,13 @@ public class GoogleMapView extends AnchorPane {
     protected final List<MapComponentInitializedListener> mapInitializedListeners = new ArrayList<>();
     protected final List<MapReadyListener> mapReadyListeners = new ArrayList<>();
     protected GoogleMap map;
+    protected DirectionsPane direc;
 
-    public GoogleMapView() throws FileNotFoundException {
+    public GoogleMapView() {
         this(false);
     }
 
-    public GoogleMapView(boolean debug) throws FileNotFoundException {
+    public GoogleMapView(boolean debug) {
         this(null, debug);
     }
 
@@ -101,9 +109,8 @@ public class GoogleMapView extends AnchorPane {
      * }
      *
      * @param mapResourcePath
-     * @throws FileNotFoundException if the map resource can not be found.
      */
-    public GoogleMapView(String mapResourcePath) throws FileNotFoundException {
+    public GoogleMapView(String mapResourcePath) {
         this(mapResourcePath, false);
     }
 
@@ -113,9 +120,23 @@ public class GoogleMapView extends AnchorPane {
      *
      * @param mapResourcePath
      * @param debug true if the FireBug pane should be displayed in the WebView.
-     * @throws FileNotFoundException if the map resource can not be found.
      */
-    public GoogleMapView(String mapResourcePath, boolean debug) throws FileNotFoundException {
+    public GoogleMapView(String mapResourcePath, boolean debug) {
+        this(mapResourcePath, null, null, debug);
+    }
+
+    /**
+     * Creates a new map view and specifies the display language and API key.
+     *
+     * @param mapResourcePath
+     * @param language map display language, null for default
+     * @param key Google Maps API key or null
+     * @param debug true if the FireBug pane should be displayed in the WebView.
+     */
+    public GoogleMapView(String mapResourcePath, String language, String key, boolean debug) {
+        this.language = language;
+        this.key = key;
+
         String htmlFile;
         if (mapResourcePath == null) {
             if (debug) {
@@ -126,42 +147,101 @@ public class GoogleMapView extends AnchorPane {
         } else {
             htmlFile = mapResourcePath;
         }
-        webview = new WebView();
-        webengine = new JavaFxWebEngine(webview.getEngine());
-        JavascriptRuntime.setDefaultWebEngine(webengine);
 
-        setTopAnchor(webview, 0.0);
-        setLeftAnchor(webview, 0.0);
-        setBottomAnchor(webview, 0.0);
-        setRightAnchor(webview, 0.0);
-        getChildren().add(webview);
+        String htmlText;
+        try {
+            StringBuilder text = loadText(htmlFile);
+            text = modifyHtml(text);
 
-        webview.widthProperty().addListener(e -> mapResized());
-        webview.heightProperty().addListener(e -> mapResized());
+            htmlText = text.toString();
+        } catch (Exception e) {
+            String exception = e.getClass().getSimpleName();
+            if (e.getMessage() != null)
+                exception += ": " + e.getMessage();
 
-        webview.widthProperty().addListener(e -> mapResized());
-        webview.heightProperty().addListener(e -> mapResized());
-
-        webengine.getLoadWorker().stateProperty().addListener(
-                new ChangeListener<Worker.State>() {
-                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                        if (newState == Worker.State.SUCCEEDED) {
-                            setInitialized(true);
-                            fireMapInitializedListeners();
-
-                        }
-                    }
-                });
-        URL rsc = getClass().getResource(htmlFile);
-        if(rsc == null){
-        	throw new FileNotFoundException(String.format("The map resource was not found at the given path ('%s').", htmlFile));
+            throw new IllegalStateException("Couldn't load map file '" + htmlFile + "': " + exception);
         }
-        webengine.load(rsc.toExternalForm());
 
+        CountDownLatch latch = new CountDownLatch(1);
+        Runnable initWebView = () -> {
+            try {
+                webview = new WebView();
+                webengine = new JavaFxWebEngine(webview.getEngine());
+                JavascriptRuntime.setDefaultWebEngine(webengine);
+
+                setTopAnchor(webview, 0.0);
+                setLeftAnchor(webview, 0.0);
+                setBottomAnchor(webview, 0.0);
+                setRightAnchor(webview, 0.0);
+                getChildren().add(webview);
+
+                webview.widthProperty().addListener(e -> mapResized());
+                webview.heightProperty().addListener(e -> mapResized());
+
+                webview.widthProperty().addListener(e -> mapResized());
+                webview.heightProperty().addListener(e -> mapResized());
+
+                webengine.getLoadWorker().stateProperty().addListener(
+                        new ChangeListener<Worker.State>() {
+                            public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                                if (newState == Worker.State.SUCCEEDED) {
+                                    
+                                    setInitialized(true);
+                                    fireMapInitializedListeners();
+
+                                }
+                            }
+                        });
+                webengine.loadContent(htmlText);
+            } finally {
+                latch.countDown();
+            }
+        };
+
+        if (Platform.isFxApplicationThread()) {
+            initWebView.run();
+        } else {
+            Platform.runLater(initWebView);
+        }
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    protected StringBuilder loadText(String path) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path), "UTF-8"))) {
+            reader.lines().forEach(sb::append);
+        } catch (UncheckedIOException e) {
+            throw e.getCause();
+        }
+        return sb;
+    }
+
+    protected StringBuilder modifyHtml(StringBuilder text) {
+        int index = getGoogleMapsApiParamsIndex(text);
+        if (index != -1) {
+            if (language != null)
+                text.insert(index, "&language=" + language);
+            if (key != null)
+                text.insert(index, "&key=" + key);
+        }
+
+        return text;
+    }
+
+    protected static int getGoogleMapsApiParamsIndex(StringBuilder text) {
+        int index = text.indexOf(GOOGLE_MAPS_API_LINK);
+        if (index != -1)
+            index += GOOGLE_MAPS_API_LINK.length();
+        return index;
     }
 
     private void mapResized() {
-        if (initialized && map != null) {
+        if (initialized) {
             //map.triggerResized();
 //            System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
@@ -186,8 +266,31 @@ public class GoogleMapView extends AnchorPane {
     }
 
     public GoogleMap createMap(MapOptions mapOptions) {
+        return createMap(mapOptions,false);
+    }
+
+    public GoogleMap createMap() {
+        return createMap(null, false);
+    }
+    
+    public GoogleMap createMap(boolean withDirectionsPanel) {
+        return createMap(null, withDirectionsPanel);
+    }
+    
+    public GoogleMap createMap(MapOptions mapOptions, boolean withDirectionsPanel ) {
         checkInitialized();
-        map = new GoogleMap(mapOptions);
+        if( mapOptions != null ) {
+            map = new GoogleMap(mapOptions);
+        } else {
+            map = new GoogleMap();
+        }
+        
+        
+        if( withDirectionsPanel ) {
+            map.showDirectionsPane();
+            direc = new DirectionsPane();
+        }
+        
         map.addStateEventHandler(MapStateEventType.projection_changed, () -> {
             if (map.getProjection() != null) {
                 mapResized();
@@ -195,14 +298,13 @@ public class GoogleMapView extends AnchorPane {
             }
         });
 
-        return map;
+        return map;        
     }
 
-    public GoogleMap createMap() {
-        map = new GoogleMap();
-        return map;
+    public DirectionsPane getDirec() {
+        return direc;
     }
-
+    
     public void addMapInializedListener(MapComponentInitializedListener listener) {
         synchronized (mapInitializedListeners) {
             mapInitializedListeners.add(listener);
@@ -290,4 +392,8 @@ public class GoogleMapView extends AnchorPane {
         }
     }
 
+    public WebView getWebview() {
+        return webview;
+    }
+    
 }

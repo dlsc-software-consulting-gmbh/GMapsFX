@@ -1,0 +1,35 @@
+
+html, body{
+    height: 100%;
+    margin: 0px;
+    padding: 0px
+}
+
+.map-canvas-show-directions{
+    height: 100%;
+    width: 75%;
+    float: right;
+}
+
+.map-canvas {
+    height: 100%;
+    width: 100%;
+    float: right;
+}
+
+.directions-show {
+    height: 100%;
+    width: 25%;
+    float: left;
+    overflow-y: scroll;
+    display: inline-block;
+    
+}
+
+.directions-hide {
+    height: 100%;
+    width: 0%;
+    float: left;
+    overflow-y: scroll;
+    display: inline-block;
+}

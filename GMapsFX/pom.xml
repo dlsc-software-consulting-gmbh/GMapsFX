@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lynden</groupId>
     <artifactId>GMapsFX</artifactId>
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>1.1.2-SNAPSHOT</version>
+    <version>2.0.5-SNAPSHOT</version>
     <packaging>jar</packaging>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>        
+        </license>
     </licenses>
-    
     <developers>
         <developer>
             <name>Rob Terpilowski</name>
@@ -24,23 +24,30 @@
         </developer>
         <developer>
             <name>Geoff Capper</name>
-        </developer>    
-    </developers>    
-    
+        </developer>
+    </developers>
+    <distributionManagement>
+        <repository>
+            <id>bintray-rterp-maven</id>
+            <name>rterp-maven</name>
+            <url>https://api.bintray.com/maven/rterp/maven/GMapsFX/;publish=1</url>
+        </repository>
+    </distributionManagement>
+    <!--mvn -P bintray clean deploy -->
+    <!--mvn -P release-sign-artifacts release:prepare-->
     <scm>
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
-    </scm>    
-    
+        <!--<tag>2.0.2-23</tag>-->
+        <tag>HEAD</tag>
+    </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
-
-
     <profiles>
         <profile>
             <id>release-sign-artifacts</id>
@@ -55,7 +62,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.1</version>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -66,53 +73,64 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <configuration>
+                            <use>false</use>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>2.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
-
-
     <build>
         <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
-      </plugin>            
-
+            <!--
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>2.1.2</version>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.8.1</version>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <inherited>false</inherited>
                 <configuration>
-                    <use>false</use>
+                    <serverId>ossrh-releases</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <stagingProfileId>52088f2261e7b7</stagingProfileId>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>            
+            </plugin>
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <archive>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -144,10 +162,45 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.16</version>
+                <configuration />
+            </plugin>
+            <!-- License headers -->
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.6</version>
                 <configuration>
+                    <header>LICENSE</header>
+                    <includes>
+                        <include>**/*.java</include>
+                    </includes>
                 </configuration>
             </plugin>
-        </plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>                    
+        </plugins>        
     </build>
     <dependencies>
         <dependency>

@@ -112,7 +112,7 @@ public class JavascriptObject {
      *
      * @return The underlying Javascript object
      */
-    protected JSObject getJSObject() {
+    public JSObject getJSObject() {
         return jsObject;
     }
 
