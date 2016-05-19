@@ -124,6 +124,16 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMapView(String mapResourcePath, boolean debug) {
         this(mapResourcePath, null, null, debug);
     }
+    
+    /**
+     * Creates a new map view and specifies the display language and API key.
+     *
+     * @param language map display language, null for default
+     * @param key Google Maps API key or null
+     */
+    public GoogleMapView(String language, String key) {
+        this(null, language, key, false);
+    }
 
     /**
      * Creates a new map view and specifies the display language and API key.
@@ -161,7 +171,16 @@ public class GoogleMapView extends AnchorPane {
 
             throw new IllegalStateException("Couldn't load map file '" + htmlFile + "': " + exception);
         }
-
+        
+        String htmlText1 = htmlText;
+        if(language != null){
+            String lang = "https://maps.googleapis.com/maps/api/js?v=3.exp&language="+language;
+            htmlText1 = htmlText.replace("https://maps.googleapis.com/maps/api/js?v=3.exp",
+                lang);
+        }
+        String htmlText2 = htmlText1;
+        
+        
         CountDownLatch latch = new CountDownLatch(1);
         Runnable initWebView = () -> {
             try {
@@ -185,14 +204,13 @@ public class GoogleMapView extends AnchorPane {
                         new ChangeListener<Worker.State>() {
                             public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
                                 if (newState == Worker.State.SUCCEEDED) {
-                                    
                                     setInitialized(true);
                                     fireMapInitializedListeners();
 
                                 }
                             }
                         });
-                webengine.loadContent(htmlText);
+                webengine.loadContent(htmlText2);
             } finally {
                 latch.countDown();
             }
@@ -285,10 +303,9 @@ public class GoogleMapView extends AnchorPane {
             map = new GoogleMap();
         }
         
-        
+        direc = new DirectionsPane();
         if( withDirectionsPanel ) {
             map.showDirectionsPane();
-            direc = new DirectionsPane();
         }
         
         map.addStateEventHandler(MapStateEventType.projection_changed, () -> {
