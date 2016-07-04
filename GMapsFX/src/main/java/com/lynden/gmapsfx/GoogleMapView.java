@@ -52,6 +52,8 @@ public class GoogleMapView extends AnchorPane {
     protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
     protected static final String GOOGLE_MAPS_API_VERSION = "3.exp";
     
+    private boolean usingCustomHtml;
+    
     protected final String language;
     protected final String region;
     protected final String key;
@@ -156,9 +158,14 @@ public class GoogleMapView extends AnchorPane {
     
     /**
      * Creates a new map view and specifies the display language and API key.
+     * <p>
+     * If you are specifying your own HTML page for mapResourcePath in a jar of 
+     * your own then you should include a script element to pull in the 
+     * Google Maps API with any API keys, language and region parameters.
      *
      * @param mapResourcePath
      * @param language map display language, null for default
+     * @param region
      * @param key Google Maps API key or null
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
@@ -176,7 +183,10 @@ public class GoogleMapView extends AnchorPane {
             }
         } else {
             htmlFile = mapResourcePath;
+            usingCustomHtml = true;
         }
+        
+        System.out.println("htmlFile: " + htmlFile);
         
 //        String scriptSource = GOOGLE_MAPS_API_LINK;
 //        if (language != null) {
@@ -306,14 +316,17 @@ public class GoogleMapView extends AnchorPane {
     
     private void initialiseScript() {
         //webengine.executeScript("writeMapScriptElement('"+scriptSource+"')");
-        
-        JSObject window = (JSObject) webengine.executeScript("window");
-        window.setMember("libLoadBridge", new MapLibraryLoadBridge());
-        
-        String script = "loadMapLibrary('" + GOOGLE_MAPS_API_VERSION + "','" + key + "','" + language + "','" + region + "');";
-        //System.out.println("Loading script with call: " + script);
-        webengine.executeScript(script);
-        
+        if (! usingCustomHtml) {
+            JSObject window = (JSObject) webengine.executeScript("window");
+            window.setMember("libLoadBridge", new MapLibraryLoadBridge());
+
+            String script = "loadMapLibrary('" + GOOGLE_MAPS_API_VERSION + "','" + key + "','" + language + "','" + region + "');";
+            //System.out.println("Loading script with call: " + script);
+            webengine.executeScript(script);
+        } else {
+            setInitialized(true);
+            fireMapInitializedListeners();
+        }
     }
     
 //    protected StringBuilder loadText(String path) throws IOException {
@@ -507,17 +520,6 @@ public class GoogleMapView extends AnchorPane {
         }
         
         public void mapLibraryLoaded() {
-            //System.out.println("Map Library Loaded");
-//            Platform.runLater(() -> {
-//                try {
-//                    Thread.sleep(1000);
-//                } catch (InterruptedException ex) {
-//                    Logger.getLogger(GoogleMapView.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                //System.out.println("Map Library Loaded - Thread - Calling setInitialised and firing MapInitListeners...");
-//                setInitialized(true);
-//                fireMapInitializedListeners();
-//            });
             setInitialized(true);
             fireMapInitializedListeners();
         }
