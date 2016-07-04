@@ -150,6 +150,9 @@ public class MainApp extends Application implements MapComponentInitializedListe
     
     @Override
     public void mapInitialized() {
+        
+        //System.out.println("MainApp.mapInitialised....");
+        
         //Once the map has been loaded by the Webview, initialize the map details.
         LatLong center = new LatLong(47.606189, -122.335842);
         mapComponent.addMapReadyListener(() -> {
@@ -179,6 +182,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         LatLong markerLatLong = new LatLong(47.606189, -122.335842);
         markerOptions.position(markerLatLong)
                 .title("My new Marker")
+                .icon("mymarker.png")
                 .animation(Animation.DROP)
                 .visible(true);
 

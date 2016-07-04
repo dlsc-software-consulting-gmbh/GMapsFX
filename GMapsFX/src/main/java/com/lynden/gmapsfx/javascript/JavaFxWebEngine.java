@@ -7,7 +7,10 @@
 package com.lynden.gmapsfx.javascript;
 
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebErrorEvent;
+import javafx.scene.web.WebEvent;
 
 /**
  * This class provides an implementation of the IWebEngine interface utilizing 
@@ -64,5 +67,13 @@ public class JavaFxWebEngine implements IWebEngine {
     @Override
     public void loadContent(String content) {
         webEngine.loadContent(content);
+    }
+
+    public void setOnAlert(EventHandler<WebEvent<String>> eventHandler) {
+        webEngine.setOnAlert(eventHandler);
+    }
+
+    public void setOnError(EventHandler<WebErrorEvent> eventHandler) {
+        webEngine.setOnError(eventHandler);
     }
 }
