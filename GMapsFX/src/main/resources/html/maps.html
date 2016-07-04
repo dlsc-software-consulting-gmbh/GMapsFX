@@ -1,18 +1,51 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="style.css" type="text/css"/>
+
         <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
         <meta charset="utf-8">
         <title>Simple markers</title>
         <style>
-            html, body, #map-canvas {
+            html, body{
                 height: 100%;
                 margin: 0px;
                 padding: 0px
             }
+            #map-canvas{
+                height: 100%;
+                width: 100%;
+                float: right;
+            }
+            #directions{
+                height: 100%;
+                width: 0%;
+                float: left;
+                overflow-y: scroll;
+                display: inline-block;
+            }
         </style>
-        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-        <script>
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        <script language='javascript'>
+            function hideDirections() {
+                alert('Hide directions called');
+                var dirDiv = document.getElementById('directions');
+                var mapDiv = document.getElementById('map-canvas');
+                mapDiv.style.width = '100%';
+                dirDiv.style.width = '0%';
+                return 1;
+            }
+            
+            function showDirections() {
+                alert('Show directions called');
+                var dirDiv = document.getElementById('directions');
+                var mapDiv = document.getElementById('map-canvas');
+                mapDiv.style.width = '75%';
+                dirDiv.style.width = '25%';
+                return 2;
+            }
+            
+
 			/*
 			var javaReady = function(callback){
 				if(typeof callback == 'function'){
@@ -42,7 +75,8 @@
 			*/
         </script>
     </head>
-    <body>
+    <body onload="hideDirections()">
+        <div id="directions"></div>
         <div id="map-canvas"></div>
     </body>
 </html>

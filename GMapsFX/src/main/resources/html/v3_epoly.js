@@ -96,8 +96,8 @@ google.maps.Polygon.prototype.Contains = function(point) {
     if (((this.getPath().getAt(i).lat() < y) && (this.getPath().getAt(j).lat() >= y))
     || ((this.getPath().getAt(j).lat() < y) && (this.getPath().getAt(i).lat() >= y))) {
       if ( this.getPath().getAt(i).lng() + (y - this.getPath().getAt(i).lat())
-      /  (this.getPath().getAt(j).lat()-this.getPath().getAt(i).lat())
-      *  (this.getPath().getAt(j).lng() - this.getPath().getAt(i).lng())<x ) {
+      /*  (this.getPath().getAt(j).lat()-this.getPath().getAt(i).lat())*/
+        (this.getPath().getAt(j).lng() - this.getPath().getAt(i).lng())<x ) {
         oddNodes = !oddNodes;
       }
     }

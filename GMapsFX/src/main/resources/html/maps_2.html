@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+<script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>  
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <title>Simple markers</title>
+        <style>
+
+            html, body{
+                height: 100%;
+                margin: 0px;
+                padding: 0px
+            }
+
+            .map-canvas-show-directions{
+                height: 100%;
+                width: 75%;
+                float: right;
+            }
+
+            .map-canvas {
+                height: 100%;
+                width: 100%;
+                float: right;
+            }
+
+            .directions-show {
+                height: 100%;
+                width: 25%;
+                float: left;
+                overflow-y: scroll;
+                display: inline-block;
+
+            }
+
+            .directions-hide {
+                height: 100%;
+                width: 0%;
+                float: left;
+                overflow-y: scroll;
+                display: inline-block;
+            }
+        </style>
+
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+        
+        
+        
+        <script>
+            
+            function callMe() {
+                window.alert("show alert: " + document.URL);
+            }
+            
+            function showDirectionPane() {
+                document.getElementById("directions").setAttribute("class", "directions-show");
+                document.getElementById("map-canvas").setAttribute("class", "map-canvas-show-directions");
+            }
+
+            function hideDirectionPane() {
+                document.getElementById("directions").setAttribute("class", "directions-hide");
+                document.getElementById("map-canvas").setAttribute("class", "map-canvas");
+            }
+            
+            
+            
+        </script>
+    </head>
+    <body onload="window.alert(document.URL)">
+        
+        <div class="directions-hide"  id="directions">
+            
+            
+        </div>
+        <div class="map-canvas" id="map-canvas"></div>
+    </body>
+</html>

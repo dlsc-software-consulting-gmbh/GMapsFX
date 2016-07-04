@@ -91,7 +91,7 @@ public class PolylineOptions extends JavascriptObject {
     }
     
     public PolylineOptions visible(boolean visible) {
-        setProperty("draggable", visible);
+        setProperty("visible", visible);
         this.visible = visible;
         return this;
     }
