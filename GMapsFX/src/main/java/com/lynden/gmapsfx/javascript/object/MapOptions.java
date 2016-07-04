@@ -36,6 +36,12 @@ public class MapOptions extends JavascriptObject {
     protected boolean zoomControl;
     protected boolean mapTypeControl;
     
+    private String styleString;
+    
+    /*
+    [{"featureType":"landscape","stylers":[{"saturation":-100},{"lightness":65},{"visibility":"on"}]},{"featureType":"poi","stylers":[{"saturation":-100},{"lightness":51},{"visibility":"simplified"}]},{"featureType":"road.highway","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"road.arterial","stylers":[{"saturation":-100},{"lightness":30},{"visibility":"on"}]},{"featureType":"road.local","stylers":[{"saturation":-100},{"lightness":40},{"visibility":"on"}]},{"featureType":"transit","stylers":[{"saturation":-100},{"visibility":"simplified"}]},{"featureType":"administrative.province","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"labels","stylers":[{"visibility":"on"},{"lightness":-25},{"saturation":-100}]},{"featureType":"water","elementType":"geometry","stylers":[{"hue":"#ffff00"},{"lightness":-25},{"saturation":-97}]}]
+    */
+    
 
     public MapOptions() {
         super(GMapObjectType.OBJECT);
@@ -105,6 +111,17 @@ public class MapOptions extends JavascriptObject {
     public MapOptions mapTypeControl( boolean mapTypeControl ) {
         setProperty( "mapTypeControl", mapTypeControl);
         this.mapTypeControl = mapTypeControl;
+        return this;
+    }
+
+    /**
+     * @param styleString the styleString to set. This parameter is assigned by 
+     * calling eval() and should be of the format: "[{'featureType':'landscape','stylers':[{'saturation':-100}, ...etc..."
+     * @return 
+     */
+    public MapOptions styleString(String styleString) {
+        setProperty("styles", this.getJSObject().eval(styleString));
+        this.styleString = styleString;
         return this;
     }
     
