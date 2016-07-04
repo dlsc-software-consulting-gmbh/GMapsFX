@@ -277,11 +277,11 @@ public class GoogleMapView extends AnchorPane {
         setRightAnchor(webview, 0.0);
         getChildren().add(webview);
         
-        webview.boundsInLocalProperty().addListener(e -> mapResized());
-//        webview.widthProperty().addListener(e -> mapResized());
-//        webview.heightProperty().addListener(e -> mapResized());
-//        webview.widthProperty().addListener(e -> mapResized());
-//        webview.heightProperty().addListener(e -> mapResized());
+        
+        webview.widthProperty().addListener(e -> mapResized());
+        webview.heightProperty().addListener(e -> mapResized());
+        webview.widthProperty().addListener(e -> mapResized());
+        webview.heightProperty().addListener(e -> mapResized());
         
         webengine.setOnAlert(new EventHandler<WebEvent<String>>() {
             @Override
