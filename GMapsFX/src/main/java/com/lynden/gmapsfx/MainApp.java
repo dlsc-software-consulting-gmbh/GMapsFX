@@ -150,6 +150,9 @@ public class MainApp extends Application implements MapComponentInitializedListe
     
     @Override
     public void mapInitialized() {
+        
+        //System.out.println("MainApp.mapInitialised....");
+        
         //Once the map has been loaded by the Webview, initialize the map details.
         LatLong center = new LatLong(47.606189, -122.335842);
         mapComponent.addMapReadyListener(() -> {
@@ -167,8 +170,10 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 .scaleControl(false)
                 .streetViewControl(false)
                 .zoomControl(false)
-                .mapType(MapTypeIdEnum.TERRAIN);
-
+                .mapType(MapTypeIdEnum.TERRAIN)
+                .styleString("[{'featureType':'landscape','stylers':[{'saturation':-100},{'lightness':65},{'visibility':'on'}]},{'featureType':'poi','stylers':[{'saturation':-100},{'lightness':51},{'visibility':'simplified'}]},{'featureType':'road.highway','stylers':[{'saturation':-100},{'visibility':'simplified'}]},{\"featureType\":\"road.arterial\",\"stylers\":[{\"saturation\":-100},{\"lightness\":30},{\"visibility\":\"on\"}]},{\"featureType\":\"road.local\",\"stylers\":[{\"saturation\":-100},{\"lightness\":40},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"stylers\":[{\"saturation\":-100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"water\",\"elementType\":\"labels\",\"stylers\":[{\"visibility\":\"on\"},{\"lightness\":-25},{\"saturation\":-100}]},{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#ffff00\"},{\"lightness\":-25},{\"saturation\":-97}]}]");
+        
+        //[{\"featureType\":\"landscape\",\"stylers\":[{\"saturation\":-100},{\"lightness\":65},{\"visibility\":\"on\"}]},{\"featureType\":\"poi\",\"stylers\":[{\"saturation\":-100},{\"lightness\":51},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.highway\",\"stylers\":[{\"saturation\":-100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"road.arterial\",\"stylers\":[{\"saturation\":-100},{\"lightness\":30},{\"visibility\":\"on\"}]},{\"featureType\":\"road.local\",\"stylers\":[{\"saturation\":-100},{\"lightness\":40},{\"visibility\":\"on\"}]},{\"featureType\":\"transit\",\"stylers\":[{\"saturation\":-100},{\"visibility\":\"simplified\"}]},{\"featureType\":\"administrative.province\",\"stylers\":[{\"visibility\":\"off\"}]},{\"featureType\":\"water\",\"elementType\":\"labels\",\"stylers\":[{\"visibility\":\"on\"},{\"lightness\":-25},{\"saturation\":-100}]},{\"featureType\":\"water\",\"elementType\":\"geometry\",\"stylers\":[{\"hue\":\"#ffff00\"},{\"lightness\":-25},{\"saturation\":-97}]}]
         map = mapComponent.createMap(options,false);
         directions = mapComponent.getDirec();
         
@@ -179,6 +184,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         LatLong markerLatLong = new LatLong(47.606189, -122.335842);
         markerOptions.position(markerLatLong)
                 .title("My new Marker")
+                .icon("mymarker.png")
                 .animation(Animation.DROP)
                 .visible(true);
 

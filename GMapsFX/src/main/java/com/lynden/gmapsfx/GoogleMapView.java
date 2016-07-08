@@ -28,13 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebErrorEvent;
+import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -45,11 +50,15 @@ import netscape.javascript.JSObject;
 public class GoogleMapView extends AnchorPane {
 
     protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
-
+    protected static final String GOOGLE_MAPS_API_VERSION = "3.exp";
+    
+    private boolean usingCustomHtml;
+    
     protected final String language;
+    protected final String region;
     protected final String key;
-    protected WebView webview;
-    protected JavaFxWebEngine webengine;
+    protected final WebView webview;
+    protected final JavaFxWebEngine webengine;
     protected boolean initialized = false;
     protected final CyclicBarrier barrier = new CyclicBarrier(2);
     protected final List<MapComponentInitializedListener> mapInitializedListeners = new ArrayList<>();
@@ -134,7 +143,7 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMapView(String language, String key) {
         this(null, language, key, false);
     }
-
+    
     /**
      * Creates a new map view and specifies the display language and API key.
      *
@@ -144,7 +153,25 @@ public class GoogleMapView extends AnchorPane {
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
     public GoogleMapView(String mapResourcePath, String language, String key, boolean debug) {
+        this(mapResourcePath, language, null, key, debug);
+    }
+    
+    /**
+     * Creates a new map view and specifies the display language and API key.
+     * <p>
+     * If you are specifying your own HTML page for mapResourcePath in a jar of 
+     * your own then you should include a script element to pull in the 
+     * Google Maps API with any API keys, language and region parameters.
+     *
+     * @param mapResourcePath
+     * @param language map display language, null for default
+     * @param region
+     * @param key Google Maps API key or null
+     * @param debug true if the FireBug pane should be displayed in the WebView.
+     */
+    public GoogleMapView(String mapResourcePath, String language, String region, String key, boolean debug) {
         this.language = language;
+        this.region = region;
         this.key = key;
 
         String htmlFile;
@@ -156,112 +183,185 @@ public class GoogleMapView extends AnchorPane {
             }
         } else {
             htmlFile = mapResourcePath;
-        }
-
-        String htmlText;
-        try {
-            StringBuilder text = loadText(htmlFile);
-            text = modifyHtml(text);
-
-            htmlText = text.toString();
-        } catch (Exception e) {
-            String exception = e.getClass().getSimpleName();
-            if (e.getMessage() != null)
-                exception += ": " + e.getMessage();
-
-            throw new IllegalStateException("Couldn't load map file '" + htmlFile + "': " + exception);
+            usingCustomHtml = true;
         }
         
-        String htmlText1 = htmlText;
-        if(language != null){
-            String lang = "https://maps.googleapis.com/maps/api/js?v=3.exp&language="+language;
-            htmlText1 = htmlText.replace("https://maps.googleapis.com/maps/api/js?v=3.exp",
-                lang);
-        }
-        String htmlText2 = htmlText1;
+        System.out.println("htmlFile: " + htmlFile);
+        
+//        String scriptSource = GOOGLE_MAPS_API_LINK;
+//        if (language != null) {
+//            scriptSource += "&language="+language;
+//        }
+//        if (key != null) {
+//            scriptSource += "&key=" + key;
+//        }
+        
+//        String htmlText;
+//        try {
+//            StringBuilder text = loadText(htmlFile);
+//            text = modifyHtml(text);
+//
+//            htmlText = text.toString();
+//        } catch (Exception e) {
+//            String exception = e.getClass().getSimpleName();
+//            if (e.getMessage() != null)
+//                exception += ": " + e.getMessage();
+//
+//            throw new IllegalStateException("Couldn't load map file '" + htmlFile + "': " + exception);
+//        }
+        
+//        String htmlText1 = htmlText;
+//        if(language != null){
+//            String lang = "https://maps.googleapis.com/maps/api/js?v=3.exp&language="+language;
+//            htmlText1 = htmlText.replace("https://maps.googleapis.com/maps/api/js?v=3.exp",
+//                lang);
+//        }
+//        String htmlText2 = htmlText1;
         
         
-        CountDownLatch latch = new CountDownLatch(1);
-        Runnable initWebView = () -> {
-            try {
-                webview = new WebView();
-                webengine = new JavaFxWebEngine(webview.getEngine());
-                JavascriptRuntime.setDefaultWebEngine(webengine);
+//        CountDownLatch latch = new CountDownLatch(1);
+//        Runnable initWebView = () -> {
+//            try {
+//                webview = new WebView();
+//                webengine = new JavaFxWebEngine(webview.getEngine());
+//                JavascriptRuntime.setDefaultWebEngine(webengine);
+//
+//                setTopAnchor(webview, 0.0);
+//                setLeftAnchor(webview, 0.0);
+//                setBottomAnchor(webview, 0.0);
+//                setRightAnchor(webview, 0.0);
+//                getChildren().add(webview);
+//
+//                webview.widthProperty().addListener(e -> mapResized());
+//                webview.heightProperty().addListener(e -> mapResized());
+//
+//                webview.widthProperty().addListener(e -> mapResized());
+//                webview.heightProperty().addListener(e -> mapResized());
+//
+//                webengine.getLoadWorker().stateProperty().addListener(
+//                        new ChangeListener<Worker.State>() {
+//                            public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+//                                if (newState == Worker.State.SUCCEEDED) {
+//                                    setInitialized(true);
+//                                    fireMapInitializedListeners();
+//
+//                                }
+//                            }
+//                        });
+//                webengine.loadContent(htmlText2);
+//            } finally {
+//                latch.countDown();
+//            }
+//        };
+//
+//        if (Platform.isFxApplicationThread()) {
+//            initWebView.run();
+//        } else {
+//            Platform.runLater(initWebView);
+//        }
+//
+//        try {
+//            latch.await();
+//        } catch (InterruptedException e) {
+//            Thread.currentThread().interrupt();
+//        }
+        
+        
+        webview = new WebView();
+        webengine = new JavaFxWebEngine(webview.getEngine());
+        JavascriptRuntime.setDefaultWebEngine(webengine);
 
-                setTopAnchor(webview, 0.0);
-                setLeftAnchor(webview, 0.0);
-                setBottomAnchor(webview, 0.0);
-                setRightAnchor(webview, 0.0);
-                getChildren().add(webview);
-
-                webview.widthProperty().addListener(e -> mapResized());
-                webview.heightProperty().addListener(e -> mapResized());
-
-                webview.widthProperty().addListener(e -> mapResized());
-                webview.heightProperty().addListener(e -> mapResized());
-
-                webengine.getLoadWorker().stateProperty().addListener(
-                        new ChangeListener<Worker.State>() {
-                            public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                                if (newState == Worker.State.SUCCEEDED) {
-                                    setInitialized(true);
-                                    fireMapInitializedListeners();
-
-                                }
-                            }
-                        });
-                webengine.loadContent(htmlText2);
-            } finally {
-                latch.countDown();
+        setTopAnchor(webview, 0.0);
+        setLeftAnchor(webview, 0.0);
+        setBottomAnchor(webview, 0.0);
+        setRightAnchor(webview, 0.0);
+        getChildren().add(webview);
+        
+        
+        webview.widthProperty().addListener(e -> mapResized());
+        webview.heightProperty().addListener(e -> mapResized());
+        webview.widthProperty().addListener(e -> mapResized());
+        webview.heightProperty().addListener(e -> mapResized());
+        
+        webengine.setOnAlert(new EventHandler<WebEvent<String>>() {
+            @Override
+            public void handle(WebEvent<String> e) {
+                System.out.println("Alert: " + e.getData());
             }
-        };
+        });
+        webengine.setOnError(new EventHandler<WebErrorEvent>() {
+            @Override
+            public void handle(WebErrorEvent e) {
+                System.out.println("Error: " + e.getMessage());
+            }
+        });
+        
+//        final String myScriptSource = scriptSource;
+        
+        webengine.getLoadWorker().stateProperty().addListener(
+                new ChangeListener<Worker.State>() {
+                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            initialiseScript();
+                            //setInitialized(true);
+                            //fireMapInitializedListeners();
 
-        if (Platform.isFxApplicationThread()) {
-            initWebView.run();
+                        }
+                    }
+                });
+        //webengine.loadContent(htmlText2);
+        webengine.load(getClass().getResource(htmlFile).toExternalForm());
+        
+    }
+    
+    private void initialiseScript() {
+        //webengine.executeScript("writeMapScriptElement('"+scriptSource+"')");
+        if (! usingCustomHtml) {
+            JSObject window = (JSObject) webengine.executeScript("window");
+            window.setMember("libLoadBridge", new MapLibraryLoadBridge());
+
+            String script = "loadMapLibrary('" + GOOGLE_MAPS_API_VERSION + "','" + key + "','" + language + "','" + region + "');";
+            //System.out.println("Loading script with call: " + script);
+            webengine.executeScript(script);
         } else {
-            Platform.runLater(initWebView);
-        }
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            setInitialized(true);
+            fireMapInitializedListeners();
         }
     }
-
-    protected StringBuilder loadText(String path) throws IOException {
-        StringBuilder sb = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path), "UTF-8"))) {
-            reader.lines().forEach(sb::append);
-        } catch (UncheckedIOException e) {
-            throw e.getCause();
-        }
-        return sb;
-    }
-
-    protected StringBuilder modifyHtml(StringBuilder text) {
-        int index = getGoogleMapsApiParamsIndex(text);
-        if (index != -1) {
-            if (language != null)
-                text.insert(index, "&language=" + language);
-            if (key != null)
-                text.insert(index, "&key=" + key);
-        }
-
-        return text;
-    }
-
-    protected static int getGoogleMapsApiParamsIndex(StringBuilder text) {
-        int index = text.indexOf(GOOGLE_MAPS_API_LINK);
-        if (index != -1)
-            index += GOOGLE_MAPS_API_LINK.length();
-        return index;
-    }
+    
+//    protected StringBuilder loadText(String path) throws IOException {
+//        StringBuilder sb = new StringBuilder();
+//        try (BufferedReader reader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(path), "UTF-8"))) {
+//            reader.lines().forEach(sb::append);
+//        } catch (UncheckedIOException e) {
+//            throw e.getCause();
+//        }
+//        return sb;
+//    }
+//
+//    protected StringBuilder modifyHtml(StringBuilder text) {
+//        int index = getGoogleMapsApiParamsIndex(text);
+//        if (index != -1) {
+//            if (language != null)
+//                text.insert(index, "&language=" + language);
+//            if (key != null)
+//                text.insert(index, "&key=" + key);
+//        }
+//
+//        return text;
+//    }
+//
+//    protected static int getGoogleMapsApiParamsIndex(StringBuilder text) {
+//        int index = text.indexOf(GOOGLE_MAPS_API_LINK);
+//        if (index != -1)
+//            index += GOOGLE_MAPS_API_LINK.length();
+//        return index;
+//    }
 
     private void mapResized() {
         if (initialized) {
             //map.triggerResized();
-//            System.out.println("GoogleMapView.mapResized: triggering resize event");
+            System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
 //            System.out.println("GoogleMapView.mapResized: triggering resize event done");
         }
@@ -401,7 +501,12 @@ public class GoogleMapView extends AnchorPane {
             throw new MapNotInitializedException();
         }
     }
-
+    
+    public WebView getWebview() {
+        return webview;
+    }
+    
+    
     public class JSListener {
 
         public void log(String text) {
@@ -409,8 +514,16 @@ public class GoogleMapView extends AnchorPane {
         }
     }
 
-    public WebView getWebview() {
-        return webview;
+    public class MapLibraryLoadBridge {
+        
+        public MapLibraryLoadBridge() {
+        }
+        
+        public void mapLibraryLoaded() {
+            setInitialized(true);
+            fireMapInitializedListeners();
+        }
+        
     }
     
 }
