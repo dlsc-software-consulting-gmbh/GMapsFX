@@ -92,6 +92,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
         
     @Override
     public void start(final Stage stage) throws Exception {
+        System.out.println("Java version: " + System.getProperty("java.home"));
         mapComponent = new GoogleMapView(Locale.getDefault().getLanguage(), null);
         mapComponent.addMapInializedListener(this);
                 
