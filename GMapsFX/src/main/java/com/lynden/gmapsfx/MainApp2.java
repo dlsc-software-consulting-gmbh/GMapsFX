@@ -60,8 +60,9 @@ public class MainApp2 extends Application implements MapComponentInitializedList
     public void start(final Stage stage) throws Exception {
         mapComponent = new GoogleMapView();
         mapComponent.addMapInializedListener(this);
+        mapComponent.setDisableDoubleClick(true);
         mapComponent.getWebview().getEngine().setOnAlert((WebEvent<String> event) -> {
-            System.out.println("Event event: " + event);
+         //   System.out.println("Event event: " + event);
         });
                 
         BorderPane bp = new BorderPane();
