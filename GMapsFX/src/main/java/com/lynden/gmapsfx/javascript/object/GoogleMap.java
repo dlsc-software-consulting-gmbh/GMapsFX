@@ -44,7 +44,8 @@ public class GoogleMap extends JavascriptObject {
 
     private ReadOnlyObjectWrapper<LatLong> center;
     private IntegerProperty zoom;
-
+    private ReadOnlyObjectWrapper<LatLongBounds> bounds;
+    
     private final EventHandlers jsHandlers = new EventHandlers();
     private boolean registeredOnJS;
 
@@ -101,19 +102,10 @@ public class GoogleMap extends JavascriptObject {
         return zoom;
     }
 
-    public void setCenter(LatLong latLong) {
-        invokeJavascript("setCenter", latLong);
-    }
-
     public LatLong getLatLong() {
         return getProperty("setCenter", LatLong.class);
     }
     
-    public void fitBounds( LatLongBounds bounds ) {
-        invokeJavascript("fitBounds", bounds );
-    }
-    
-
     public final ReadOnlyObjectProperty<LatLong> centerProperty() {
         if (center == null) {
             center = new ReadOnlyObjectWrapper<>(getCenter());
@@ -128,6 +120,43 @@ public class GoogleMap extends JavascriptObject {
         return new LatLong((JSObject) invokeJavascript("getCenter"));
     }
     
+    public void setCenter(LatLong latLong) {
+        invokeJavascript("setCenter", latLong);
+    }
+    
+    
+    /**
+     * Returns the LatLongBounds of the visual area. Note: on zoom changes the
+     * bounds are reset after the zoom event is fired, which can cause
+     * unexpected results.
+     *
+     * @return
+     */
+    public LatLongBounds getBounds() {
+        return invokeJavascriptReturnValue("getBounds", LatLongBounds.class);
+    }
+    
+    public void fitBounds( LatLongBounds bounds ) {
+        invokeJavascript("fitBounds", bounds );
+    }
+    
+    public void panToBounds(LatLongBounds bounds) {
+        invokeJavascript("panToBounds", bounds);
+    }
+    
+    /** A property tied to the map, updated when the idle state event is fired.
+     * 
+     * @return 
+     */
+    public final ReadOnlyObjectProperty<LatLongBounds> boundsProperty() {
+        if (bounds == null) {
+            bounds = new ReadOnlyObjectWrapper<>(getBounds());
+            addStateEventHandler(MapStateEventType.idle, () -> {
+                bounds.set(getBounds());
+            });
+        }
+        return bounds.getReadOnlyProperty();
+    }
     
     public void setHeading( double heading ) {
         invokeJavascript("setHeading", heading);
@@ -160,17 +189,6 @@ public class GoogleMap extends JavascriptObject {
     public Projection getProjection() {
         Object obj = invokeJavascript("getProjection");
         return (obj == null) ? null : new Projection((JSObject) obj);
-    }
-
-    /**
-     * Returns the LatLongBounds of the visual area. Note: on zoom changes the
-     * bounds are reset after the zoom event is fired, which can cause
-     * unexpected results.
-     *
-     * @return
-     */
-    public LatLongBounds getBounds() {
-        return invokeJavascriptReturnValue("getBounds", LatLongBounds.class);
     }
 
     /**
