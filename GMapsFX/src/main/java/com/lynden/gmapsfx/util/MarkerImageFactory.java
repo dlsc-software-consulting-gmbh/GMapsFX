@@ -43,7 +43,6 @@ public class MarkerImageFactory {
      * @param uri
      * @param type
      * @return 
-     * @throws java.io.IOException 
      */
     public static String createMarkerImage(String uri, String type) {
         

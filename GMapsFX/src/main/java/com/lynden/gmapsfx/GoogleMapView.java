@@ -34,13 +34,9 @@ import javafx.concurrent.Worker;
 import javafx.event.Event;
 import javafx.event.EventDispatchChain;
 import javafx.event.EventDispatcher;
-import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.web.WebErrorEvent;
-import javafx.scene.web.WebEvent;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
 
@@ -101,9 +97,7 @@ public class GoogleMapView extends AnchorPane {
      * <div id="map-canvas"></div>
      * </body>
      * </html> }
-     * <
-     * p
-     * >
+     * <p>
      * If you store this file in your project jar, under
      * my.gmapsfx.project.resources as mymap.html then you should call using
      * "/my/gmapsfx/project/resources/mymap.html" for the mapResourcePath.
