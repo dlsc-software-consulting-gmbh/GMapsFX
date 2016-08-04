@@ -26,7 +26,8 @@ public class MapOptions extends JavascriptObject {
     
     protected LatLong center;
     protected MapTypeIdEnum mapType;
-    protected boolean mapMarker;
+//    protected boolean mapMarker;
+    protected boolean mapMaker;
     protected boolean overviewMapControl;
     protected boolean panControl;
     protected boolean rotateControl;
@@ -54,9 +55,26 @@ public class MapOptions extends JavascriptObject {
         return this;
     }
     
+    /** This is a mistyping of MapMaker which is the option to use MapMaker tiles.
+     * 
+     * @param mapMarker
+     * @return 
+     */
+    @Deprecated
     public MapOptions mapMarker( boolean mapMarker ) {
-        setProperty("mapMarker", mapMarker );
-        this.mapMarker = mapMarker;
+//        setProperty("mapMarker", mapMarker );
+//        this.mapMarker = mapMarker;
+        return this;
+    }
+    
+    /** Use MapMaker tiles.
+     * 
+     * @param mapMaker
+     * @return 
+     */
+    public MapOptions mapMaker(boolean mapMaker) {
+        setProperty("mapMaker", mapMaker);
+        this.mapMaker = mapMaker;
         return this;
     }
     

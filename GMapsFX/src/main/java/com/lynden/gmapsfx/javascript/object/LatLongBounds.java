@@ -49,6 +49,6 @@ public class LatLongBounds extends JavascriptObject {
     
     @Override
     public String toString() {
-        return "LatLongBounds[NE:" + getNorthEast() + ", SW:" + getSouthWest() + "]";
+        return "LatLongBounds[SW:" + getSouthWest() + ", NE:" + getNorthEast() + "]";
     }
 }
