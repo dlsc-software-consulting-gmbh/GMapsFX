@@ -180,7 +180,7 @@ public class GoogleMapView extends AnchorPane {
             htmlFile = mapResourcePath;
             usingCustomHtml = true;
         }
-
+        
         //System.out.println("htmlFile: " + htmlFile);
         
         CountDownLatch latch = new CountDownLatch(1);
@@ -263,7 +263,7 @@ public class GoogleMapView extends AnchorPane {
     }
 
     private void mapResized() {
-        if (initialized) {
+        if (initialized && map != null) {
             //System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
         }

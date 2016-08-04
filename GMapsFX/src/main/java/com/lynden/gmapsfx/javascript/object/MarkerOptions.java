@@ -29,7 +29,7 @@ public class MarkerOptions extends JavascriptObject {
     protected boolean visible = true;
     protected String icon;
     protected Animation animation;
-    
+    //protected String label;
     
     public MarkerOptions() {
         super(GMapObjectType.OBJECT);
@@ -65,6 +65,10 @@ public class MarkerOptions extends JavascriptObject {
         return this;
     }
     
+    public MarkerOptions label( String label ) {
+        setProperty("label", label);
+        return this;
+    }
     
     
 }

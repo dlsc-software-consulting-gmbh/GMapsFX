@@ -102,9 +102,10 @@ public class GoogleMap extends JavascriptObject {
         return zoom;
     }
 
-    public LatLong getLatLong() {
-        return getProperty("setCenter", LatLong.class);
-    }
+//    This method was calling setCenter anyway, so would never have worked.
+//    public LatLong getLatLong() {
+//        return getProperty("setCenter", LatLong.class);
+//    }
     
     public final ReadOnlyObjectProperty<LatLong> centerProperty() {
         if (center == null) {
@@ -136,6 +137,16 @@ public class GoogleMap extends JavascriptObject {
         return invokeJavascriptReturnValue("getBounds", LatLongBounds.class);
     }
     
+    /** Moves the map to ensure the given bounds fit within the viewport.
+     * <p>
+     * Note that the Google Maps API will add a buffer around this value, so 
+     * assuming you can store this and use it to later restore the view 
+     * will give incorrect results. Calling map.fitBounds(map.getBounds()); will 
+     * result in the map gradually zooming outward.
+     * <p>
+     * 
+     * @param bounds 
+     */
     public void fitBounds( LatLongBounds bounds ) {
         invokeJavascript("fitBounds", bounds );
     }
@@ -173,7 +184,12 @@ public class GoogleMap extends JavascriptObject {
     public void removeMarker(Marker marker) {
         marker.setMap(null);
     }
-
+    
+    /** Sets the map type. This is equivalent to the javascript method 
+     * setMapTypeId.
+     * 
+     * @param type 
+     */
     public void setMapType(MapTypeIdEnum type) {
         invokeJavascript("setMapTypeId", type);
     }
@@ -190,7 +206,29 @@ public class GoogleMap extends JavascriptObject {
         Object obj = invokeJavascript("getProjection");
         return (obj == null) ? null : new Projection((JSObject) obj);
     }
-
+    
+    
+    /**
+     * Pans the map by the supplied values.
+     *
+     * @param x delta x value in pixels.
+     * @param y delta y value in pixels.
+     */
+    public void panBy(double x, double y) {
+//        System.out.println("panBy x: " + x + ", y: " + y);
+        invokeJavascript("panBy", new Object[]{x, y});
+    }
+    
+    /**
+     * Pans the map to the specified latitude and longitude.
+     *
+     * @param latLong 
+     */
+    public void panTo(LatLong latLong) {
+        invokeJavascript("panTo", latLong);
+    }
+    
+    
     /**
      * Returns the screen point for the provided LatLong. Note: Unexpected
      * results can be obtained if this method is called as a result of a zoom
@@ -225,16 +263,7 @@ public class GoogleMap extends JavascriptObject {
         return new Point2D(x, y);
     }
 
-    /**
-     * Pans the map by the supplied values.
-     *
-     * @param x delta x value in pixels.
-     * @param y delta y value in pixels.
-     */
-    public void panBy(double x, double y) {
-//        System.out.println("panBy x: " + x + ", y: " + y);
-        invokeJavascript("panBy", new Object[]{x, y});
-    }
+    
 
     /**
      * Registers an event handler in the repository shared between Javascript
