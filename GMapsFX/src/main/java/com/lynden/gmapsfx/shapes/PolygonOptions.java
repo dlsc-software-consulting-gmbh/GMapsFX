@@ -30,7 +30,7 @@ public class PolygonOptions extends FillableMapShapeOptions<PolygonOptions> {
     }
     
     public PolygonOptions paths(MVCArray paths) {
-        setProperty("path", paths);
+        setProperty("paths", paths);
         this.paths = paths;
         return this;
     }
