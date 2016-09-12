@@ -18,7 +18,6 @@ package com.lynden.gmapsfx.service.directions;
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
-import com.lynden.gmapsfx.javascript.object.Polyline;
 import com.lynden.gmapsfx.service.geocoding.GeocoderUtils;
 import java.util.ArrayList;
 import java.util.List;
