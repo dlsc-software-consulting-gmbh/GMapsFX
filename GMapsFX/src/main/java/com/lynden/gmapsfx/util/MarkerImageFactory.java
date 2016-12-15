@@ -18,6 +18,8 @@ package com.lynden.gmapsfx.util;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,8 +47,13 @@ public class MarkerImageFactory {
      * @return 
      */
     public static String createMarkerImage(String uri, String type) {
+        Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.FINEST, "createMarkerImage using: {0}", uri);
         
         String dataURI = null;
+        
+        if (uri.startsWith("file:")) {
+            return createMarkerImageFromFile(uri, type);
+        }
         
         URL myURL = MarkerImageFactory.class.getResource(uri);
         
@@ -69,13 +76,45 @@ public class MarkerImageFactory {
         
     }
     
+    private static String createMarkerImageFromFile(String uri, String type) {
+        
+        try {
+            String dataURI = null;
+            
+            URL myURL = URI.create(uri).toURL();
+            
+            if (myURL != null) {
+                String myURLext = myURL.toExternalForm();
+                Image img = new Image(myURLext);
+                
+                String imageMimeType = "image/" + type;
+                
+                try {
+                    dataURI = "data:" + imageMimeType + ";base64,(" +
+                            javax.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + ")";
+                } catch (IOException ioe) {
+                    Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.WARNING, "Cannot create marker image", ioe);
+                    dataURI = null;
+                }
+            }
+            
+            return dataURI;
+            
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+        
+    }
+    
+    
     private static byte[] getImageBytes(BufferedImage image, String type) throws IOException {
-		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-
-        ImageIO.write(image, type, bos);
-        byte[] imageBytes = bos.toByteArray();
-        bos.close();
-
+        byte[] imageBytes;
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+            ImageIO.write(image, type, bos);
+            imageBytes = bos.toByteArray();
+        }
         return imageBytes;
 		
 	}
