@@ -36,6 +36,7 @@ public class MapOptions extends JavascriptObject {
     protected int zoom;
     protected boolean zoomControl;
     protected boolean mapTypeControl;
+    protected boolean scrollWheel;
     
     private String styleString;
     
@@ -131,7 +132,13 @@ public class MapOptions extends JavascriptObject {
         this.mapTypeControl = mapTypeControl;
         return this;
     }
-
+    
+    public MapOptions scrollWheel(boolean scrollWheel ) {
+        setProperty( "scrollwheel", scrollWheel );
+        this.scrollWheel = scrollWheel;
+        return this;
+    }
+    
     /**
      * @param styleString the styleString to set. This parameter is assigned by 
      * calling eval() and should be of the format: "[{'featureType':'landscape','stylers':[{'saturation':-100}, ...etc..."
