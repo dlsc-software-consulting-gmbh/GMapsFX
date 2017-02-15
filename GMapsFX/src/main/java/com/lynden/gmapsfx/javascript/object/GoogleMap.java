@@ -23,6 +23,11 @@ import com.lynden.gmapsfx.javascript.event.MapStateEventType;
 import com.lynden.gmapsfx.javascript.event.StateEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -48,7 +53,9 @@ public class GoogleMap extends JavascriptObject {
     
     private final EventHandlers jsHandlers = new EventHandlers();
     private boolean registeredOnJS;
-
+    
+    private Set<Marker> markers;
+    
     public GoogleMap() {
         super(GMapObjectType.MAP, divArg);
     }
@@ -176,13 +183,69 @@ public class GoogleMap extends JavascriptObject {
     public double getHeading() {
         return invokeJavascriptReturnValue("getHeading", Double.class );
     }
-
+    
+    /** Adds the supplied marker to the map.
+     * 
+     * @param marker 
+     */
     public void addMarker(Marker marker) {
+        if (markers == null) {
+            markers = new HashSet<>();
+        }
+        markers.add(marker);
         marker.setMap(this);
     }
-
+    
+    /** Removes the supplied marker from the map.
+     * 
+     * @param marker 
+     */
     public void removeMarker(Marker marker) {
+        if (markers != null && markers.contains(marker)) {
+            markers.remove(marker);
+        }
         marker.setMap(null);
+    }
+    
+    /** Removes all of the markers from the map.
+     * 
+     */
+    public void clearMarkers() {
+        if (markers != null && ! markers.isEmpty()) {
+            markers.forEach((m) -> {
+                m.setMap(null);
+            });
+            markers.clear();
+        }
+    }
+    
+    /** Adds all of the markers in the supplied collection to the map. Existing 
+     * markers, if any, are retained.
+     * 
+     * @param col 
+     */
+    public void addMarkers(Collection<Marker> col) {
+        if (markers == null) {
+            markers = new HashSet<>(col);
+        } else {
+            markers.addAll(col);
+        }
+        col.forEach((m) -> {
+            m.setMap(this);
+        });
+    }
+    
+    /** Removes the markers in the supplied collection from the map.
+     * 
+     * @param col 
+     */
+    public void removeMarkers(Collection<Marker> col) {
+        if (markers != null && ! markers.isEmpty()) {
+            markers.removeAll(col);
+            col.forEach((m) -> {
+                m.setMap(null);
+            });
+        }
     }
     
     /** Sets the map type. This is equivalent to the javascript method 
