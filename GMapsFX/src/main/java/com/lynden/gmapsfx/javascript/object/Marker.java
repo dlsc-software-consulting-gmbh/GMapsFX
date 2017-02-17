@@ -24,10 +24,6 @@ import com.lynden.gmapsfx.javascript.JavascriptObject;
  * @author Rob Terpilowski
  */
 public class Marker extends JavascriptObject {
-
-
-    protected String title;
-    
     
     /**
      * Contructs a new map Marker with the specified options
@@ -38,13 +34,16 @@ public class Marker extends JavascriptObject {
     }
     
     
+    public String getTitle() {
+        return invokeJavascriptReturnValue("getTitle", String.class);
+    }
+    
     /**
      * Sets the title of this Marker
      * @param title The Marker's new title
      */
     public void setTitle( String title ) {
         invokeJavascript("setTitle", title);
-        this.title = title;
     }
     
     
