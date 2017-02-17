@@ -23,10 +23,8 @@ import com.lynden.gmapsfx.javascript.event.MapStateEventType;
 import com.lynden.gmapsfx.javascript.event.StateEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -34,6 +32,7 @@ import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
+import javafx.util.Callback;
 import netscape.javascript.JSObject;
 
 /**
@@ -234,6 +233,19 @@ public class GoogleMap extends JavascriptObject {
             m.setMap(this);
         });
     }
+    
+    public void addMarkers(Collection<Marker> col, UIEventType type, Callback<Marker, UIEventHandler> h) {
+        if (markers == null) {
+            markers = new HashSet<>(col);
+        } else {
+            markers.addAll(col);
+        }
+        col.forEach((m) -> {
+            m.setMap(this);
+            addUIEventHandler(m, type, h.call(m));
+        });
+    }
+    
     
     /** Removes the markers in the supplied collection from the map.
      * 
