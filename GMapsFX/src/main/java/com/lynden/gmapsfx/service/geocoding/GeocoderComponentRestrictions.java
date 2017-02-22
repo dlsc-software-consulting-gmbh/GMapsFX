@@ -21,13 +21,16 @@ package com.lynden.gmapsfx.service.geocoding;
  */
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author jlstephens89
  */
 public class GeocoderComponentRestrictions extends JavascriptObject {
-    
+    private static final Logger LOG = LoggerFactory.getLogger(GeocoderComponentRestrictions.class);
+
     public GeocoderComponentRestrictions(String administrativeArea, String country,
             String locality, String postalCode, String route){
         super(GMapObjectType.GEOCODER_COMPONENT_RESTRICTIONS, 
@@ -59,7 +62,7 @@ public class GeocoderComponentRestrictions extends JavascriptObject {
             builder.append("route: '").append(route).append("'");
         }
         builder.append("}");
-        System.out.println("COMPONENT " + builder.toString());
+        LOG.trace("COMPONENT " + builder.toString());
         return builder.toString();
     }
     

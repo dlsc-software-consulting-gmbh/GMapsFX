@@ -23,12 +23,15 @@ import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.LatLongBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author jlstephens89
  */
 public class GeocoderRequest extends JavascriptObject {
+    private static final Logger LOG = LoggerFactory.getLogger(GeocoderRequest.class);
 
     public GeocoderRequest(String address) {
         this(address, null, null,null,null, null);
@@ -79,7 +82,7 @@ public class GeocoderRequest extends JavascriptObject {
             builder.append("region: '").append(region).append("'");
         }
         builder.append("}");
-        System.out.println("REQUEST " + builder.toString());
+        LOG.trace("REQUEST " + builder.toString());
         return builder.toString();
     }
 
