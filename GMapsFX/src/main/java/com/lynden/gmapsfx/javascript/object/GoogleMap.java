@@ -380,7 +380,14 @@ public class GoogleMap extends JavascriptObject {
         addUIHandler(obj, type, h);
     }
 
-    public void addMouseEventHandler(JavascriptObject obj, UIEventType type, MouseEventHandler h) {
+    /**
+     * Adds a handler for a mouse type event and returns an object that does not require interaction with
+     * the underlying Javascript API.
+     * 
+     * @param type The type of event to listen for
+     * @param h The MouseEventHandler that will handle the event.
+     */
+    public void addMouseEventHandler(UIEventType type, MouseEventHandler h) {
         addUIHandler(this, type, h);
     }
 
