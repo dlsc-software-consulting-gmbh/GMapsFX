@@ -23,8 +23,6 @@ import netscape.javascript.JSObject;
  * @author Geoff Capper
  */
 public interface UIEventHandler extends GFXEventHandler {
-    /**
-     * @param obj This object may be either a MouseEvent or one of it's subclasses.
-     */
-	public void handle(JSObject obj);
+
+    public void handle(JSObject jsObject);
 }
