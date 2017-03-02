@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Geoff Capper.
+ * Copyright 2017 RobTerpilowski.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.lynden.gmapsfx.javascript.event;
 
-import netscape.javascript.JSObject;
-
-/** A tagging interface to allow us to store all event handlers in the one 
- * {@link EventHandlers} object.
+/**
  *
- * @author Geoff Capper
+ * @author RobTerpilowski
  */
-public interface GFXEventHandler {
+public interface MouseEventHandler extends GFXEventHandler {
     
+    public void handle(GMapMouseEvent mouseEvent);
 }

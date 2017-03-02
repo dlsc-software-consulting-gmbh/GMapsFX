@@ -1,5 +1,7 @@
 package com.lynden.gmapsfx;
 
+import com.lynden.gmapsfx.javascript.event.GMapMouseEvent;
+import com.lynden.gmapsfx.javascript.event.MouseEventHandler;
 import com.lynden.gmapsfx.service.elevation.ElevationResult;
 import com.lynden.gmapsfx.service.elevation.ElevationService;
 import com.lynden.gmapsfx.service.elevation.ElevationServiceCallback;
@@ -229,6 +231,8 @@ public class MainApp extends Application implements MapComponentInitializedListe
 //        map.addStateEventHandler(MapStateEventType.tilesloaded, () -> {
 //			System.out.println("We got a tilesloaded event on the map");
 //		});
+
+  
         map.addUIEventHandler(UIEventType.click, (JSObject obj) -> {
             LatLong ll = new LatLong((JSObject) obj.getMember("latLng"));
             //System.out.println("LatLong: lat: " + ll.getLatitude() + " lng: " + ll.getLongitude());
