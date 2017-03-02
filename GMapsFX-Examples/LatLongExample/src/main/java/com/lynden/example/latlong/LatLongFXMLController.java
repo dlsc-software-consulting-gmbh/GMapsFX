@@ -43,7 +43,7 @@ public class LatLongFXMLController implements Initializable {
                 .zoom(9);
         map = googleMapView.createMap(mapOptions, false);
 
-        map.addMouseEventHandler(map, UIEventType.click, (GMapMouseEvent event) -> {
+        map.addMouseEventHandler(UIEventType.click, (GMapMouseEvent event) -> {
             LatLong latLong = event.getLatLong();
             latitudeLabel.setText(formatter.format(latLong.getLatitude()));
             longitudeLabel.setText(formatter.format(latLong.getLongitude()));
