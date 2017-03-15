@@ -165,8 +165,8 @@ public class GoogleMapView extends AnchorPane {
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
     public GoogleMapView(String mapResourcePath, String language, String region, String key, boolean debug) {
-        this.language = language;
-        this.region = region;
+        this.language = "en";
+        this.region = "US";
         this.key = key;
 
         String htmlFile;
