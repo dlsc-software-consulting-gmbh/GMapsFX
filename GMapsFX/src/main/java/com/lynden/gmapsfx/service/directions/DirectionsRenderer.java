@@ -49,7 +49,15 @@ public class DirectionsRenderer extends JavascriptObject{
     }
     
     public void setMap(GoogleMap map){
-        getJSObject().eval(getVariableName()+".setMap("+map.getVariableName()+");");
+        if( map == null ) {
+            getJSObject().eval(getVariableName()+".setMap(null);");
+        } else {
+            getJSObject().eval(getVariableName()+".setMap("+map.getVariableName()+");");
+        }
+    }
+    
+    public void clearDirections() {
+        setMap(null);
     }
 
     public void setOptions(String options){
