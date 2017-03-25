@@ -24,6 +24,9 @@ public class LatLongFXMLController implements Initializable {
     private Label longitudeLabel;
 
     @FXML
+    private WebView webView;
+    
+    @FXML
     private GoogleMapView googleMapView;
 
     private GoogleMap map;
@@ -32,6 +35,7 @@ public class LatLongFXMLController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        webView.getEngine().load("http://maps.google.com?language=ja&region=JP");
         googleMapView.addMapInializedListener(() -> configureMap());
     }
 
