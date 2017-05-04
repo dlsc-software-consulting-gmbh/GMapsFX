@@ -48,6 +48,17 @@ public class DirectionsRenderer extends JavascriptObject{
         getJSObject().eval(getVariableName()+".setPanel("+panel.getVariableName()+");");
     }
     
+    /*
+     * Enables to set the stroke color of the routes created using this renderer
+    */
+    public DirectionsRenderer(boolean drag, GoogleMap map, DirectionsPane panel, String strokeColor){
+        super(GMapObjectType.DIRECTIONS_DISPLAY);
+        
+        getJSObject().eval(getVariableName()+".setOptions({draggable:" +drag+", polylineOptions: { strokeColor: '"+strokeColor+"'}});");
+        getJSObject().eval(getVariableName()+".setMap("+map.getVariableName()+");");
+        getJSObject().eval(getVariableName()+".setPanel("+panel.getVariableName()+");");
+    }
+    
     public void setMap(GoogleMap map){
         if( map == null ) {
             getJSObject().eval(getVariableName()+".setMap(null);");
