@@ -22,6 +22,10 @@ import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -35,6 +39,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,6 +51,7 @@ import org.w3c.dom.Text;
  * @author Rob Terpilowski
  */
 public class GoogleMapView extends AnchorPane {
+
     private static final Logger LOG = LoggerFactory.getLogger(GoogleMapView.class);
 
     protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
@@ -78,7 +85,7 @@ public class GoogleMapView extends AnchorPane {
      * jar for the html page and markers. The map html page must be sourced from
      * the jar containing any marker images for those to function.
      * <p>
-     * The html page is, at it's simplest:      {@code 
+     * The html page is, at it's simplest: null     {@code 
 	 * <!DOCTYPE html>
      * <html>
      *   <head>
@@ -106,7 +113,7 @@ public class GoogleMapView extends AnchorPane {
      * Your marker images should be stored in the same folder as, or below the
      * map file. You then reference them using relative notation. If you put
      * them in a subpackage "markers" you would create your MarkerOptions object
-     * as follows:      {@code
+     * as follows: null     {@code
 	 * myMarkerOptions.position(myLatLong)
      *     .title("My Marker")
      *     .icon("markers/mymarker.png")
@@ -139,7 +146,6 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMapView(String language, String key) {
         this(null, language, key, false);
     }
-
 
     /**
      * Creates a new map view and specifies the display language and API key.
@@ -178,7 +184,7 @@ public class GoogleMapView extends AnchorPane {
             htmlFile = mapResourcePath;
             usingCustomHtml = true;
         }
-        
+
         CountDownLatch latch = new CountDownLatch(1);
         Runnable initWebView = () -> {
             try {
@@ -203,15 +209,15 @@ public class GoogleMapView extends AnchorPane {
 
                 webengine.getLoadWorker().stateProperty().addListener(
                         new ChangeListener<Worker.State>() {
-                            public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                                if (newState == Worker.State.SUCCEEDED) {
-                                    initialiseScript();
-                                    //setInitialized(true);
-                                    //fireMapInitializedListeners();
+                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
+                        if (newState == Worker.State.SUCCEEDED) {
+                            initialiseScript();
+                            //setInitialized(true);
+                            //fireMapInitializedListeners();
 
-                                }
-                            }
-                        });
+                        }
+                    }
+                });
                 webengine.load(getClass().getResource(htmlFile).toExternalForm());
             } finally {
                 latch.countDown();
@@ -229,9 +235,16 @@ public class GoogleMapView extends AnchorPane {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
     }
 
+    protected String getHtmlFile(boolean debug) {
+        if (debug) {
+           return "html/maps-debug.html";
+        } else {
+           return "html/maps.html";
+        }
+    }
 
     private void initialiseScript() {
         if (!usingCustomHtml) {
@@ -245,10 +258,10 @@ public class GoogleMapView extends AnchorPane {
             fireMapInitializedListeners();
         }
     }
-    
-        private void setFont( WebEngine webEngine) {
-    
-            webEngine.getLoadWorker().stateProperty().addListener((ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
+
+    private void setFont(WebEngine webEngine) {
+
+        webEngine.getLoadWorker().stateProperty().addListener((ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
 
             if (newValue == Worker.State.SUCCEEDED) {
                 Document document = (Document) webEngine.executeScript("document");
@@ -260,7 +273,7 @@ public class GoogleMapView extends AnchorPane {
             }
 
         });
-            
+
     }
 
     private void mapResized() {
@@ -269,8 +282,7 @@ public class GoogleMapView extends AnchorPane {
         }
     }
 
-    public void setKey(String key)
-    {
+    public void setKey(String key) {
         this.key = key;
     }
 
@@ -325,10 +337,11 @@ public class GoogleMapView extends AnchorPane {
         return map;
     }
 
-    protected GoogleMap internal_createMap(){
+    protected GoogleMap internal_createMap() {
         return new GoogleMap();
     }
-    protected GoogleMap internal_createMap(MapOptions mapOptions){
+
+    protected GoogleMap internal_createMap(MapOptions mapOptions) {
         return new GoogleMap(mapOptions);
     }
 
@@ -377,7 +390,6 @@ public class GoogleMapView extends AnchorPane {
     public void setDisableDoubleClick(boolean disableDoubleClick) {
         this.disableDoubleClick = disableDoubleClick;
     }
-
 
     protected void setInitialized(boolean initialized) {
         this.initialized = initialized;
