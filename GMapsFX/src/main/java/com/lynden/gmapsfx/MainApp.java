@@ -1,13 +1,10 @@
 package com.lynden.gmapsfx;
 
-import com.lynden.gmapsfx.javascript.event.GMapMouseEvent;
-import com.lynden.gmapsfx.javascript.event.MouseEventHandler;
 import com.lynden.gmapsfx.service.elevation.ElevationResult;
 import com.lynden.gmapsfx.service.elevation.ElevationService;
 import com.lynden.gmapsfx.service.elevation.ElevationServiceCallback;
 import com.lynden.gmapsfx.service.elevation.ElevationStatus;
 import com.lynden.gmapsfx.service.elevation.LocationElevationRequest;
-import com.lynden.gmapsfx.service.elevation.PathElevationRequest;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
 import com.lynden.gmapsfx.javascript.object.Animation;
 import com.lynden.gmapsfx.javascript.object.DirectionsPane;
@@ -22,17 +19,13 @@ import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
 import com.lynden.gmapsfx.javascript.object.Marker;
 import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import com.lynden.gmapsfx.service.directions.DirectionStatus;
-import com.lynden.gmapsfx.service.directions.DirectionsGeocodedWaypoint;
-import com.lynden.gmapsfx.service.directions.DirectionsLeg;
 import com.lynden.gmapsfx.service.directions.DirectionsRenderer;
 import com.lynden.gmapsfx.service.directions.DirectionsRequest;
 import com.lynden.gmapsfx.service.directions.DirectionsResult;
 import com.lynden.gmapsfx.service.directions.DirectionsService;
 import com.lynden.gmapsfx.service.directions.DirectionsServiceCallback;
-import com.lynden.gmapsfx.service.directions.DirectionsSteps;
 import com.lynden.gmapsfx.service.directions.DirectionsWaypoint;
 import com.lynden.gmapsfx.service.directions.TravelModes;
-import com.lynden.gmapsfx.service.geocoding.GeocoderRequest;
 import com.lynden.gmapsfx.service.geocoding.GeocoderStatus;
 import com.lynden.gmapsfx.service.geocoding.GeocodingResult;
 import com.lynden.gmapsfx.service.geocoding.GeocodingService;
@@ -46,25 +39,23 @@ import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import com.lynden.gmapsfx.shapes.Rectangle;
 import com.lynden.gmapsfx.shapes.RectangleOptions;
-import com.lynden.gmapsfx.zoom.MaxZoomResult;
-import com.lynden.gmapsfx.zoom.MaxZoomService;
-import com.lynden.gmapsfx.zoom.MaxZoomServiceCallback;
-import java.util.List;
 import java.util.Locale;
 import javafx.application.Application;
-import static javafx.application.Application.launch;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToolBar;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
 import static javafx.application.Application.launch;
+import javafx.concurrent.Worker;
+import javafx.scene.web.WebEngine;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 /**
  * Example Application for creating and loading a GoogleMap into a JavaFX
@@ -351,6 +342,9 @@ public class MainApp extends Application implements MapComponentInitializedListe
         es.getElevationForLocations(loc, this);
         
     }
+    
+    
+
 	
 	
 	private void hideMarker() {

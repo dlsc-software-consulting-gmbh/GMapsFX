@@ -37,8 +37,12 @@ import javafx.event.EventDispatcher;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -194,6 +198,7 @@ public class GoogleMapView extends AnchorPane {
                 //});
                 webengine = new JavaFxWebEngine(webview.getEngine());
                 JavascriptRuntime.setDefaultWebEngine(webengine);
+                setFont(webview.getEngine());
 
                 setTopAnchor(webview, 0.0);
                 setLeftAnchor(webview, 0.0);
@@ -254,12 +259,28 @@ public class GoogleMapView extends AnchorPane {
             window.setMember("libLoadBridge", new MapLibraryLoadBridge());
 
             String script = "loadMapLibrary('" + GOOGLE_MAPS_API_VERSION + "','" + key + "','" + language + "','" + region + "');";
-            //System.out.println("Loading script with call: " + script);
             webengine.executeScript(script);
         } else {
             setInitialized(true);
             fireMapInitializedListeners();
         }
+    }
+    
+        private void setFont( WebEngine webEngine) {
+    
+            webEngine.getLoadWorker().stateProperty().addListener((ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
+
+            if (newValue == Worker.State.SUCCEEDED) {
+                Document document = (Document) webEngine.executeScript("document");
+
+                Element styleNode = document.createElement("style");
+                Text styleContent = document.createTextNode("* { font-family: Arial, Helvetica, san-serif !important; }");
+                styleNode.appendChild(styleContent);
+                document.getDocumentElement().getElementsByTagName("head").item(0).appendChild(styleNode);
+            }
+
+        });
+            
     }
 
     private void mapResized() {
