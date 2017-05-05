@@ -17,6 +17,7 @@ package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
+
 import com.lynden.gmapsfx.javascript.event.EventHandlers;
 import com.lynden.gmapsfx.javascript.event.GFXEventHandler;
 import com.lynden.gmapsfx.javascript.event.MapStateEventType;
@@ -35,6 +36,10 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.util.Callback;
 import netscape.javascript.JSObject;
+
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -58,11 +63,39 @@ public class GoogleMap extends JavascriptObject {
 
     public GoogleMap() {
         super(GMapObjectType.MAP, divArg);
+
+        initialize();
     }
 
     public GoogleMap(MapOptions mapOptions) {
-        super(GMapObjectType.MAP, new Object[]{divArg, mapOptions});
+        super(GMapObjectType.MAP, divArg, mapOptions);
+
+        initialize();
     }
+
+    protected void initialize(){
+        zoom = new SimpleIntegerProperty(internalGetZoom());
+        addStateEventHandler(MapStateEventType.zoom_changed, () -> {
+            if (!userPromptedZoomChange) {
+                mapPromptedZoomChange = true;
+                zoom.set(internalGetZoom());
+                mapPromptedZoomChange = false;
+            }
+        });
+        zoom.addListener((ObservableValue<? extends Number> obs, Number o, Number n) -> {
+            if (!mapPromptedZoomChange) {
+                userPromptedZoomChange = true;
+                internalSetZoom(n.intValue());
+                userPromptedZoomChange = false;
+            }
+        });
+
+        center = new ReadOnlyObjectWrapper<>(getCenter());
+        addStateEventHandler(MapStateEventType.center_changed, () -> {
+            center.set(getCenter());
+        });
+    }
+
 
     public void setZoom(int zoom) {
         zoomProperty().set(zoom);
@@ -89,23 +122,6 @@ public class GoogleMap extends JavascriptObject {
     }
 
     public IntegerProperty zoomProperty() {
-        if (zoom == null) {
-            zoom = new SimpleIntegerProperty(internalGetZoom());
-            addStateEventHandler(MapStateEventType.zoom_changed, () -> {
-                if (!userPromptedZoomChange) {
-                    mapPromptedZoomChange = true;
-                    zoom.set(internalGetZoom());
-                    mapPromptedZoomChange = false;
-                }
-            });
-            zoom.addListener((ObservableValue<? extends Number> obs, Number o, Number n) -> {
-                if (!mapPromptedZoomChange) {
-                    userPromptedZoomChange = true;
-                    internalSetZoom(n.intValue());
-                    userPromptedZoomChange = false;
-                }
-            });
-        }
         return zoom;
     }
 
@@ -114,12 +130,6 @@ public class GoogleMap extends JavascriptObject {
 //        return getProperty("setCenter", LatLong.class);
 //    }
     public final ReadOnlyObjectProperty<LatLong> centerProperty() {
-        if (center == null) {
-            center = new ReadOnlyObjectWrapper<>(getCenter());
-            addStateEventHandler(MapStateEventType.center_changed, () -> {
-                center.set(getCenter());
-            });
-        }
         return center.getReadOnlyProperty();
     }
 

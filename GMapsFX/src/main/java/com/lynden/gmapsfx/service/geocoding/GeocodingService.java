@@ -19,16 +19,17 @@ package com.lynden.gmapsfx.service.geocoding;
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
 import netscape.javascript.JSObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Rob Terpilowski
  */
 public class GeocodingService extends JavascriptObject {
+    private static final Logger LOG = LoggerFactory.getLogger(GeocodingService.class);
+    
     public GeocodingServiceCallback callback;
     
     public GeocodingService(){
@@ -58,7 +59,7 @@ public class GeocodingService extends JavascriptObject {
               .append(getVariableName())
               .append(".processResponse(results, status);});");
         
-        System.out.println("Geocoding direct call: " + r.toString());
+        LOG.trace("Geocoding direct call: " + r.toString());
         
         getJSObject().eval(r.toString());
     }
@@ -73,7 +74,7 @@ public class GeocodingService extends JavascriptObject {
                 Object len = jsres.getMember("length");
                 if (len instanceof Number) {
                     int n = ((Number)len).intValue();
-//                    System.out.println("n: " + n);
+//                    LOG.trace("n: " + n);
                     GeocodingResult[] ers = new GeocodingResult[n];
                     for (int i = 0; i < n; i++) {
                         Object obj = jsres.getSlot(i);

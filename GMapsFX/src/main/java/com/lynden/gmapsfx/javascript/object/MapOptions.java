@@ -33,7 +33,9 @@ public class MapOptions extends JavascriptObject {
     protected boolean rotateControl;
     protected boolean scaleControl;
     protected boolean streetViewControl;
-    protected int zoom;
+    protected double zoom;
+    protected double maxZoom;
+    protected double minZoom;
     protected boolean zoomControl;
     protected boolean mapTypeControl;
     protected boolean scrollWheel;
@@ -115,9 +117,20 @@ public class MapOptions extends JavascriptObject {
         return this;
     }
     
-    public MapOptions zoom( int zoom ) {
+    public MapOptions zoom( double zoom ) {
         setProperty( "zoom", zoom );
         this.zoom = zoom;
+        return this;
+    }
+    
+    public MapOptions maxZoom( double maxZoom ) {
+        setProperty( "maxZoom", maxZoom );
+        this.maxZoom = maxZoom;
+        return this;
+    }
+    public MapOptions minZoom( double minZoom ) {
+        setProperty("minZoom", minZoom);
+        this.minZoom = minZoom;
         return this;
     }
     

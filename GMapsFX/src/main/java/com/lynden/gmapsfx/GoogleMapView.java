@@ -22,11 +22,6 @@ import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -40,6 +35,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
@@ -49,6 +45,7 @@ import org.w3c.dom.Text;
  * @author Rob Terpilowski
  */
 public class GoogleMapView extends AnchorPane {
+    private static final Logger LOG = LoggerFactory.getLogger(GoogleMapView.class);
 
     protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
     protected static final String GOOGLE_MAPS_API_VERSION = "3.exp";
@@ -176,17 +173,11 @@ public class GoogleMapView extends AnchorPane {
 
         String htmlFile;
         if (mapResourcePath == null) {
-            if (debug) {
-                htmlFile = "/html/maps-debug.html";
-            } else {
-                htmlFile = "/html/maps.html";
-            }
+            htmlFile = getHtmlFile(debug);
         } else {
             htmlFile = mapResourcePath;
             usingCustomHtml = true;
         }
-        
-        //System.out.println("htmlFile: " + htmlFile);
         
         CountDownLatch latch = new CountDownLatch(1);
         Runnable initWebView = () -> {
@@ -194,9 +185,6 @@ public class GoogleMapView extends AnchorPane {
                 webview = new WebView();
                 EventDispatcher originalDispatcher = webview.getEventDispatcher();
                 webview.setEventDispatcher(new MyEventDispatcher(originalDispatcher));
-                //webview.focusedProperty().addListener((ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
-                //    //System.out.println("Webview focus changed from: " + oldValue + " to " + newValue );
-                //});
                 webengine = new JavaFxWebEngine(webview.getEngine());
                 JavascriptRuntime.setDefaultWebEngine(webengine);
                 setFont(webview.getEngine());
@@ -209,20 +197,10 @@ public class GoogleMapView extends AnchorPane {
 
                 webview.widthProperty().addListener(e -> mapResized());
                 webview.heightProperty().addListener(e -> mapResized());
-                /*
-                webengine.setOnAlert(new EventHandler<WebEvent<String>>() {
-                    @Override
-                    public void handle(WebEvent<String> e) {
-                        System.out.println("Alert: " + e.getData());
-                    }
-                });
-                webengine.setOnError(new EventHandler<WebErrorEvent>() {
-                    @Override
-                    public void handle(WebErrorEvent e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                });
-                */
+
+                webengine.setOnAlert(e -> LOG.info("Alert: " + e.getData()));
+                webengine.setOnError(e -> LOG.error("Error: " + e.getMessage()));
+
                 webengine.getLoadWorker().stateProperty().addListener(
                         new ChangeListener<Worker.State>() {
                             public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
@@ -253,7 +231,6 @@ public class GoogleMapView extends AnchorPane {
         }
         
     }
-
 
 
     private void initialiseScript() {
@@ -288,7 +265,6 @@ public class GoogleMapView extends AnchorPane {
 
     private void mapResized() {
         if (initialized && map != null) {
-            //System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
         }
     }
@@ -329,9 +305,9 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMap createMap(MapOptions mapOptions, boolean withDirectionsPanel) {
         checkInitialized();
         if (mapOptions != null) {
-            map = new GoogleMap(mapOptions);
+            map = internal_createMap(mapOptions);
         } else {
-            map = new GoogleMap();
+            map = internal_createMap();
         }
 
         direc = new DirectionsPane();
@@ -347,6 +323,13 @@ public class GoogleMapView extends AnchorPane {
         });
 
         return map;
+    }
+
+    protected GoogleMap internal_createMap(){
+        return new GoogleMap();
+    }
+    protected GoogleMap internal_createMap(MapOptions mapOptions){
+        return new GoogleMap(mapOptions);
     }
 
     public DirectionsPane getDirec() {
@@ -395,9 +378,6 @@ public class GoogleMapView extends AnchorPane {
         this.disableDoubleClick = disableDoubleClick;
     }
 
-    protected void init() {
-
-    }
 
     protected void setInitialized(boolean initialized) {
         this.initialized = initialized;
@@ -445,13 +425,6 @@ public class GoogleMapView extends AnchorPane {
         return webview;
     }
 
-    public class JSListener {
-
-        public void log(String text) {
-            System.out.println(text);
-        }
-    }
-
     public class MapLibraryLoadBridge {
 
         public MapLibraryLoadBridge() {
@@ -478,7 +451,6 @@ public class GoogleMapView extends AnchorPane {
             if (event instanceof MouseEvent) {
                 MouseEvent mouseEvent = (MouseEvent) event;
                 if (mouseEvent.getClickCount() == 2) {
-                    //System.out.println("Mouse event: " + event);
                     if (disableDoubleClick) {
                         mouseEvent.consume();
                     }

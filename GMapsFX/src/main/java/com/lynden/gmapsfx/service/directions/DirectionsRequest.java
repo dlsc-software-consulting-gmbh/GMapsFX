@@ -18,12 +18,16 @@ package com.lynden.gmapsfx.service.directions;
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Andre
  */
 public class DirectionsRequest extends JavascriptObject{
+    private static final Logger LOG = LoggerFactory.getLogger(DirectionsRequest.class);
+
     static boolean opt = true;
 
     public void setOpt(boolean opt) {
@@ -131,7 +135,7 @@ public class DirectionsRequest extends JavascriptObject{
             builder.append("]");
         }
         builder.append("}");
-        System.out.println("REQUEST " + builder.toString());
+        LOG.trace("REQUEST " + builder.toString());
         return builder.toString();
     }
 
