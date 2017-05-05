@@ -57,7 +57,7 @@ public class GoogleMapView extends AnchorPane {
 
     protected final String language;
     protected final String region;
-    protected final String key;
+    protected String key;
     protected WebView webview;
     protected JavaFxWebEngine webengine;
     protected boolean initialized = false;
@@ -142,6 +142,7 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMapView(String language, String key) {
         this(null, language, key, false);
     }
+
 
     /**
      * Creates a new map view and specifies the display language and API key.
@@ -253,6 +254,8 @@ public class GoogleMapView extends AnchorPane {
         
     }
 
+
+
     private void initialiseScript() {
         if (!usingCustomHtml) {
             JSObject window = (JSObject) webengine.executeScript("window");
@@ -288,6 +291,11 @@ public class GoogleMapView extends AnchorPane {
             //System.out.println("GoogleMapView.mapResized: triggering resize event");
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
         }
+    }
+
+    public void setKey(String key)
+    {
+        this.key = key;
     }
 
     public void setZoom(int zoom) {
