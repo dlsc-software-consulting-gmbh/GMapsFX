@@ -162,6 +162,15 @@ public class JavascriptRuntime implements IJavascriptRuntime {
 
         return sb.toString();
     }
+    
+    
+    /**
+     * Sets a Javascript runtime to use.  Should only be used by unit tests to set a mock runtime
+     * @param testRuntime The runtime to use
+     */
+    public static void setJavascriptRuntime(IJavascriptRuntime testRuntime) {
+        runtime = testRuntime;
+    }
 
     /**
      * Takes the specified object and converts the argument to a String.

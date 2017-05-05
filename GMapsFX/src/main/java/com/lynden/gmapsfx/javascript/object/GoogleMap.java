@@ -17,7 +17,17 @@ package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
-import com.lynden.gmapsfx.javascript.event.*;
+
+import com.lynden.gmapsfx.javascript.event.EventHandlers;
+import com.lynden.gmapsfx.javascript.event.GFXEventHandler;
+import com.lynden.gmapsfx.javascript.event.MapStateEventType;
+import com.lynden.gmapsfx.javascript.event.MouseEventHandler;
+import com.lynden.gmapsfx.javascript.event.StateEventHandler;
+import com.lynden.gmapsfx.javascript.event.UIEventHandler;
+import com.lynden.gmapsfx.javascript.event.UIEventType;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -45,12 +55,12 @@ public class GoogleMap extends JavascriptObject {
     private ReadOnlyObjectWrapper<LatLong> center;
     private IntegerProperty zoom;
     private ReadOnlyObjectWrapper<LatLongBounds> bounds;
-    
+
     private final EventHandlers jsHandlers = new EventHandlers();
     private boolean registeredOnJS;
-    
+
     private Set<Marker> markers;
-    
+
     public GoogleMap() {
         super(GMapObjectType.MAP, divArg);
 
@@ -102,11 +112,11 @@ public class GoogleMap extends JavascriptObject {
     private void internalSetZoom(int zoom) {
         invokeJavascript("setZoom", zoom);
     }
-    
+
     public void showDirectionsPane() {
         JavascriptRuntime.getInstance().execute("showDirections()");
     }
-    
+
     public void hideDirectionsPane() {
         JavascriptRuntime.getInstance().execute("hideDirections()");
     }
@@ -119,7 +129,6 @@ public class GoogleMap extends JavascriptObject {
 //    public LatLong getLatLong() {
 //        return getProperty("setCenter", LatLong.class);
 //    }
-    
     public final ReadOnlyObjectProperty<LatLong> centerProperty() {
         return center.getReadOnlyProperty();
     }
@@ -127,12 +136,11 @@ public class GoogleMap extends JavascriptObject {
     public LatLong getCenter() {
         return new LatLong((JSObject) invokeJavascript("getCenter"));
     }
-    
+
     public void setCenter(LatLong latLong) {
         invokeJavascript("setCenter", latLong);
     }
-    
-    
+
     /**
      * Returns the LatLongBounds of the visual area. Note: on zoom changes the
      * bounds are reset after the zoom event is fired, which can cause
@@ -143,28 +151,30 @@ public class GoogleMap extends JavascriptObject {
     public LatLongBounds getBounds() {
         return invokeJavascriptReturnValue("getBounds", LatLongBounds.class);
     }
-    
-    /** Moves the map to ensure the given bounds fit within the viewport.
+
+    /**
+     * Moves the map to ensure the given bounds fit within the viewport.
      * <p>
-     * Note that the Google Maps API will add a buffer around this value, so 
-     * assuming you can store this and use it to later restore the view 
-     * will give incorrect results. Calling map.fitBounds(map.getBounds()); will 
+     * Note that the Google Maps API will add a buffer around this value, so
+     * assuming you can store this and use it to later restore the view will
+     * give incorrect results. Calling map.fitBounds(map.getBounds()); will
      * result in the map gradually zooming outward.
      * <p>
-     * 
-     * @param bounds 
+     *
+     * @param bounds
      */
-    public void fitBounds( LatLongBounds bounds ) {
-        invokeJavascript("fitBounds", bounds );
+    public void fitBounds(LatLongBounds bounds) {
+        invokeJavascript("fitBounds", bounds);
     }
-    
+
     public void panToBounds(LatLongBounds bounds) {
         invokeJavascript("panToBounds", bounds);
     }
-    
-    /** A property tied to the map, updated when the idle state event is fired.
-     * 
-     * @return 
+
+    /**
+     * A property tied to the map, updated when the idle state event is fired.
+     *
+     * @return
      */
     public final ReadOnlyObjectProperty<LatLongBounds> boundsProperty() {
         if (bounds == null) {
@@ -175,18 +185,19 @@ public class GoogleMap extends JavascriptObject {
         }
         return bounds.getReadOnlyProperty();
     }
-    
-    public void setHeading( double heading ) {
+
+    public void setHeading(double heading) {
         invokeJavascript("setHeading", heading);
     }
-    
+
     public double getHeading() {
-        return invokeJavascriptReturnValue("getHeading", Double.class );
+        return invokeJavascriptReturnValue("getHeading", Double.class);
     }
-    
-    /** Adds the supplied marker to the map.
-     * 
-     * @param marker 
+
+    /**
+     * Adds the supplied marker to the map.
+     *
+     * @param marker
      */
     public void addMarker(Marker marker) {
         if (markers == null) {
@@ -195,10 +206,11 @@ public class GoogleMap extends JavascriptObject {
         markers.add(marker);
         marker.setMap(this);
     }
-    
-    /** Removes the supplied marker from the map.
-     * 
-     * @param marker 
+
+    /**
+     * Removes the supplied marker from the map.
+     *
+     * @param marker
      */
     public void removeMarker(Marker marker) {
         if (markers != null && markers.contains(marker)) {
@@ -206,23 +218,25 @@ public class GoogleMap extends JavascriptObject {
         }
         marker.setMap(null);
     }
-    
-    /** Removes all of the markers from the map.
-     * 
+
+    /**
+     * Removes all of the markers from the map.
+     *
      */
     public void clearMarkers() {
-        if (markers != null && ! markers.isEmpty()) {
+        if (markers != null && !markers.isEmpty()) {
             markers.forEach((m) -> {
                 m.setMap(null);
             });
             markers.clear();
         }
     }
-    
-    /** Adds all of the markers in the supplied collection to the map. Existing 
+
+    /**
+     * Adds all of the markers in the supplied collection to the map. Existing
      * markers, if any, are retained.
-     * 
-     * @param col 
+     *
+     * @param col
      */
     public void addMarkers(Collection<Marker> col) {
         if (markers == null) {
@@ -234,7 +248,7 @@ public class GoogleMap extends JavascriptObject {
             m.setMap(this);
         });
     }
-    
+
     public void addMarkers(Collection<Marker> col, UIEventType type, Callback<Marker, UIEventHandler> h) {
         if (markers == null) {
             markers = new HashSet<>(col);
@@ -246,25 +260,26 @@ public class GoogleMap extends JavascriptObject {
             addUIEventHandler(m, type, h.call(m));
         });
     }
-    
-    
-    /** Removes the markers in the supplied collection from the map.
-     * 
-     * @param col 
+
+    /**
+     * Removes the markers in the supplied collection from the map.
+     *
+     * @param col
      */
     public void removeMarkers(Collection<Marker> col) {
-        if (markers != null && ! markers.isEmpty()) {
+        if (markers != null && !markers.isEmpty()) {
             markers.removeAll(col);
             col.forEach((m) -> {
                 m.setMap(null);
             });
         }
     }
-    
-    /** Sets the map type. This is equivalent to the javascript method 
+
+    /**
+     * Sets the map type. This is equivalent to the javascript method
      * setMapTypeId.
-     * 
-     * @param type 
+     *
+     * @param type
      */
     public void setMapType(MapTypeIdEnum type) {
         invokeJavascript("setMapTypeId", type);
@@ -282,8 +297,7 @@ public class GoogleMap extends JavascriptObject {
         Object obj = invokeJavascript("getProjection");
         return (obj == null) ? null : new Projection((JSObject) obj);
     }
-    
-    
+
     /**
      * Pans the map by the supplied values.
      *
@@ -294,17 +308,16 @@ public class GoogleMap extends JavascriptObject {
 //        System.out.println("panBy x: " + x + ", y: " + y);
         invokeJavascript("panBy", new Object[]{x, y});
     }
-    
+
     /**
      * Pans the map to the specified latitude and longitude.
      *
-     * @param latLong 
+     * @param latLong
      */
     public void panTo(LatLong latLong) {
         invokeJavascript("panTo", latLong);
     }
-    
-    
+
     /**
      * Returns the screen point for the provided LatLong. Note: Unexpected
      * results can be obtained if this method is called as a result of a zoom
@@ -338,8 +351,6 @@ public class GoogleMap extends JavascriptObject {
 //        System.out.println("GoogleMap.fromLatLngToPoint x: " + x + " y: " + y);
         return new Point2D(x, y);
     }
-
-    
 
     /**
      * Registers an event handler in the repository shared between Javascript
@@ -376,6 +387,21 @@ public class GoogleMap extends JavascriptObject {
      * @param h Handler that will be called when the event occurs.
      */
     public void addUIEventHandler(JavascriptObject obj, UIEventType type, UIEventHandler h) {
+        addUIHandler(obj, type, h);
+    }
+
+    /**
+     * Adds a handler for a mouse type event and returns an object that does not require interaction with
+     * the underlying Javascript API.
+     * 
+     * @param type The type of event to listen for
+     * @param h The MouseEventHandler that will handle the event.
+     */
+    public void addMouseEventHandler(UIEventType type, MouseEventHandler h) {
+        addUIHandler(this, type, h);
+    }
+
+    protected void addUIHandler(JavascriptObject obj, UIEventType type, GFXEventHandler h) {
         String key = registerEventHandler(h);
         String mcall = "google.maps.event.addListener(" + obj.getVariableName() + ", '" + type.name() + "', "
                 + "function(event) {document.jsHandlers.handleUIEvent('" + key + "', event);});";//.latLng

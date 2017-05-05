@@ -32,15 +32,13 @@ import javafx.event.EventDispatcher;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
 
 /**
  *
@@ -56,7 +54,7 @@ public class GoogleMapView extends AnchorPane {
 
     protected final String language;
     protected final String region;
-    protected final String key;
+    protected String key;
     protected WebView webview;
     protected JavaFxWebEngine webengine;
     protected boolean initialized = false;
@@ -142,6 +140,7 @@ public class GoogleMapView extends AnchorPane {
         this(null, language, key, false);
     }
 
+
     /**
      * Creates a new map view and specifies the display language and API key.
      *
@@ -168,8 +167,8 @@ public class GoogleMapView extends AnchorPane {
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
     public GoogleMapView(String mapResourcePath, String language, String region, String key, boolean debug) {
-        this.language = language;
-        this.region = region;
+        this.language = "en";
+        this.region = "US";
         this.key = key;
 
         String htmlFile;
@@ -188,6 +187,7 @@ public class GoogleMapView extends AnchorPane {
                 webview.setEventDispatcher(new MyEventDispatcher(originalDispatcher));
                 webengine = new JavaFxWebEngine(webview.getEngine());
                 JavascriptRuntime.setDefaultWebEngine(webengine);
+                setFont(webview.getEngine());
 
                 setTopAnchor(webview, 0.0);
                 setLeftAnchor(webview, 0.0);
@@ -232,13 +232,6 @@ public class GoogleMapView extends AnchorPane {
         
     }
 
-    protected String getHtmlFile(boolean debug) {
-        if (debug) {
-            return "/com/lynden/gmapsfx/html/maps-debug.html";
-        } else {
-            return "/com/lynden/gmapsfx/html/maps.html";
-        }
-    }
 
     private void initialiseScript() {
         if (!usingCustomHtml) {
@@ -246,18 +239,39 @@ public class GoogleMapView extends AnchorPane {
             window.setMember("libLoadBridge", new MapLibraryLoadBridge());
 
             String script = "loadMapLibrary('" + GOOGLE_MAPS_API_VERSION + "','" + key + "','" + language + "','" + region + "');";
-            LOG.debug("Loading script with call: {}", script);
             webengine.executeScript(script);
         } else {
             setInitialized(true);
             fireMapInitializedListeners();
         }
     }
+    
+        private void setFont( WebEngine webEngine) {
+    
+            webEngine.getLoadWorker().stateProperty().addListener((ObservableValue<? extends Worker.State> observable, Worker.State oldValue, Worker.State newValue) -> {
+
+            if (newValue == Worker.State.SUCCEEDED) {
+                Document document = (Document) webEngine.executeScript("document");
+
+                Element styleNode = document.createElement("style");
+                Text styleContent = document.createTextNode("* { font-family: Arial, Helvetica, san-serif !important; }");
+                styleNode.appendChild(styleContent);
+                document.getDocumentElement().getElementsByTagName("head").item(0).appendChild(styleNode);
+            }
+
+        });
+            
+    }
 
     private void mapResized() {
         if (initialized && map != null) {
             webengine.executeScript("google.maps.event.trigger(" + map.getVariableName() + ", 'resize')");
         }
+    }
+
+    public void setKey(String key)
+    {
+        this.key = key;
     }
 
     public void setZoom(int zoom) {

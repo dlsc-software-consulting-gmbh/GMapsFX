@@ -1,11 +1,19 @@
-GMapsFX
-=======
+##  GMapsFX
+
+<p align="center">
+<b>
+<a href="https://github.com/rterp/GMapsFX/wiki/Known-Issue:-Garbled-Text-in-GMapsFX-on-Mac-OSX">Attention: Known Issue, Garbled Text in GMapsFX on Mac OSX</a>
+</b>
+</p>
+
+
  [ ![Download](https://api.bintray.com/packages/rterp/maven/GMapsFX/images/download.svg) ](https://bintray.com/rterp/maven/GMapsFX/_latestVersion)
 
 
 A pure JavaFX API which allows you to add Google Maps to your JavaFX application without the need to interact with the underlying Google Maps JavaScript API.
 
 GMapsFX requires Java 8
+
 
 
 ![GMapsFX GUI](http://rterp.files.wordpress.com/2014/05/gmapsfx.png)

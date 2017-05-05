@@ -80,34 +80,6 @@ public class DirectionsRequest extends JavascriptObject{
             //unit system
             DirectionsWaypoint[] waypoints){
         super(GMapObjectType.DIRECTIONS_REQUESTS, convertToJavascriptString(addressOrigin, latLongOrigin, addressDestination, latLongDestination, travelmode, drivingOptions, waypoints));
-//        
-//        if(addressOrigin != null)getJSObject().setMember("origin", addressOrigin);
-//        else if(latLongOrigin != null)getJSObject().setMember("origin", latLongOrigin);
-//        
-//        if(addressDestination != null)getJSObject().setMember("destination", addressDestination);
-//        else if(latLongDestination != null)getJSObject().setMember("destination", latLongDestination);
-//        
-//        getJSObject().setMember("travelMode", "google.maps.TravelMode."+travelmode);
-//        
-//        // transit options
-//        
-//        if(drivingOptions != null && travelmode == TravelModes.DRIVING){
-//            getJSObject().setMember("drivingOptions", drivingOptions);
-//        }
-//        
-//        //unit system
-//        
-//        if(waypoints != null){
-//            getJSObject().setMember("waypoints", getJSObject().eval("[]"));
-//            for(int i = 0; i < waypoints.length; i++){
-//                getJSObject().eval(getVariableName()+".waypoints.push("+waypoints[i].getVariableName()+")");
-//            }
-//        }
-        /*
-        System.out.println("REQUEST: \n" 
-                + "origin: " + getJSObject().getMember("origin").toString() + "\n"
-                + "destination: " + getJSObject().getMember("destination").toString() + "\n"
-                + "travelMode: " + getJSObject().getMember("travelMode").toString() + "\n");*/
     }
     
     private static String convertToJavascriptString(String addressOrigin, LatLong latLongOrigin, 
