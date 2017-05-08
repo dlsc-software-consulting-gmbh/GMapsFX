@@ -2,7 +2,7 @@
 
 <p align="center">
 <b>
-Fixed! <s>Attention: Known Issue, Garbled Text in GMapsFX on Mac OSX</s>
+Fixed! <s><a href="https://github.com/rterp/GMapsFX/wiki/Known-Issue:-Garbled-Text-in-GMapsFX-on-Mac-OSX">Attention: Known Issue, Garbled Text in GMapsFX on Mac OSX</a></s>
 </b>
 </p>
 
