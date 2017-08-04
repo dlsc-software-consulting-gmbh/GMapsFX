@@ -90,8 +90,8 @@ public class MarkerImageFactory {
                 String imageMimeType = "image/" + type;
                 
                 try {
-                    dataURI = "data:" + imageMimeType + ";base64,(" +
-                            javax.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + ")";
+                    dataURI = "data:" + imageMimeType + ";base64," +
+                            javax.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + "";
                 } catch (IOException ioe) {
                     Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.WARNING, "Cannot create marker image", ioe);
                     dataURI = null;
