@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../style.css" type="text/css"/>
+
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+        <meta charset="utf-8">
+        <title>Clustered map</title>
+        <style>
+            html, body{
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            #map-canvas{
+                height: 100%;
+                width: 100%;
+                float: right;
+            }
+            #directions{
+                height: 100%;
+                width: 0;
+                float: left;
+                overflow-y: scroll;
+                display: inline-block;
+            }
+        </style>
+		
+		<script src="http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js"></script>
+        <!--<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>-->
+        <script type="text/javascript" src="js/markerclusterer.js"></script>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script language='javascript'>
+            console.log("hier");
+            console.log("clusterer" + MarkerClusterer.prototype.MARKER_CLUSTER_IMAGE_PATH_);
+			function loadMapLibrary(ver, key, lang, region) {
+				console.log('loadMapLibrary');
+				var opts = [];
+				if (key !== 'null') {
+					opts[opts.length] = 'key='+key;
+				}
+				if (lang !== 'null') {
+					opts[opts.length] = 'language='+lang;
+				}
+				if (region !== 'null') {
+					opts[opts.length] = 'region='+region;
+				}
+				var sOpts = opts.join('&');
+				
+				if (ver === 'null') {
+					ver = '3.exp';
+				}
+				
+				google.load('maps', ver, { 'other_params' : sOpts, 'callback': 'initMap()' });
+                console.log('loadMapLibrary done');
+			}
+			
+			function initMap() {
+				console.log('initMap');
+				var ll = new google.maps.LatLng(47.606189,-122.335842);
+                console.log('LatLong: ' + ll);
+				libLoadBridge.mapLibraryLoaded();
+                console.log( 'loaded');
+			}
+			
+            function hideDirections() {
+                console.log('Hide directions called');
+                var dirDiv = document.getElementById('directions');
+                var mapDiv = document.getElementById('map-canvas');
+                mapDiv.style.width = '100%';
+                dirDiv.style.width = '0%';
+                return 1;
+            }
+            
+            function showDirections() {
+                console.log('Show directions called');
+                var dirDiv = document.getElementById('directions');
+                var mapDiv = document.getElementById('map-canvas');
+                mapDiv.style.width = '75%';
+                dirDiv.style.width = '25%';
+                return 2;
+            }
+            
+
+			/*
+			var javaReady = function(callback){
+				if(typeof callback == 'function'){
+					if(typeof java != 'undefined'){
+						callback();
+					} else {
+						var javaTimeout = 0;
+						var readycall = setInterval(function(){
+						javaTimeout++; 
+							if(typeof java != 'undefined' || javaTimeout > 1000){
+								try{
+									callback();
+								} catch(s){};
+								clearInterval(readycall);
+							}
+						},1);
+					}
+				}
+			};
+            var errorlistener = function(msg, url, line){ 
+				javaReady(function(){
+					java.log(msg +", url: "+url+ ", line:" + line); 
+				}); 
+			};
+			//overide onerror 
+			var onerror = errorlistener;
+			*/
+        </script>
+    </head>
+    <body onload="hideDirections()">
+        <div id="directions"></div>
+        <div id="map-canvas"></div>
+    </body>
+</html>

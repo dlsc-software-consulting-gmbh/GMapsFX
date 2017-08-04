@@ -7,9 +7,9 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>2.11.0-SNAPSHOT</version>
+    <version>2.12.1-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <licenses>
+    <licenses>   
         <license>
             <name>The Apache Software License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
@@ -25,6 +25,12 @@
         <developer>
             <name>Geoff Capper</name>
         </developer>
+        <developer>
+            <name>Thijs Walcarius</name>
+            <email>thijs.walcarius@ugent.be</email>
+            <organization>Ghent University - imec</organization>
+            <organizationUrl>http://idlab.ugent.be</organizationUrl>
+        </developer>
     </developers>
     <distributionManagement>
         <repository>
@@ -33,14 +39,13 @@
             <url>https://api.bintray.com/maven/rterp/maven/GMapsFX/;publish=1</url>
         </repository>
     </distributionManagement>
-    <!--mvn -P bintray clean deploy -->
-    <!--mvn -P release-sign-artifacts release:prepare-->
+    <!--mvn release:clean release:prepare release:perform -->
     <scm>
         <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
         <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
         <url>git@github.com:rterp/GMapsFX.git</url>
         <!--<tag>2.0.2-23</tag>-->
-        <tag>HEAD</tag>
+        <tag>GMapsFX-2.12.0</tag>
     </scm>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +63,7 @@
                 </property>
             </activation>
             <build>
-                <plugins>
+                <plugins>                                      
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -73,55 +78,14 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.8.1</version>
-                        <configuration>
-                            <use>false</use>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>2.2.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
+                   
                 </plugins>
             </build>
         </profile>
     </profiles>
     <build>
         <plugins>
-            <!--
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <extensions>true</extensions>
-                <inherited>false</inherited>
-                <configuration>
-                    <serverId>ossrh-releases</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <stagingProfileId>52088f2261e7b7</stagingProfileId>
-                </configuration>
-            </plugin>
-            -->
-        
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -192,6 +156,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <additionalparam>-Xdoclint:none</additionalparam>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -200,10 +167,20 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>                    
-        </plugins>        
+            </plugin>
+        </plugins>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.23</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.1</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -213,7 +190,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.9.5</version>
+            <version>2.7.17</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

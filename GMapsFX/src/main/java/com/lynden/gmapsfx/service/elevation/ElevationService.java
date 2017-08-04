@@ -9,6 +9,8 @@ package com.lynden.gmapsfx.service.elevation;
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import netscape.javascript.JSObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** Makes a request to the Google Maps Elevation Service.
  * <p>
@@ -18,7 +20,8 @@ import netscape.javascript.JSObject;
  * @author Geoff Capper
  */
 public class ElevationService extends JavascriptObject {
-    
+    private static final Logger LOG = LoggerFactory.getLogger(ElevationService.class);
+
     private ElevationServiceCallback callback;
     
     public ElevationService() {
@@ -46,7 +49,7 @@ public class ElevationService extends JavascriptObject {
               .append(getVariableName())
               .append(".processResponse(results, status);});");
         
-        System.out.println("ElevationService direct call: " + r.toString());
+        LOG.trace("ElevationService direct call: " + r.toString());
         
         getJSObject().eval(r.toString());
         

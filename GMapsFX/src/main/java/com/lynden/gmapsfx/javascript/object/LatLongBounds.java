@@ -46,6 +46,14 @@ public class LatLongBounds extends JavascriptObject {
         Object obj = invokeJavascript("getSouthWest");
         return new LatLong((JSObject) obj);
     }
+
+    public void extend(LatLong latLong) {
+        invokeJavascript("extend", latLong);
+    }
+
+    public boolean contains(LatLong latLong){
+        return invokeJavascriptReturnValue("contains", Boolean.class, latLong);
+    }
     
     @Override
     public String toString() {

@@ -19,15 +19,16 @@ import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
-import java.security.PrivilegedActionException;
-import javafx.scene.Node;
 import netscape.javascript.JSObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Andre
  */
 public class DirectionsRenderer extends JavascriptObject{
+    private static final Logger LOG = LoggerFactory.getLogger(DirectionsRenderer.class);
 
     public DirectionsRenderer() {
         super(GMapObjectType.DIRECTIONS_DISPLAY);
@@ -36,7 +37,7 @@ public class DirectionsRenderer extends JavascriptObject{
     public DirectionsRenderer(JSObject type) {
         super(GMapObjectType.DIRECTIONS_DISPLAY, type);
         
-        System.out.println("map: " + (getJSObject().getMember("map").toString()) + "\n"+
+        LOG.trace("map: " + (getJSObject().getMember("map").toString()) + "\n"+
                 "draggable: " + getJSObject().getMember("draggable").toString());
     }
     
@@ -48,8 +49,27 @@ public class DirectionsRenderer extends JavascriptObject{
         getJSObject().eval(getVariableName()+".setPanel("+panel.getVariableName()+");");
     }
     
-    public void setMap(GoogleMap map){
+    /*
+     * Enables to set the stroke color of the routes created using this renderer
+    */
+    public DirectionsRenderer(boolean drag, GoogleMap map, DirectionsPane panel, String strokeColor){
+        super(GMapObjectType.DIRECTIONS_DISPLAY);
+        
+        getJSObject().eval(getVariableName()+".setOptions({draggable:" +drag+", polylineOptions: { strokeColor: '"+strokeColor+"'}});");
         getJSObject().eval(getVariableName()+".setMap("+map.getVariableName()+");");
+        getJSObject().eval(getVariableName()+".setPanel("+panel.getVariableName()+");");
+    }
+    
+    public void setMap(GoogleMap map){
+        if( map == null ) {
+            getJSObject().eval(getVariableName()+".setMap(null);");
+        } else {
+            getJSObject().eval(getVariableName()+".setMap("+map.getVariableName()+");");
+        }
+    }
+    
+    public void clearDirections() {
+        setMap(null);
     }
 
     public void setOptions(String options){
