@@ -19,7 +19,7 @@ package com.lynden.gmapsfx.javascript.object;
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 
 /**
- *
+ * @see <a href="https://developers.google.com/maps/documentation/javascript/3.exp/reference#MapOptions">Google MapOptions API Documentation</a>
  * @author robt
  */
 public class MapOptions extends JavascriptObject {
@@ -39,7 +39,8 @@ public class MapOptions extends JavascriptObject {
     protected boolean zoomControl;
     protected boolean mapTypeControl;
     protected boolean scrollWheel;
-    
+    protected boolean fullscreenControl;
+		
     private String styleString;
     
     /*
@@ -58,6 +59,18 @@ public class MapOptions extends JavascriptObject {
         return this;
     }
     
+	/** Determines whether the fullscreen control is displayed on the map.
+	 * 
+	 * @param fullscreenControl
+	 * @return 
+	 */
+	public MapOptions fullscreenControl( boolean fullscreenControl ) {
+		setProperty("fullscreenControl", fullscreenControl);
+		this.fullscreenControl = fullscreenControl;
+		return this;
+	}
+	
+	
     /** This is a mistyping of MapMaker which is the option to use MapMaker tiles.
      * 
      * @param mapMarker
