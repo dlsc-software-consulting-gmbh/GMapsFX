@@ -12,3 +12,6 @@
 hs_err_pid*
 /GMapsFX/target/
 GMapsFX/nb-configuration.xml
+/GMapsFX-Examples/*/target/
+.idea
+*.iml
