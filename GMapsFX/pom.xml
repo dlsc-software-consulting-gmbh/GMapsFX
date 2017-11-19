@@ -7,7 +7,7 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>http://rterp.github.io/GMapsFX/</url>
-    <version>2.12.1-SNAPSHOT</version>
+    <version>2.12.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <licenses>   
         <license>

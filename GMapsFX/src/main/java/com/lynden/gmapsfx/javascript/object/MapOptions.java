@@ -26,7 +26,6 @@ public class MapOptions extends JavascriptObject {
     
     protected LatLong center;
     protected MapTypeIdEnum mapType;
-//    protected boolean mapMarker;
     protected boolean mapMaker;
     protected boolean overviewMapControl;
     protected boolean panControl;
@@ -40,6 +39,10 @@ public class MapOptions extends JavascriptObject {
     protected boolean mapTypeControl;
     protected boolean scrollWheel;
     protected boolean fullscreenControl;
+    protected boolean clickableIcons;
+    protected boolean disableDefaultUI;
+    protected boolean disableDoubleClickZoom;
+    protected boolean keyboardShortcuts;
 		
     private String styleString;
     
@@ -162,6 +165,30 @@ public class MapOptions extends JavascriptObject {
     public MapOptions scrollWheel(boolean scrollWheel ) {
         setProperty( "scrollwheel", scrollWheel );
         this.scrollWheel = scrollWheel;
+        return this;
+    }
+
+    public MapOptions clickableIcons(boolean clickableIcons) {
+        setProperty( "clickableIcons", clickableIcons );
+        this.clickableIcons = clickableIcons;
+        return this;
+    }
+
+    public MapOptions disableDefaultUI( boolean disableDefaultUI ) {
+        setProperty( "disableDefaultUI", disableDefaultUI );
+        this.disableDefaultUI = disableDefaultUI;
+        return this;
+    }
+
+    public MapOptions disableDoubleClickZoom( boolean disableDoubleClickZoom ) {
+        setProperty( "disableDoubleClickZoom", disableDoubleClickZoom );
+        this.disableDoubleClickZoom = disableDoubleClickZoom;
+        return this;
+    }
+
+    public MapOptions keyboardShortcuts( boolean keyboardShortcuts ) {
+        setProperty( "keyboardShortcuts", keyboardShortcuts );
+        this.keyboardShortcuts = keyboardShortcuts;
         return this;
     }
     
