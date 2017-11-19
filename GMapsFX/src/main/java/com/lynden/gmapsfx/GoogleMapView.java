@@ -349,7 +349,7 @@ public class GoogleMapView extends AnchorPane {
         return direc;
     }
 
-    public void addMapInializedListener(MapComponentInitializedListener listener) {
+    public void addMapInitializedListener(MapComponentInitializedListener listener) {
         synchronized (mapInitializedListeners) {
             mapInitializedListeners.add(listener);
         }
@@ -462,7 +462,7 @@ public class GoogleMapView extends AnchorPane {
 
             if (event instanceof MouseEvent) {
                 MouseEvent mouseEvent = (MouseEvent) event;
-                if (mouseEvent.getClickCount() == 2) {
+                if (mouseEvent.getClickCount() > 1) {
                     if (disableDoubleClick) {
                         mouseEvent.consume();
                     }
