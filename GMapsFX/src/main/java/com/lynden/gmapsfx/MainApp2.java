@@ -59,7 +59,7 @@ public class MainApp2 extends Application implements MapComponentInitializedList
     @Override
     public void start(final Stage stage) throws Exception {
         mapComponent = new GoogleMapView();
-        mapComponent.addMapInializedListener(this);
+        mapComponent.addMapInitializedListener(this);
         mapComponent.setDisableDoubleClick(true);
         mapComponent.getWebview().getEngine().setOnAlert((WebEvent<String> event) -> {
          //   System.out.println("Event event: " + event);

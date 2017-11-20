@@ -39,6 +39,7 @@ import com.lynden.gmapsfx.shapes.Polyline;
 import com.lynden.gmapsfx.shapes.PolylineOptions;
 import com.lynden.gmapsfx.shapes.Rectangle;
 import com.lynden.gmapsfx.shapes.RectangleOptions;
+import com.lynden.gmapsfx.util.MarkerImageFactory;
 import java.util.Locale;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -87,7 +88,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
     public void start(final Stage stage) throws Exception {
         System.out.println("Java version: " + System.getProperty("java.home"));
         mapComponent = new GoogleMapView(Locale.getDefault().getLanguage(), null);
-        mapComponent.addMapInializedListener(this);
+        mapComponent.addMapInitializedListener(this);
                 
         BorderPane bp = new BorderPane();
         ToolBar tb = new ToolBar();

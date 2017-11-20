@@ -44,7 +44,7 @@ public class ClusteredMainApp extends Application implements MapComponentInitial
     @Override
     public void start(final Stage stage) throws Exception {
         mapComponent = new ClusteredGoogleMapView(null, Locale.getDefault().getLanguage(), null, true);
-        mapComponent.addMapInializedListener(this);
+        mapComponent.addMapInitializedListener(this);
                 
         BorderPane bp = new BorderPane();
         ToolBar tb = new ToolBar();
