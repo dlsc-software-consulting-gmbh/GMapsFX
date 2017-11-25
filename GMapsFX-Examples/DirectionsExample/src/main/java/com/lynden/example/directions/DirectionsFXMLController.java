@@ -50,7 +50,7 @@ public class DirectionsFXMLController implements Initializable, MapComponentInit
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        mapView.addMapInializedListener(this);
+        mapView.addMapInitializedListener(this);
         to.bindBidirectional(toTextField.textProperty());
         from.bindBidirectional(fromTextField.textProperty());
     }
