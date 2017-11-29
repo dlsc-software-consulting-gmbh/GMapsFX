@@ -99,7 +99,7 @@
         <dependency>
             <groupId>com.lynden</groupId>
             <artifactId>GMapsFX</artifactId>
-            <version>2.12.1-SNAPSHOT</version>
+            <version>2.12.2-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
