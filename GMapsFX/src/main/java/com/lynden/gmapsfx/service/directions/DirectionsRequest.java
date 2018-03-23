@@ -34,42 +34,42 @@ public class DirectionsRequest extends JavascriptObject{
         this.opt = opt;
     }
         
-    public DirectionsRequest(String addressOrigin, String addressDestination, TravelModes travelModes){
-        this(addressOrigin, null, addressDestination, null, travelModes, null, null);
+    public DirectionsRequest(String addressOrigin, String addressDestination, TravelModes travelModes, boolean provideRouteAlternatives){
+        this(addressOrigin, null, addressDestination, null, travelModes, null, null, true);
     }
     
-    public DirectionsRequest(LatLong latLongOrigin, LatLong latLongDestination, TravelModes travelModes){
-        this(null, latLongOrigin, null, latLongDestination, travelModes, null, null);
-    }
-    
-    public DirectionsRequest(LatLong latLongOrigin, LatLong latLongDestination, TravelModes travelModes,
-            DrivingOptions drivingOpttions){
-        this(null, latLongOrigin, null, latLongDestination, travelModes, drivingOpttions, null);
-    }
-    
-    public DirectionsRequest(String addressOrigin, String addressDestination, TravelModes travelModes,
-            DrivingOptions drivingOpttions){
-        this(addressOrigin, null, addressDestination, null, travelModes, drivingOpttions, null);
+    public DirectionsRequest(LatLong latLongOrigin, LatLong latLongDestination, TravelModes travelModes, boolean provideRouteAlternatives){
+        this(null, latLongOrigin, null, latLongDestination, travelModes, null, null, true);
     }
     
     public DirectionsRequest(LatLong latLongOrigin, LatLong latLongDestination, TravelModes travelModes,
-            DrivingOptions drivingOpttions, DirectionsWaypoint[] waypoints){
-        this(null, latLongOrigin, null, latLongDestination, travelModes, drivingOpttions, waypoints);
+            DrivingOptions drivingOpttions, boolean provideRouteAlternatives){
+        this(null, latLongOrigin, null, latLongDestination, travelModes, drivingOpttions, null, true);
     }
     
     public DirectionsRequest(String addressOrigin, String addressDestination, TravelModes travelModes,
-            DrivingOptions drivingOpttions, DirectionsWaypoint[] waypoints){
-        this(addressOrigin, null, addressDestination, null, travelModes, drivingOpttions, waypoints);
+            DrivingOptions drivingOpttions, boolean provideRouteAlternatives){
+        this(addressOrigin, null, addressDestination, null, travelModes, drivingOpttions, null, true);
     }
     
     public DirectionsRequest(LatLong latLongOrigin, LatLong latLongDestination, TravelModes travelModes,
-            DirectionsWaypoint[] waypoints){
-        this(null, latLongOrigin, null, latLongDestination, travelModes, null, waypoints);
+            DrivingOptions drivingOpttions, DirectionsWaypoint[] waypoints, boolean provideRouteAlternatives){
+        this(null, latLongOrigin, null, latLongDestination, travelModes, drivingOpttions, waypoints, true);
     }
     
     public DirectionsRequest(String addressOrigin, String addressDestination, TravelModes travelModes,
-            DirectionsWaypoint[] waypoints){
-        this(addressOrigin, null, addressDestination, null, travelModes, null, waypoints);
+            DrivingOptions drivingOpttions, DirectionsWaypoint[] waypoints, boolean provideRouteAlternatives){
+        this(addressOrigin, null, addressDestination, null, travelModes, drivingOpttions, waypoints, true);
+    }
+    
+    public DirectionsRequest(LatLong latLongOrigin, LatLong latLongDestination, TravelModes travelModes,
+            DirectionsWaypoint[] waypoints, boolean provideRouteAlternatives){
+        this(null, latLongOrigin, null, latLongDestination, travelModes, null, waypoints, true);
+    }
+    
+    public DirectionsRequest(String addressOrigin, String addressDestination, TravelModes travelModes,
+            DirectionsWaypoint[] waypoints, boolean provideRouteAlternatives){
+        this(addressOrigin, null, addressDestination, null, travelModes, null, waypoints, true);
     }
     
     public DirectionsRequest(String addressOrigin, LatLong latLongOrigin, 
@@ -78,8 +78,8 @@ public class DirectionsRequest extends JavascriptObject{
             // transit options
             DrivingOptions drivingOptions,
             //unit system
-            DirectionsWaypoint[] waypoints){
-        super(GMapObjectType.DIRECTIONS_REQUESTS, convertToJavascriptString(addressOrigin, latLongOrigin, addressDestination, latLongDestination, travelmode, drivingOptions, waypoints));
+            DirectionsWaypoint[] waypoints, boolean provideRouteAlternatives){
+        super(GMapObjectType.DIRECTIONS_REQUESTS, convertToJavascriptString(addressOrigin, latLongOrigin, addressDestination, latLongDestination, travelmode, drivingOptions, waypoints, provideRouteAlternatives));
     }
     
     private static String convertToJavascriptString(String addressOrigin, LatLong latLongOrigin, 
@@ -88,7 +88,7 @@ public class DirectionsRequest extends JavascriptObject{
             // transit options
             DrivingOptions drivingOptions,
             //unit system
-            DirectionsWaypoint[] waypoints){
+            DirectionsWaypoint[] waypoints, boolean provideRouteAlternatives){
         
         
         StringBuilder builder = new StringBuilder();
@@ -119,6 +119,11 @@ public class DirectionsRequest extends JavascriptObject{
         if (drivingOptions != null) {
             builder.append(something ? "," : "");
             builder.append("drivingOptions: ").append(drivingOptions.getVariableName());
+            something = true;
+        }
+        if (provideRouteAlternatives) {
+            builder.append(something ? "," : "");
+            builder.append("provideRouteAlternatives: true");
             something = true;
         }
         if(waypoints != null){
