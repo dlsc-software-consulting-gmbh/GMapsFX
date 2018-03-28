@@ -337,7 +337,7 @@ public class MainApp extends Application implements MapComponentInitializedListe
                 "Belo Horizonte - MG",
                 "Rio de Janeiro - RJ",
                 TravelModes.DRIVING,
-                dw);
+                dw, false);
         ds.getRoute(dr, this, renderer);
         
         LatLong[] location = new LatLong[1];

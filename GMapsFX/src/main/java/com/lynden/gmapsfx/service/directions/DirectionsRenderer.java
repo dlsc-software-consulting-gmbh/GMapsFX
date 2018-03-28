@@ -79,6 +79,14 @@ public class DirectionsRenderer extends JavascriptObject{
     public void setPanel(DirectionsPane panel){
         getJSObject().eval(getVariableName()+".setPanel("+panel.getVariableName()+");");
     }
+	
+	public int getRoutesCount(){
+		return Integer.valueOf(getJSObject().eval(getVariableName()+".directions.routes.length").toString());
+	}
+	
+	public void setRouteIndex(int index){
+		getJSObject().eval(getVariableName()+".setRouteIndex("+index+");");
+	}
 
     @Override
     public String toString() {
