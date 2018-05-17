@@ -83,7 +83,8 @@ public class MainApp extends Application implements MapComponentInitializedListe
     public void start(final Stage stage) throws Exception {
         System.out.println("Java version: " + System.getProperty("java.home"));
         Locale locale = Locale.getDefault();
-		mapComponent = new GoogleMapView(locale.getLanguage(), locale.getCountry(), null);
+		mapComponent = new GoogleMapView(null, locale.getLanguage(), locale.getCountry());
+
         mapComponent.addMapInitializedListener(this);
                 
         BorderPane bp = new BorderPane();

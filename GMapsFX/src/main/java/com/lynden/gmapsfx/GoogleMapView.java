@@ -128,10 +128,6 @@ public class GoogleMapView extends AnchorPane {
         this(null, debug);
     }
     
-    public GoogleMapView(@NamedArg("key") String key, @NamedArg("language") String language, @NamedArg("region") String region) {
-    	this(null, language, region, key, false);
-    }
-    
     /**
      * Creates a new map view and specifies if the FireBug pane should be
      * displayed in the WebView
@@ -152,6 +148,10 @@ public class GoogleMapView extends AnchorPane {
      */
     public GoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath, @NamedArg("key") String key, @NamedArg("debug") boolean debug) {
         this(mapResourcePath, "en", "US", key, debug);
+    }
+    
+    public GoogleMapView(@NamedArg("key") String key, @NamedArg("language") String language, @NamedArg("region") String region) {
+    	this(null, language, region, key, false);
     }
 
     /**
