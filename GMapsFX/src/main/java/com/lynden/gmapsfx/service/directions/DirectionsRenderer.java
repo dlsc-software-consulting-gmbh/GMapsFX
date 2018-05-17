@@ -15,20 +15,21 @@
  */
 package com.lynden.gmapsfx.service.directions;
 
+import java.util.logging.Logger;
+
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
+
 import netscape.javascript.JSObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Andre
  */
 public class DirectionsRenderer extends JavascriptObject{
-    private static final Logger LOG = LoggerFactory.getLogger(DirectionsRenderer.class);
+    private static final Logger LOG = Logger.getLogger(DirectionsRenderer.class.getName());
 
     public DirectionsRenderer() {
         super(GMapObjectType.DIRECTIONS_DISPLAY);
@@ -37,7 +38,7 @@ public class DirectionsRenderer extends JavascriptObject{
     public DirectionsRenderer(JSObject type) {
         super(GMapObjectType.DIRECTIONS_DISPLAY, type);
         
-        LOG.trace("map: " + (getJSObject().getMember("map").toString()) + "\n"+
+        LOG.finer("map: " + (getJSObject().getMember("map").toString()) + "\n"+
                 "draggable: " + getJSObject().getMember("draggable").toString());
     }
     

@@ -15,18 +15,19 @@
  */
 package com.lynden.gmapsfx.service.directions;
 
+import java.util.logging.Logger;
+
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
+
 import netscape.javascript.JSObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Andre
  */
 public class DirectionsService extends JavascriptObject{
-    private static final Logger LOG = LoggerFactory.getLogger(DirectionsService.class);
+    private static final Logger LOG = Logger.getLogger(DirectionsService.class.getName());
 
     public DirectionsServiceCallback callback;
     public DirectionsRenderer renderer;
@@ -54,21 +55,21 @@ public class DirectionsService extends JavascriptObject{
                 .append(".processResponse(results, status);\n}")
                 .append("});");
         
-        LOG.trace("Directions direct call: " + r.toString());
+        LOG.finer("Directions direct call: " + r.toString());
         try{
             getJSObject().eval(r.toString());
         } catch(Throwable t){
-            LOG.error(t.getMessage());
+            LOG.severe(t.getMessage());
         }
     }
     
      public void processResponse(Object results, Object status) {
-        LOG.trace("STATUS: {}",status);
+        LOG.finer("STATUS: {}" + status);
         DirectionStatus pStatus = DirectionStatus.UNKNOWN_ERROR;
         if (status instanceof String && results instanceof JSObject) {
             pStatus = DirectionStatus.valueOf((String) status);
             if (DirectionStatus.OK.equals(pStatus)) {
-                LOG.trace("\n\nResults: " + results);
+                LOG.finer("\n\nResults: " + results);
                 DirectionsResult ers = new DirectionsResult((JSObject) results);
                 callback.directionsReceived(ers, pStatus);
                 return;

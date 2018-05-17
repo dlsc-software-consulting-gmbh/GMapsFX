@@ -1,9 +1,31 @@
 package com.lynden.gmapsfx;
 
+import java.util.Locale;
+
 import com.lynden.gmapsfx.javascript.event.UIEventType;
-import com.lynden.gmapsfx.javascript.object.*;
+import com.lynden.gmapsfx.javascript.object.Animation;
+import com.lynden.gmapsfx.javascript.object.ClusteredGoogleMap;
+import com.lynden.gmapsfx.javascript.object.DirectionsPane;
+import com.lynden.gmapsfx.javascript.object.InfoWindow;
+import com.lynden.gmapsfx.javascript.object.InfoWindowOptions;
+import com.lynden.gmapsfx.javascript.object.LatLong;
+import com.lynden.gmapsfx.javascript.object.LatLongBounds;
+import com.lynden.gmapsfx.javascript.object.MVCArray;
+import com.lynden.gmapsfx.javascript.object.MapOptions;
+import com.lynden.gmapsfx.javascript.object.MapTypeIdEnum;
+import com.lynden.gmapsfx.javascript.object.Marker;
+import com.lynden.gmapsfx.javascript.object.MarkerOptions;
 import com.lynden.gmapsfx.service.directions.DirectionsRenderer;
-import com.lynden.gmapsfx.shapes.*;
+import com.lynden.gmapsfx.shapes.ArcBuilder;
+import com.lynden.gmapsfx.shapes.Circle;
+import com.lynden.gmapsfx.shapes.CircleOptions;
+import com.lynden.gmapsfx.shapes.Polygon;
+import com.lynden.gmapsfx.shapes.PolygonOptions;
+import com.lynden.gmapsfx.shapes.Polyline;
+import com.lynden.gmapsfx.shapes.PolylineOptions;
+import com.lynden.gmapsfx.shapes.Rectangle;
+import com.lynden.gmapsfx.shapes.RectangleOptions;
+
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -14,8 +36,6 @@ import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-
-import java.util.Locale;
 
 /**
  * Example Application for creating and loading a GoogleMap into a JavaFX
@@ -43,7 +63,8 @@ public class ClusteredMainApp extends Application implements MapComponentInitial
         
     @Override
     public void start(final Stage stage) throws Exception {
-        mapComponent = new ClusteredGoogleMapView(null, Locale.getDefault().getLanguage(), null, true);
+        Locale locale = Locale.getDefault();
+		mapComponent = new ClusteredGoogleMapView(null, locale.getLanguage(), locale.getCountry(), null, true);
         mapComponent.addMapInitializedListener(this);
                 
         BorderPane bp = new BorderPane();

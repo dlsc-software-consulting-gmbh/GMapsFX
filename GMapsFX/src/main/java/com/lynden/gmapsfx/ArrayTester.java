@@ -16,10 +16,13 @@
 
 package com.lynden.gmapsfx;
 
+import java.util.logging.Logger;
+
 import com.lynden.gmapsfx.javascript.JavaFxWebEngine;
 import com.lynden.gmapsfx.javascript.JavascriptArray;
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
+
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -29,15 +32,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import netscape.javascript.JSObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Geoff Capper
  */
 public class ArrayTester extends Application {
-    private static final Logger LOG = LoggerFactory.getLogger(ArrayTester.class);
+    private static final Logger LOG = Logger.getLogger(ArrayTester.class.getName());
     
     protected WebView webview;
     protected JavaFxWebEngine webengine;
@@ -80,37 +81,37 @@ public class ArrayTester extends Application {
         int len = 0;
         for (int i = 0; i < 6; i++) {
             len = ary.push("String " + i);
-            LOG.debug("testArrays push " + i + " gives len: " + len);
+            LOG.finest("testArrays push " + i + " gives len: " + len);
         }
         
-        LOG.debug("testArrays toString: " + ary.toString());
+        LOG.finest("testArrays toString: " + ary.toString());
         
         ary.reverse();
         
-        LOG.debug("testArrays reverse toString: " + ary.toString());
+        LOG.finest("testArrays reverse toString: " + ary.toString());
         
         ary.reverse();
         
         Object obj = ary.pop();
         
-        LOG.debug("testArrays popped: " + obj);
-        LOG.debug("testArrays popped toString: " + ary.toString());
+        LOG.finest("testArrays popped: " + obj);
+        LOG.finest("testArrays popped toString: " + ary.toString());
         
         TestJSO jso = new TestJSO();
         jso.setTestName("Test 1");
         
         ary.unshift(jso);
         
-        LOG.debug("testArrays unshift JsO toString: " + ary.toString());
+        LOG.finest("testArrays unshift JsO toString: " + ary.toString());
         
         Object jso1 = ary.shift();
         
-        LOG.debug("testArrays shift JsO: " + jso1);
-        LOG.debug("testArrays shift JsO reference equality: " + (jso == jso1));
-        LOG.debug("testArrays shift JsO toString: " + ary.toString());
+        LOG.finest("testArrays shift JsO: " + jso1);
+        LOG.finest("testArrays shift JsO reference equality: " + (jso == jso1));
+        LOG.finest("testArrays shift JsO toString: " + ary.toString());
         
         ary.push(jso);
-        LOG.debug("testArrays push JsO toString: " + ary.toString());
+        LOG.finest("testArrays push JsO toString: " + ary.toString());
         
         jsWin.call("displayArray", ary);
         
@@ -118,10 +119,10 @@ public class ArrayTester extends Application {
         
         jsWin.call("displayArray", ary);
         
-        LOG.debug("testArrays alter JsO toString: " + ary.toString());
+        LOG.finest("testArrays alter JsO toString: " + ary.toString());
         
         Object jso2 = ary.get(ary.length() - 1);
-        LOG.debug("testArrays get JsO2: " + jso2);
+        LOG.finest("testArrays get JsO2: " + jso2);
         
         jsWin.call("iterateArray", ary);
         

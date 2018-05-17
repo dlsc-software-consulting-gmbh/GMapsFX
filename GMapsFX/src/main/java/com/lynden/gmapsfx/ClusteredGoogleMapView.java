@@ -4,6 +4,8 @@ import com.lynden.gmapsfx.javascript.object.ClusteredGoogleMap;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
 
+import javafx.beans.NamedArg;
+
 /**
  * User: twalcari
  * Date: 1/9/2015
@@ -15,29 +17,25 @@ public class ClusteredGoogleMapView extends GoogleMapView {
         super();
     }
 
-    public ClusteredGoogleMapView(boolean debug) {
-        super(debug);
-    }
+	public ClusteredGoogleMapView(@NamedArg("debug") boolean debug) {
+		super(debug);
+	}
 
-    public ClusteredGoogleMapView(String mapResourcePath) {
-        super(mapResourcePath);
-    }
+	public ClusteredGoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath) {
+		super(mapResourcePath);
+	}
 
-    public ClusteredGoogleMapView(String mapResourcePath, boolean debug) {
-        super(mapResourcePath, debug);
-    }
+	public ClusteredGoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath, @NamedArg("debug") boolean debug) {
+		super(mapResourcePath, debug);
+	}
 
-    public ClusteredGoogleMapView(String language, String key) {
-        super(language, key);
-    }
+	public ClusteredGoogleMapView(@NamedArg("language") String language, @NamedArg("region") String region, @NamedArg("key") String key) {
+		super(language, region, key);
+	}
 
-    public ClusteredGoogleMapView(String mapResourcePath, String language, String key, boolean debug) {
-        super(mapResourcePath, language, key, debug);
-    }
-
-    public ClusteredGoogleMapView(String mapResourcePath, String language, String region, String key, boolean debug) {
-        super(mapResourcePath, language, region, key, debug);
-    }
+	public ClusteredGoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath, @NamedArg("language") String language, @NamedArg("region") String region, @NamedArg("key") String key, @NamedArg("debug") boolean debug) {
+		super(mapResourcePath, language, region, key, debug);
+	}
 
     @Override
     public ClusteredGoogleMap createMap() {

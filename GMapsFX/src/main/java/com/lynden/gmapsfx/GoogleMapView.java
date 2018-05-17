@@ -15,6 +15,17 @@
  */
 package com.lynden.gmapsfx;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CyclicBarrier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Text;
+
 import com.lynden.gmapsfx.javascript.JavaFxWebEngine;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
 import com.lynden.gmapsfx.javascript.event.MapStateEventType;
@@ -22,11 +33,10 @@ import com.lynden.gmapsfx.javascript.object.DirectionsPane;
 import com.lynden.gmapsfx.javascript.object.GoogleMap;
 import com.lynden.gmapsfx.javascript.object.LatLong;
 import com.lynden.gmapsfx.javascript.object.MapOptions;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.CyclicBarrier;
+import com.lynden.gmapsfx.util.MarkerImageFactory;
+
 import javafx.application.Platform;
+import javafx.beans.NamedArg;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
@@ -39,21 +49,13 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import netscape.javascript.JSObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Text;
 
 /**
  *
  * @author Rob Terpilowski
  */
 public class GoogleMapView extends AnchorPane {
-
-    private static final Logger LOG = LoggerFactory.getLogger(GoogleMapView.class);
-
+	
     protected static final String GOOGLE_MAPS_API_LINK = "https://maps.googleapis.com/maps/api/js?v=3.exp";
     protected static final String GOOGLE_MAPS_API_VERSION = "3.exp";
 
@@ -75,11 +77,7 @@ public class GoogleMapView extends AnchorPane {
     public GoogleMapView() {
         this(false);
     }
-
-    public GoogleMapView(boolean debug) {
-        this(null, debug);
-    }
-
+    
     /**
      * Allows for the creation of the map using external resources from another
      * jar for the html page and markers. The map html page must be sourced from
@@ -122,10 +120,18 @@ public class GoogleMapView extends AnchorPane {
      *
      * @param mapResourcePath
      */
-    public GoogleMapView(String mapResourcePath) {
+    public GoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath) {
         this(mapResourcePath, false);
     }
 
+    public GoogleMapView(@NamedArg("debug") boolean debug) {
+        this(null, debug);
+    }
+    
+    public GoogleMapView(@NamedArg("key") String key, @NamedArg("language") String language, @NamedArg("region") String region) {
+    	this(null, language, region, key, false);
+    }
+    
     /**
      * Creates a new map view and specifies if the FireBug pane should be
      * displayed in the WebView
@@ -133,30 +139,19 @@ public class GoogleMapView extends AnchorPane {
      * @param mapResourcePath
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
-    public GoogleMapView(String mapResourcePath, boolean debug) {
-        this(mapResourcePath, null, null, debug);
-    }
-
-    /**
-     * Creates a new map view and specifies the display language and API key.
-     *
-     * @param language map display language, null for default
-     * @param key Google Maps API key or null
-     */
-    public GoogleMapView(String language, String key) {
-        this(null, language, key, false);
-    }
+	public GoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath, @NamedArg("debug") boolean debug) {
+		this(mapResourcePath, "en", "US", null, debug);
+	}
 
     /**
      * Creates a new map view and specifies the display language and API key.
      *
      * @param mapResourcePath
-     * @param language map display language, null for default
      * @param key Google Maps API key or null
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
-    public GoogleMapView(String mapResourcePath, String language, String key, boolean debug) {
-        this(mapResourcePath, language, null, key, debug);
+    public GoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath, @NamedArg("key") String key, @NamedArg("debug") boolean debug) {
+        this(mapResourcePath, "en", "US", key, debug);
     }
 
     /**
@@ -172,9 +167,9 @@ public class GoogleMapView extends AnchorPane {
      * @param key Google Maps API key or null
      * @param debug true if the FireBug pane should be displayed in the WebView.
      */
-    public GoogleMapView(String mapResourcePath, String language, String region, String key, boolean debug) {
-        this.language = "en";
-        this.region = "US";
+	public GoogleMapView(@NamedArg("mapResourcePath") String mapResourcePath, @NamedArg("language") String language, @NamedArg("region") String region, @NamedArg("key") String key, @NamedArg("debug") boolean debug) {
+        this.language = language;
+        this.region = region;
         this.key = key;
 
         String htmlFile;
@@ -204,8 +199,8 @@ public class GoogleMapView extends AnchorPane {
                 webview.widthProperty().addListener(e -> mapResized());
                 webview.heightProperty().addListener(e -> mapResized());
 
-                webengine.setOnAlert(e -> LOG.info("Alert: " + e.getData()));
-                webengine.setOnError(e -> LOG.error("Error: " + e.getMessage()));
+                webengine.setOnAlert(e -> Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.INFO, "Alert: " + e.getData()));
+                webengine.setOnError(e -> Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.FINEST, "Error: " + e.getMessage()));
 
                 webengine.getLoadWorker().stateProperty().addListener(
                         new ChangeListener<Worker.State>() {
@@ -471,5 +466,5 @@ public class GoogleMapView extends AnchorPane {
             return originalDispatcher.dispatchEvent(event, tail);
         }
     }
-
+    
 }

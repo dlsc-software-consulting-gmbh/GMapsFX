@@ -16,19 +16,20 @@
 
 package com.lynden.gmapsfx.service.geocoding;
 
+import java.util.logging.Logger;
+
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
+
 import netscape.javascript.JSObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Rob Terpilowski
  */
 public class GeocodingService extends JavascriptObject {
-    private static final Logger LOG = LoggerFactory.getLogger(GeocodingService.class);
+    private static final Logger LOG = Logger.getLogger(GeocodingService.class.getName());
     
     public GeocodingServiceCallback callback;
     
@@ -59,7 +60,7 @@ public class GeocodingService extends JavascriptObject {
               .append(getVariableName())
               .append(".processResponse(results, status);});");
         
-        LOG.trace("Geocoding direct call: " + r.toString());
+        LOG.finer("Geocoding direct call: " + r.toString());
         
         getJSObject().eval(r.toString());
     }
