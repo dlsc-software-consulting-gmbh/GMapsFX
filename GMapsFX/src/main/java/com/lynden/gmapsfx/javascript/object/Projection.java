@@ -38,5 +38,14 @@ public class Projection extends JavascriptObject {
         }
         return null;
     }
-    
+
+    public LatLong fromPointToLatLng(GMapPoint point) {
+        //        System.out.println("Projection.fromPointToLatLng: " + loc);
+        Object res = invokeJavascript("fromPointToLatLng", point);
+        //        System.out.println("Projection.fromLatLngToPoint.res: " + res);
+        if (res != null && res instanceof JSObject) {
+            return new LatLong((JSObject) res);
+        }
+        return null;
+    }
 }

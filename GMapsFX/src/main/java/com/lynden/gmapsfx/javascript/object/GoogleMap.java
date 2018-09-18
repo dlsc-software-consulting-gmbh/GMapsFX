@@ -353,6 +353,41 @@ public class GoogleMap extends JavascriptObject {
     }
 
     /**
+     * Returns the LatLong for the provided screen point. Note: Unexpected
+     * results can be obtained if this method is called as a result of a zoom
+     * change, as the zoom event is fired before the bounds are updated, and
+     * bounds need to be used to obtain the answer!
+     * <p>
+     * One workaround is to only operate off bounds_changed events.
+     *
+     * @param point
+     * @return
+     */
+    public LatLong fromPointToLatLng(Point2D point) {
+//        System.out.println("GoogleMap.fromPointToLatLng point: " + point);
+        Projection proj = getProjection();
+        //System.out.println("map.fromPointToLatLng Projection: " + proj);
+        LatLongBounds llb = getBounds();
+//        System.out.println("GoogleMap.fromPointToLatLng Bounds: " + llb);
+
+        GMapPoint topRight = proj.fromLatLngToPoint(llb.getNorthEast());
+//        System.out.println("GoogleMap.fromLatLngToPoint topRight: " + topRight);
+        GMapPoint bottomLeft = proj.fromLatLngToPoint(llb.getSouthWest());
+//        System.out.println("GoogleMap.fromLatLngToPoint bottomLeft: " + bottomLeft);
+
+        double scale = Math.pow(2, getZoom());
+        double wpx = point.getX() / scale + bottomLeft.getX();
+        double wpy = point.getY() / scale + topRight.getY();
+        GMapPoint worldPoint = new GMapPoint(wpx, wpy);
+//        System.out.println("GoogleMap.fromPointToLatLng worldPoint: " + worldPoint);
+
+        LatLong loc = proj.fromPointToLatLng(worldPoint);
+
+//        System.out.println("GoogleMap.fromPointToLatLng loc: " + loc);
+        return loc;
+    }
+
+    /**
      * Registers an event handler in the repository shared between Javascript
      * and Java.
      *
