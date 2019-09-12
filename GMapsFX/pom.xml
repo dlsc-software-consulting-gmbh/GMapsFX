@@ -52,6 +52,7 @@
         <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <versao.javafx>8.0.121-b13</versao.javafx>
     </properties>
     <profiles>
         <profile>
@@ -158,6 +159,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
                     <additionalparam>-Xdoclint:none</additionalparam>
+                    <doclint>none</doclint>
                 </configuration>
                 <executions>
                     <execution>
@@ -181,6 +183,13 @@
 <!--             <artifactId>logback-classic</artifactId> -->
 <!--             <version>1.2.1</version> -->
 <!--         </dependency> -->
+		<dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>javafx</artifactId>
+			<version>${versao.javafx}</version>
+			<systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
+			<scope>system</scope>
+		</dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

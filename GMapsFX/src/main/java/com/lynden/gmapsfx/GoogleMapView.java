@@ -40,6 +40,7 @@ import javafx.beans.NamedArg;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Worker;
+import javafx.concurrent.Worker.State;
 import javafx.event.Event;
 import javafx.event.EventDispatchChain;
 import javafx.event.EventDispatcher;
@@ -203,16 +204,14 @@ public class GoogleMapView extends AnchorPane {
                 webengine.setOnError(e -> Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.FINEST, "Error: " + e.getMessage()));
 
                 webengine.getLoadWorker().stateProperty().addListener(
-                        new ChangeListener<Worker.State>() {
-                    public void changed(ObservableValue ov, Worker.State oldState, Worker.State newState) {
-                        if (newState == Worker.State.SUCCEEDED) {
-                            initialiseScript();
-                            //setInitialized(true);
-                            //fireMapInitializedListeners();
+                        (ChangeListener<State>) (ov, oldState, newState) -> {
+						    if (newState == Worker.State.SUCCEEDED) {
+						        initialiseScript();
+						        //setInitialized(true);
+						        //fireMapInitializedListeners();
 
-                        }
-                    }
-                });
+						    }
+						});
                 webengine.load(getClass().getResource(htmlFile).toExternalForm());
             } finally {
                 latch.countDown();

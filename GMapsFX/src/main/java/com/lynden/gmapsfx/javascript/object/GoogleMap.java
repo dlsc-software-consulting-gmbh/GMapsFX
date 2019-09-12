@@ -15,9 +15,12 @@
  */
 package com.lynden.gmapsfx.javascript.object;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.JavascriptRuntime;
-
 import com.lynden.gmapsfx.javascript.event.EventHandlers;
 import com.lynden.gmapsfx.javascript.event.GFXEventHandler;
 import com.lynden.gmapsfx.javascript.event.MapStateEventType;
@@ -25,9 +28,7 @@ import com.lynden.gmapsfx.javascript.event.MouseEventHandler;
 import com.lynden.gmapsfx.javascript.event.StateEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventHandler;
 import com.lynden.gmapsfx.javascript.event.UIEventType;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -36,10 +37,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.util.Callback;
 import netscape.javascript.JSObject;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  *
@@ -295,7 +292,7 @@ public class GoogleMap extends JavascriptObject {
 
     public Projection getProjection() {
         Object obj = invokeJavascript("getProjection");
-        return (obj == null) ? null : new Projection((JSObject) obj);
+        return obj == null ? null : new Projection((JSObject) obj);
     }
 
     /**
@@ -353,6 +350,41 @@ public class GoogleMap extends JavascriptObject {
     }
 
     /**
+     * Returns the LatLong for the provided screen point. Note: Unexpected
+     * results can be obtained if this method is called as a result of a zoom
+     * change, as the zoom event is fired before the bounds are updated, and
+     * bounds need to be used to obtain the answer!
+     * <p>
+     * One workaround is to only operate off bounds_changed events.
+     *
+     * @param point
+     * @return
+     */
+    public LatLong fromPointToLatLng(Point2D point) {
+//        System.out.println("GoogleMap.fromPointToLatLng point: " + point);
+        Projection proj = getProjection();
+        //System.out.println("map.fromPointToLatLng Projection: " + proj);
+        LatLongBounds llb = getBounds();
+//        System.out.println("GoogleMap.fromPointToLatLng Bounds: " + llb);
+
+        GMapPoint topRight = proj.fromLatLngToPoint(llb.getNorthEast());
+//        System.out.println("GoogleMap.fromLatLngToPoint topRight: " + topRight);
+        GMapPoint bottomLeft = proj.fromLatLngToPoint(llb.getSouthWest());
+//        System.out.println("GoogleMap.fromLatLngToPoint bottomLeft: " + bottomLeft);
+
+        double scale = Math.pow(2, getZoom());
+        double wpx = point.getX() / scale + bottomLeft.getX();
+        double wpy = point.getY() / scale + topRight.getY();
+        GMapPoint worldPoint = new GMapPoint(wpx, wpy);
+//        System.out.println("GoogleMap.fromPointToLatLng worldPoint: " + worldPoint);
+
+        LatLong loc = proj.fromPointToLatLng(worldPoint);
+
+//        System.out.println("GoogleMap.fromPointToLatLng loc: " + loc);
+        return loc;
+    }
+
+    /**
      * Registers an event handler in the repository shared between Javascript
      * and Java.
      *
@@ -362,7 +394,7 @@ public class GoogleMap extends JavascriptObject {
     private String registerEventHandler(GFXEventHandler h) {
         //checkInitialized();
         if (!registeredOnJS) {
-            JSObject doc = (JSObject) runtime.execute("document");
+            JSObject doc = runtime.execute("document");
             doc.setMember("jsHandlers", jsHandlers);
             registeredOnJS = true;
         }

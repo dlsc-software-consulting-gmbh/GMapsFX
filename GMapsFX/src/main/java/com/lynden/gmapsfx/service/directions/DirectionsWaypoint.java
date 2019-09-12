@@ -15,11 +15,13 @@
  */
 package com.lynden.gmapsfx.service.directions;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.lynden.gmapsfx.javascript.JavascriptObject;
 import com.lynden.gmapsfx.javascript.object.GMapObjectType;
 import com.lynden.gmapsfx.javascript.object.LatLong;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import netscape.javascript.JSObject;
 
 /**
@@ -38,8 +40,9 @@ public class DirectionsWaypoint extends JavascriptObject{
     }
     
     public DirectionsWaypoint(LatLong l){
-        super(GMapObjectType.DIRECTIONS_WAYPOINT, "{location: " + l + "}");
-        //getJSObject().setMember("location", l);
+    	super(GMapObjectType.DIRECTIONS_WAYPOINT, "{location: " + l.getVariableName() + "}");
+//        super(GMapObjectType.DIRECTIONS_WAYPOINT, "{location: " + l + "}");
+        //getJSObject().setMember("location", l); // ja estava comentado
     }
     
     public DirectionsWaypoint(JSObject jsObject) {

@@ -17,6 +17,7 @@
 package com.lynden.gmapsfx.javascript.object;
 
 import com.lynden.gmapsfx.javascript.JavascriptObject;
+
 import netscape.javascript.JSObject;
 
 /**
@@ -24,6 +25,10 @@ import netscape.javascript.JSObject;
  * @author Geoff Capper
  */
 public class GMapPoint extends JavascriptObject {
+	
+	public GMapPoint(double x, double y) {
+        super(GMapObjectType.POINT, x, y);
+    }
     
     public GMapPoint(JSObject obj) {
         super(GMapObjectType.POINT, obj);
