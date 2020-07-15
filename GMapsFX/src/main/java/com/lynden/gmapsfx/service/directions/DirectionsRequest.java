@@ -101,7 +101,7 @@ public class DirectionsRequest extends JavascriptObject{
         }
         if (addressOrigin == null && latLongOrigin != null) {
             something = true;
-            builder.append("origin: '").append(latLongOrigin.getVariableName()).append("'");
+            builder.append("origin: ").append(latLongOrigin.getVariableName());
         }
         if (addressDestination != null && latLongDestination == null) {
             builder.append(something ? "," : "");
@@ -109,7 +109,7 @@ public class DirectionsRequest extends JavascriptObject{
         }
         if (addressDestination == null && latLongDestination != null) {
             builder.append(something ? "," : "");
-            builder.append("destination: '").append(latLongDestination.getVariableName()).append("'");
+            builder.append("destination: ").append(latLongDestination.getVariableName());
         }
         if (travelmode != null) {
             builder.append(something ? "," : "");
