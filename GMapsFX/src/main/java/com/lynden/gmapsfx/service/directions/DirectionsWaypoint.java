@@ -38,7 +38,7 @@ public class DirectionsWaypoint extends JavascriptObject{
     }
     
     public DirectionsWaypoint(LatLong l){
-        super(GMapObjectType.DIRECTIONS_WAYPOINT, "{location: " + l + "}");
+        super(GMapObjectType.DIRECTIONS_WAYPOINT, "{location: " + l.getVariableName() + "}");
         //getJSObject().setMember("location", l);
     }
     
