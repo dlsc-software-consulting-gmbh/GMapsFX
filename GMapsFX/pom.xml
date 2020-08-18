@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.lynden</groupId>
+    <groupId>com.dlsc</groupId>
     <artifactId>GMapsFX</artifactId>
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
-    <url>http://rterp.github.io/GMapsFX/</url>
-    <version>2.12.2-SNAPSHOT</version>
+    <url>https://github.com/dlemmermann/GMapsFX</url>
+    <version>8.0.0</version>
     <packaging>jar</packaging>
     <licenses>   
         <license>
@@ -31,28 +31,35 @@
             <organization>Ghent University - imec</organization>
             <organizationUrl>http://idlab.ugent.be</organizationUrl>
         </developer>
+        <developer>
+            <name>Dirk Lemmermann</name>
+            <email>dlemmermann@gmail.com</email>
+            <organization>DLSC Software &amp; Consulting GmbH</organization>
+            <organizationUrl>https://www.dlsc.com</organizationUrl>
+        </developer>
     </developers>
+
     <distributionManagement>
         <repository>
-            <id>bintray-rterp-maven</id>
-            <name>rterp-maven</name>
-            <url>https://api.bintray.com/maven/rterp/maven/GMapsFX/;publish=1</url>
+            <id>bintray-dlsc-oss-repository</id>
+            <name>dlsc-oss-repository</name>
+            <url>
+                https://api.bintray.com/maven/dlsc-oss/repository/GMapsFX/;publish=1
+            </url>
         </repository>
     </distributionManagement>
-    <!--mvn release:clean release:prepare release:perform -->
+
     <scm>
-        <connection>scm:git:git@github.com:rterp/GMapsFX.git</connection>
-        <developerConnection>scm:git:git@github.com:rterp/GMapsFX.git</developerConnection>
-        <url>git@github.com:rterp/GMapsFX.git</url>
-        <!--<tag>2.0.2-23</tag>-->
-        <tag>GMapsFX-2.12.0</tag>
+        <url>https://github.com/dlemmermann/GMapsFX</url>
     </scm>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
+        <mainClass>com.dlsc.gmapsfx.MainApp</mainClass>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
+
     <profiles>
         <profile>
             <id>release-sign-artifacts</id>
@@ -78,7 +85,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                   
                 </plugins>
             </build>
         </profile>
@@ -120,7 +126,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>com.lynden.gmapsfx.MainApp</mainClass>
+                    <mainClass>com.dlsc.gmapsfx.MainApp</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -157,7 +163,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <additionalparam>-Xdoclint:none</additionalparam>
+                    <failOnError>false</failOnError>
                 </configuration>
                 <executions>
                     <execution>
