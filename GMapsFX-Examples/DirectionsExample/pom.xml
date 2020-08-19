@@ -22,7 +22,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
                         <id>unpack-dependencies</id>
@@ -84,10 +84,11 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>11</source>
+                    <target>11</target>
+                    <release>11</release>
                 </configuration>
             </plugin>
         </plugins>
@@ -96,7 +97,7 @@
         <dependency>
             <groupId>com.dlsc</groupId>
             <artifactId>GMapsFX</artifactId>
-            <version>2.12.2-SNAPSHOT</version>
+            <version>11.0.0</version>
         </dependency>
     </dependencies>
 </project>
