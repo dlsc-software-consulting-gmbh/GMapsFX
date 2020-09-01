@@ -1,13 +1,5 @@
 ##  GMapsFX
-
-<p align="center">
-<b>
-Fixed! <s><a href="https://github.com/rterp/GMapsFX/wiki/Known-Issue:-Garbled-Text-in-GMapsFX-on-Mac-OSX">Attention: Known Issue, Garbled Text in GMapsFX on Mac OSX</a></s>
-</b>
-</p>
-
-
- [ ![Download](https://api.bintray.com/packages/rterp/maven/GMapsFX/images/download.svg) ](https://bintray.com/rterp/maven/GMapsFX/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/rterp/maven/GMapsFX/images/download.svg) ](https://bintray.com/rterp/maven/GMapsFX/_latestVersion)
 
 
 A pure JavaFX API which allows you to add Google Maps to your JavaFX application without the need to interact with the underlying Google Maps JavaScript API.
@@ -39,9 +31,9 @@ The GMapsFX framework creates underyling JavaScript peer objects when their corr
 
 Because of this it is important to note that you cannot instantiate JavaScript objects until the JavaScript engine has been fully initialized.  The JavaScript engine is intialized asynchronously when a new GoogleMapView component is created.  You can register a MapComponentInitializedListener to be notified when the map and JavaScript environment has been fully initialized.  
 
-You can take a look at a small example code snippet [here.]( http://rterp.github.io/GMapsFX/)
+You can take a look at a small example code snippet [here.]( https://dlemmermann.github.io/GMapsFX/)
 
-The latest Javadocs can be found [here.] (http://rterp.github.io/GMapsFX/apidocs/)
+The latest Javadocs can be found [here.] (https://dlemmermann.github.io/GMapsFX/apidocs/)
 
 
 ## Authors
