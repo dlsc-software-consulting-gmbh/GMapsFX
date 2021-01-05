@@ -6,8 +6,8 @@
     <artifactId>GMapsFX</artifactId>
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
-    <url>https://github.com/dlemmermann/GMapsFX</url>
-    <version>11.0.0</version>
+    <url>https://github.com/dlsc-software-consulting-gmbh/GMapsFX</url>
+    <version>11.0.1</version>
     <packaging>jar</packaging>
 
     <licenses>   
@@ -16,28 +16,34 @@
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
+
     <developers>
+
         <developer>
             <name>Rob Terpilowski</name>
             <email>robt@lynden.com</email>
             <organization>Lynden, Inc.</organization>
             <organizationUrl>http://www.lynden.com</organizationUrl>
         </developer>
+
         <developer>
             <name>Geoff Capper</name>
         </developer>
+
         <developer>
             <name>Thijs Walcarius</name>
             <email>thijs.walcarius@ugent.be</email>
             <organization>Ghent University - imec</organization>
             <organizationUrl>http://idlab.ugent.be</organizationUrl>
         </developer>
+
         <developer>
             <name>Dirk Lemmermann</name>
             <email>dlemmermann@gmail.com</email>
             <organization>DLSC Software &amp; Consulting GmbH</organization>
             <organizationUrl>https://www.dlsc.com</organizationUrl>
         </developer>
+
     </developers>
 
     <distributionManagement>
@@ -51,7 +57,7 @@
     </distributionManagement>
 
     <scm>
-        <url>https://github.com/dlemmermann/GMapsFX</url>
+        <url>https://github.com/dlsc-software-consulting-gmbh/GMapsFX</url>
     </scm>
 
     <properties>
@@ -115,7 +121,7 @@
                     </archive>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.1.1</version>
@@ -133,7 +139,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin-->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>

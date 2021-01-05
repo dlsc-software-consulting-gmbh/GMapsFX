@@ -19,7 +19,6 @@
         <mainClass>com.dlsc.example.latlong.LatLongMainApp</mainClass>
     </properties>
 
-
     <build>
         <plugins>
             <plugin>
@@ -100,7 +99,7 @@
         <dependency>
             <groupId>com.dlsc</groupId>
             <artifactId>GMapsFX</artifactId>
-            <version>11.0.0</version>
+            <version>11.0.1</version>
         </dependency>
     </dependencies>
 </project>
