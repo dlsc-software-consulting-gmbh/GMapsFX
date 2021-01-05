@@ -1,7 +1,6 @@
 ##  GMapsFX
 
-[ ![Download](https://api.bintray.com/packages/rterp/maven/GMapsFX/images/download.svg) ](https://bintray.com/rterp/maven/GMapsFX/_latestVersion)
-
+[ ![Download](https://api.bintray.com/packages/dlsc-oss/repository/GMapsFX/images/download.svg) ](https://bintray.com/dlsc-oss/repository/GMapsFX/_latestVersion)
 
 A pure JavaFX API which allows you to add Google Maps to your JavaFX application without the need to interact with the underlying Google Maps JavaScript API.
 
