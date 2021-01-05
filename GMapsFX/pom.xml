@@ -68,6 +68,9 @@
         <javafx.version>14.0.1</javafx.version>
         <jaxb.api.version>2.3.3</jaxb.api.version>
         <jaxb.impl.version>2.3.3</jaxb.impl.version>
+        <sonar.projectKey>dlsc-software-consulting-gmbh_GMapsFX</sonar.projectKey>
+        <sonar.organization>dlsc-software-consulting-gmbh</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <profiles>
