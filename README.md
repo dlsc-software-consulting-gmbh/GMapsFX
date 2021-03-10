@@ -31,15 +31,16 @@ The GMapsFX framework creates underyling JavaScript peer objects when their corr
 
 Because of this it is important to note that you cannot instantiate JavaScript objects until the JavaScript engine has been fully initialized.  The JavaScript engine is intialized asynchronously when a new GoogleMapView component is created.  You can register a MapComponentInitializedListener to be notified when the map and JavaScript environment has been fully initialized.  
 
-You can take a look at a small example code snippet [here.]( http://rterp.github.io/GMapsFX/)
+You can take a look at a small example code snippet [here.]( http://dlsc-software-consulting-gmbh.github.io/GMapsFX/)
 
-The latest Javadocs can be found [here.] (http://rterp.github.io/GMapsFX/apidocs/)
+The latest Javadocs can be found [here.] (http://dlsc-software-consulting-gmbh.github.io/GMapsFX/apidocs/)
 
 
 ## Authors
 
 - Rob Terpilowski  ::  Twitter: [@RobTerpilowski](https://www.twitter.com/RobTerpilowski)
 - Geoff Capper
+- Dirk Lemmermann ::  Twitter: [@dlemmermann](https://www.twitter.com/dlemmermann)
 
 ## License
 
