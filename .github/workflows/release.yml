@@ -35,6 +35,7 @@ jobs:
 
       - name: Update version
         id: version
+        working-directory: ./GMapsFX
         run: |
           VERSION=${{ github.event.inputs.version }}
           echo "Updating POMs to version $VERSION"
@@ -45,6 +46,7 @@ jobs:
           git push origin HEAD:master
 
       - name: Release to Maven Central
+        working-directory: ./GMapsFX
         env:
           MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.SONATYPE_PASSWORD }}
@@ -56,11 +58,13 @@ jobs:
             -Dmaven.site.skip=true -Drelease=true deploy
 
       - name: Release to GitHub
+        working-directory: ./GMapsFX
         env:
           JRELEASER_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./mvnw -B --file pom.xml -Prelease -pl :parent jreleaser:full-release
 
       - name: JReleaser output
+        working-directory: ./GMapsFX
         if: always()
         uses: actions/upload-artifact@v2
         with:
