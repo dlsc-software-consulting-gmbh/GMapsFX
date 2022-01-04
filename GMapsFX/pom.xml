@@ -7,7 +7,7 @@
     <name>${project.artifactId}</name>
     <description>A Java API for using Google Maps within a JavaFX application.</description>
     <url>https://github.com/dlsc-software-consulting-gmbh/GMapsFX</url>
-    <version>11.0.3</version>
+    <version>11.0.4</version>
     <packaging>jar</packaging>
 
     <parent>
