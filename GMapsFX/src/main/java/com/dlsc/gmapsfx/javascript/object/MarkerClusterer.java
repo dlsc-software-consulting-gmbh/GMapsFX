@@ -69,7 +69,6 @@ public class MarkerClusterer extends JavascriptObject {
      * Sets the max zoom for the clusterer.
      *
      * @param number
-     * @return
      */
     public void setMaxZoom(int number) {
         invokeJavascript("setMaxZoom", number);
@@ -92,7 +91,6 @@ public class MarkerClusterer extends JavascriptObject {
      * Sets the max zoom for the clusterer.
      *
      * @param number
-     * @return
      */
     public void setGridSize(int number) {
         invokeJavascript("setGridSize", number);
