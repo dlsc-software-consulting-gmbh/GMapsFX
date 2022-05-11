@@ -82,7 +82,7 @@
         <project.github.repository>dlsc-software-consulting-gmbh/GMapsFX</project.github.repository>
         <local.repository.path>/tmp/repository</local.repository.path>
         <java.version>11</java.version>
-        <javafx.version>17.0.1</javafx.version>
+        <javafx.version>18</javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.dlsc.gmapsfx.MainApp</mainClass>
         <maven.compiler.release>11</maven.compiler.release>
