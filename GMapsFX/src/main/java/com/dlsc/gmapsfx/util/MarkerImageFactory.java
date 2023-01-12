@@ -15,6 +15,10 @@
  */
 package com.dlsc.gmapsfx.util;
 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
+
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -23,9 +27,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import javax.imageio.ImageIO;
 
 /**
  *
@@ -65,7 +66,7 @@ public class MarkerImageFactory {
             
             try {
                 dataURI = "data:" + imageMimeType + ";base64,(" + 
-                        javax.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + ")";
+                        jakarta.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + ")";
             } catch (IOException ioe) {
                 Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.WARNING, "Cannot create marker image", ioe);
                 dataURI = null;
@@ -91,7 +92,7 @@ public class MarkerImageFactory {
                 
                 try {
                     dataURI = "data:" + imageMimeType + ";base64," +
-                            javax.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + "";
+                            jakarta.xml.bind.DatatypeConverter.printBase64Binary(getImageBytes(SwingFXUtils.fromFXImage(img, null), type)) + "";
                 } catch (IOException ioe) {
                     Logger.getLogger(MarkerImageFactory.class.getName()).log(Level.WARNING, "Cannot create marker image", ioe);
                     dataURI = null;

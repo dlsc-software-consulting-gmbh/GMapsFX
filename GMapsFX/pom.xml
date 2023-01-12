@@ -52,16 +52,6 @@
 
     </developers>
 
-    <distributionManagement>
-        <repository>
-            <id>bintray-dlsc-oss-repository</id>
-            <name>dlsc-oss-repository</name>
-            <url>
-                https://api.bintray.com/maven/dlsc-oss/repository/GMapsFX/;publish=1
-            </url>
-        </repository>
-    </distributionManagement>
-
     <scm>
         <url>https://github.com/dlsc-software-consulting-gmbh/GMapsFX</url>
     </scm>
@@ -72,14 +62,14 @@
         <project.github.repository>dlsc-software-consulting-gmbh/GMapsFX</project.github.repository>
         <local.repository.path>/tmp/repository</local.repository.path>
         <java.version>11</java.version>
-        <javafx.version>18.0.1</javafx.version>
+        <javafx.version>17.0.2</javafx.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.dlsc.gmapsfx.MainApp</mainClass>
         <maven.compiler.release>11</maven.compiler.release>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <jaxb.api.version>2.3.3</jaxb.api.version>
-        <jaxb.impl.version>2.3.3</jaxb.impl.version>
+        <jaxb.api.version>4.0.0</jaxb.api.version>
+        <jaxb.impl.version>4.0.0</jaxb.impl.version>
         <sonar.projectKey>dlsc-software-consulting-gmbh_GMapsFX</sonar.projectKey>
         <sonar.organization>dlsc-software-consulting-gmbh</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>

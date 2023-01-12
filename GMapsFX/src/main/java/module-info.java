@@ -10,7 +10,7 @@ open module com.dlsc.gmapsfx {
     requires java.logging;
     requires java.desktop;
     requires org.slf4j;
-    requires java.xml.bind;
+    requires jakarta.xml.bind;
 
     exports com.dlsc.gmapsfx;
     exports com.dlsc.gmapsfx.javascript;
