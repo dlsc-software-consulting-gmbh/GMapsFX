@@ -1,3 +1,5 @@
+[![JFXCentral](https://img.shields.io/badge/Find_me_on-JFXCentral-blue?logo=googlechrome&logoColor=white)](https://www.jfx-central.com/libraries/gmapsfx)
+
 #  GMapsFX
 
 A pure JavaFX API which allows you to add Google Maps to your JavaFX application without the need to interact with the underlying Google Maps JavaScript API.
